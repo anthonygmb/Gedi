@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcc2ddab22b49519c8cc9dbf482de129",
+    "content-hash": "a0063a8707e1d9f40584285e27c95222",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -146,28 +146,29 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a"
+                "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/1a4fb7e902202c33cce8c55989b945612943c2ba",
+                "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "doctrine/coding-standard": "~0.1@dev",
+                "phpunit/phpunit": "^5.7"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -208,20 +209,20 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2015-04-14T22:21:58+00:00"
+            "time": "2017-01-03T10:49:41+00:00"
         },
         {
             "name": "doctrine/common",
-            "version": "v2.6.2",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "7bce00698899aa2c06fe7365c76e4d78ddb15fa3"
+                "reference": "930297026c8009a567ac051fd545bf6124150347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/7bce00698899aa2c06fe7365c76e4d78ddb15fa3",
-                "reference": "7bce00698899aa2c06fe7365c76e4d78ddb15fa3",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/930297026c8009a567ac051fd545bf6124150347",
+                "reference": "930297026c8009a567ac051fd545bf6124150347",
                 "shasum": ""
             },
             "require": {
@@ -230,10 +231,10 @@
                 "doctrine/collections": "1.*",
                 "doctrine/inflector": "1.*",
                 "doctrine/lexer": "1.*",
-                "php": "~5.5|~7.0"
+                "php": "~5.6|~7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.0"
+                "phpunit/phpunit": "^5.4.6"
             },
             "type": "library",
             "extra": {
@@ -281,24 +282,24 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2016-11-30T16:50:46+00:00"
+            "time": "2017-01-13T14:02:13+00:00"
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.5",
+            "version": "v2.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9"
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
-                "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fc376f7a61498e18520cd6fa083752a4ca08072b",
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": ">=2.4,<2.7-dev",
+                "doctrine/common": ">=2.4,<2.8-dev",
                 "php": ">=5.3.2"
             },
             "require-dev": {
@@ -352,20 +353,20 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2016-09-09T19:13:33+00:00"
+            "time": "2017-01-23T23:17:10+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "0f0c4df366bd1d36d38a27e2f5ff128e118ac969"
+                "reference": "a01d99bc6c9a6c8a8ace0012690099dd957ce9b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/0f0c4df366bd1d36d38a27e2f5ff128e118ac969",
-                "reference": "0f0c4df366bd1d36d38a27e2f5ff128e118ac969",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/a01d99bc6c9a6c8a8ace0012690099dd957ce9b9",
+                "reference": "a01d99bc6c9a6c8a8ace0012690099dd957ce9b9",
                 "shasum": ""
             },
             "require": {
@@ -433,7 +434,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2017-01-07T21:47:22+00:00"
+            "time": "2017-01-16T12:01:26+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -1148,16 +1149,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.19",
+            "version": "v3.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "d57c2f297d17ee82baf8cae0b16dae34a9378784"
+                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/d57c2f297d17ee82baf8cae0b16dae34a9378784",
-                "reference": "d57c2f297d17ee82baf8cae0b16dae34a9378784",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/ed86f6fb1753e76b39ff8b87f527045ca6b97169",
+                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169",
                 "shasum": ""
             },
             "require": {
@@ -1212,7 +1213,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-01-10T19:42:56+00:00"
+            "time": "2017-02-02T15:31:23+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -1770,16 +1771,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "5824d423678a0cc44f3eb46efc246aecd1836dd7"
+                "reference": "358c59fd21f9db7fdb465d1e07fba822d9e18e9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/5824d423678a0cc44f3eb46efc246aecd1836dd7",
-                "reference": "5824d423678a0cc44f3eb46efc246aecd1836dd7",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/358c59fd21f9db7fdb465d1e07fba822d9e18e9e",
+                "reference": "358c59fd21f9db7fdb465d1e07fba822d9e18e9e",
                 "shasum": ""
             },
             "require": {
@@ -1908,7 +1909,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-12-13T13:20:15+00:00"
+            "time": "2017-01-12T21:36:55+00:00"
         },
         {
             "name": "twig/twig",
@@ -1970,6 +1971,160 @@
                 "templating"
             ],
             "time": "2017-01-11T19:36:15+00:00"
+        },
+        {
+            "name": "zf1/zend-exception",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-exception.git",
+                "reference": "ca30959d3e2f522f481a3d1459386acf1aa4ca74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-exception/zipball/ca30959d3e2f522f481a3d1459386acf1aa4ca74",
+                "reference": "ca30959d3e2f522f481a3d1459386acf1aa4ca74",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_Exception": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Exception package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "exception",
+                "framework",
+                "zend"
+            ],
+            "time": "2015-04-30T11:10:20+00:00"
+        },
+        {
+            "name": "zf1/zend-search",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-search.git",
+                "reference": "c966e380667e02f83bf0806132e9cf392831930b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-search/zipball/c966e380667e02f83bf0806132e9cf392831930b",
+                "reference": "c966e380667e02f83bf0806132e9cf392831930b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11",
+                "zf1/zend-exception": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_Search": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Search package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "search",
+                "zend"
+            ],
+            "time": "2015-04-30T11:08:53+00:00"
+        },
+        {
+            "name": "zf1/zend-search-lucene",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-search-lucene.git",
+                "reference": "6427a633388186ae855b2e6f41d5d0fbf4454dab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-search-lucene/zipball/6427a633388186ae855b2e6f41d5d0fbf4454dab",
+                "reference": "6427a633388186ae855b2e6f41d5d0fbf4454dab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11",
+                "zf1/zend-exception": "self.version",
+                "zf1/zend-search": "self.version",
+                "zf1/zend-xml": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_Search_Lucene": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Search Lucene package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "lucene",
+                "search",
+                "zend"
+            ],
+            "time": "2015-04-30T11:08:58+00:00"
+        },
+        {
+            "name": "zf1/zend-xml",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-xml.git",
+                "reference": "330ca342f69ad446b874158acc9b90dc43d9bbaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-xml/zipball/330ca342f69ad446b874158acc9b90dc43d9bbaa",
+                "reference": "330ca342f69ad446b874158acc9b90dc43d9bbaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11",
+                "zf1/zend-exception": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_Xml": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Xml package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "xml",
+                "zend"
+            ],
+            "time": "2015-04-30T11:12:33+00:00"
         }
     ],
     "packages-dev": [
@@ -2027,16 +2182,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "65e64a4f99cbaeae718573c3347fbe800f3f6661"
+                "reference": "d32e4062c3a3dfb95709d2ca6dd89a327ae51c3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/65e64a4f99cbaeae718573c3347fbe800f3f6661",
-                "reference": "65e64a4f99cbaeae718573c3347fbe800f3f6661",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/d32e4062c3a3dfb95709d2ca6dd89a327ae51c3b",
+                "reference": "d32e4062c3a3dfb95709d2ca6dd89a327ae51c3b",
                 "shasum": ""
             },
             "require": {
@@ -2081,7 +2236,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2016-12-12T13:31:08+00:00"
+            "time": "2017-01-06T17:19:17+00:00"
         }
     ],
     "aliases": [],

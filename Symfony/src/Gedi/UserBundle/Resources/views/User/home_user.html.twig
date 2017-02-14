@@ -1,29 +1,29 @@
-{#{% extends "layout.html.twig" %}#}
+{% extends "layout.html.twig" %}
 
-{#{% block title %}Mon espace{% endblock %}#}
+{% block title %}Mon espace{% endblock %}
 
-{#{% block content %}#}
-    {#{% for utilisateur in tab_objets %}#}
-        {#<article>#}
-            {#<h2><a class="descGroupe">{{ utilisateur.nom }}</a>#}
-            {#</h2>#}
-        {#</article>#}
-    {#{% endfor %}#}
+{% block content %}
+    {% for utilisateur in tab_objets %}
+        <article>
+            <h2><a class="descGroupe">{{ utilisateur.nom }}</a>
+            </h2>
+        </article>
+    {% endfor %}
 
 
-    {#<h3>Add a comment</h3>#}
-    {#{% if is_granted('IS_AUTHENTICATED_FULLY') %}#}
+    <h3>Add a comment</h3>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         {#Soon!#}
-    {#{% else %}#}
-        {#<a href="{{ path('login') }} ">Log in</a> to add comments.#}
-    {#{% endif %}#}
-    {#</p>#}
+    {% else %}
+        <a href="{{ path('login') }} ">Log in</a> to add comments.
+    {% endif %}
+    </p>
 
-{#{% block body %}{% endblock %}#}
+{% block body %}{% endblock %}
 
     <a href="{{ path('shared_user') }} ">Documents partagés</a>
     <br>
     <a href="{{ path('account_user') }} ">Mon compte</a>
     <br>
     <a href="{{ path('recent_user') }} ">Recent</a>
-{#{% endblock %}#}
+{% endblock %}

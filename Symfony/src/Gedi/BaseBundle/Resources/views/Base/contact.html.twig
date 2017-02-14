@@ -10,28 +10,28 @@
     {{ form_start(contactForm) }}
     <div class="form-group full-transparent">
         {{ form_errors(contactForm.name) }}
-        {{ form_widget(contactForm.name, { 'attr':  {
+        {{ form_widget(contactForm.name, { 'attr': {'required': 'true',
             'rows': '1',
             'class': 'form-control',
             'placeholder': 'Nom'
         }}) }}
         <br>
         {{ form_errors(contactForm.email) }}
-        {{ form_widget(contactForm.email, { 'attr':  {
+        {{ form_widget(contactForm.email, { 'attr': {'required': 'true',
             'rows': '1',
             'class': 'form-control',
             'placeholder': 'azerty@abc.com'
         }}) }}
         <br>
         {{ form_errors(contactForm.object) }}
-        {{ form_widget(contactForm.object, { 'attr':  {
+        {{ form_widget(contactForm.object, { 'attr': {'required': 'true',
             'rows': '1',
             'class': 'form-control',
             'placeholder': 'Objet du mail'
         }}) }}
         <br>
         {{ form_errors(contactForm.text) }}
-        {{ form_widget(contactForm.text, { 'attr':  {
+        {{ form_widget(contactForm.text, { 'attr': {'required': 'true',
             'rows': '10',
             'class': 'form-control',
             'placeholder': 'Contenu du mail',

@@ -89,6 +89,11 @@ body {
     max-width: 25%;
 }
 
+.alert-primary {
+    padding-left: 0%;
+    max-width: 2%;
+}
+
 .popover{
     width:500px;
     height:auto;
