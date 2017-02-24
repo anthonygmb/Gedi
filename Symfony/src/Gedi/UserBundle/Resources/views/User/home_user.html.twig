@@ -3,9 +3,9 @@
 {% block base_titre %}Mon espace{% endblock %}
 
 {% block base_contenu %}
-    <a href="{{ path('shared_user') }} ">Documents partagés</a>
+    <a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }} ">Documents partagés</a>
     <br>
-    <a href="{{ path('account_user') }} ">Mon compte</a>
+    <a href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }} ">Mon compte</a>
     <br>
-    <a href="{{ path('recent_user') }} ">Recent</a>
+    <a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }} ">Recent</a>
 {% endblock %}

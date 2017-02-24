@@ -1,15 +1,15 @@
 home_user:
-    path:     /home_user
+    path:     /home_user/{id}
     defaults: { _controller: GediUserBundle:User:home }
 
 account_user:
-    path:     /account_user
+    path:     /account_user/{id}
     defaults: { _controller: GediUserBundle:User:account }
 
 recent_user:
-    path:     /recent_user
+    path:     /recent_user/{id}
     defaults: { _controller: GediUserBundle:User:recent }
 
 shared_user:
-    path:     /shared_user
+    path:     /shared_user/{id}
     defaults: { _controller: GediUserBundle:User:shared }

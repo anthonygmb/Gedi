@@ -11,8 +11,11 @@ class UserController extends Controller
 {
     /**
      * @Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
-    public function homeAction(Request $request)
+    public function homeAction(Request $request, $id)
     {
 //        $session = $request ->getSession();
 //        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -24,30 +27,39 @@ class UserController extends Controller
 //        $response->setStatusCode(Response::HTTP_NOT_FOUND);
 //        return $this->redirectToRoute('oc_platform_home');
 //        $session->getFlashBag()->add('info', 'Annonce bien enregistrée');
-        return $this->render('GediUserBundle:User:home_user.html.twig');
+        return $this->render('GediUserBundle:User:home_user.html.twig', array('id' => $id));
 
     }
 
     /**
      * @Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
-    public function accountAction()
+    public function accountAction(Request $request, $id)
     {
         return $this->render('GediUserBundle:User:account_user.html.twig');
     }
 
     /**
      * @Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
-    public function sharedAction()
+    public function sharedAction(Request $request, $id)
     {
         return $this->render('GediUserBundle:User:shared_user.html.twig');
     }
 
     /**
      * @Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
-    public function recentAction()
+    public function recentAction(Request $request, $id)
     {
         return $this->render('GediUserBundle:User:recent_user.html.twig');
     }

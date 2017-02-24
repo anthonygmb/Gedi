@@ -170,7 +170,7 @@ function showNotifyContact() {
     var icon = '../img/contact_img.png';
     if (url == types.HOME_USER || url == types.SHARED_USER ||
         url == types.RECENT_USER || url == types.ACCOUNT_USER) {
-        icon = '../../img/contact_img.png';
+        icon = '../../../img/contact_img.png';
     }
     $.notify({
         icon: icon,

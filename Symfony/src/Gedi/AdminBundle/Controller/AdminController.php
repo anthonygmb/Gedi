@@ -105,7 +105,7 @@ class AdminController extends Controller
                         '<button type="button" class="btn btn-default btn-primary round-button">' .
                         '<span class="glyphicon glyphicon-dashboard"></span></button></span>' .
                         '<span data-toggle="tooltip" data-placement="bottom" title="Editer la fiche utilisateur">' .
-                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal"' .
+                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal" ' .
                         'data-target="#popup-add" onclick="edit(\'{&quot;idUtilisateur&quot;:' . $objet->getIdUtilisateur() .
                         ',&quot;username&quot;:&quot;' . $objet->getUsername() .
                         '&quot;,&quot;password&quot;:&quot;' . $objet->getPassword() .
@@ -191,7 +191,7 @@ class AdminController extends Controller
                             data-animation="true" data-container="body" data-html="true">' .
                         '<span class="glyphicon glyphicon-user"></span></button>' .
                         '<span data-toggle="tooltip" data-placement="bottom" title="Editer le groupe">' .
-                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal"' .
+                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal" ' .
                         'data-target="#popup-add" onclick="edit(\'{&quot;idGroupe&quot;:' . $objet->getIdGroupe() .
                         ',&quot;nom&quot;:&quot;' . $objet->getNom() . '&quot;}\');">' .
                         '<span class="glyphicon glyphicon-pencil"></span></button></span>',
@@ -290,7 +290,7 @@ class AdminController extends Controller
                             data-animation="true" data-container="body" data-html="true">' .
                         '<span class="glyphicon glyphicon-file"></span></button>' .
                         '<span data-toggle="tooltip" data-placement="bottom" title="Editer le projet">' .
-                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal"' .
+                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal" ' .
                         'data-target="#popup-add" onclick="edit(\'{&quot;idProjet   &quot;:' . $objet->getIdProjet() .
                         ',&quot;nom&quot;:&quot;' . $objet->getNom() . '&quot;}\');">' .
                         '<span class="glyphicon glyphicon-pencil"></span></button></span>',
@@ -388,7 +388,7 @@ class AdminController extends Controller
                     "projet" => $objet->getidProjetFkDocument()->getNom(),
                     "propio" => $objet->getIdUtilisateurFkDocument()->getNom() . " " . $objet->getIdUtilisateurFkDocument()->getPrenom(),
                     "ctrl" => '<span data-toggle="tooltip" data-placement="bottom" title="Editer le document">' .
-                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal"' .
+                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal" ' .
                         'data-target="#popup-add" onclick="edit(\'{&quot;idDocument&quot;:' . $objet->getIdDocument() .
                         ',&quot;nom&quot;:&quot;' . $objet->getNom() .
                         '&quot;,&quot;typeDoc&quot;:&quot;' . $objet->getTypeDoc() .
