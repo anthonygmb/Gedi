@@ -81,7 +81,13 @@ class BaseController extends Controller
                 ->setSubject($object)
                 ->setFrom($contact->getEmail())
                 ->setTo('gedi.l3imiage@gmail.com')
-                ->setBody('envoi de l\'adresse : ' . $email . '' . 'nom : ' . $nom . '' . 'objet du mail : ' . $object . '' . $text);
+
+                //ne pas toucher merci !!
+                ->setBody('envoi de l\'adresse : ' . $email . '
+' . 'nom : ' . $nom . '
+' . 'objet du mail : ' . $object . '
+
+' . $text);
             $this->get('mailer')->send($message);
 
             // Envoyer un e-mail de confirmation à l'expéditeur
