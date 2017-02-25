@@ -63,7 +63,8 @@ class UserController extends Controller
                     }
                     break;
                 case BaseEnum::DOWNLOAD:
-                    $this->get('document.service')->download($sel);
+                    $tmp = [$sel];
+                    $this->get('document.service')->download($tmp);
                     $rows = "download";
                     break;
                 case BaseEnum::ENREGISTREMENT:
@@ -144,7 +145,7 @@ class UserController extends Controller
                         foreach ($projets as $child) {
                             array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
                                 '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
-                                oncontextmenu="menuContext(true);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
+                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
                                 $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() .
                                 '</p></a></div></div>');
                         }
@@ -152,7 +153,7 @@ class UserController extends Controller
                     if (sizeof($documents) > 0) {
                         foreach ($documents as $child) {
                             array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
-                                '" class="content-user" href="#" oncontextmenu="menuContext(false);"><img src="/Gedi/Symfony/web/img/' .
+                                '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
                                 $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
                                 '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
                         }
@@ -160,6 +161,7 @@ class UserController extends Controller
 
                     $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
                     $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent));
+                    return $response;
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
@@ -186,7 +188,7 @@ class UserController extends Controller
                         '<span class="glyphicon glyphicon-pencil"></span></button></span>',
                 ];
             }
-//            $response->setData(array('reponse' => (array)$rows));
+            $response->setData(array('reponse' => (array)$rows));
             return $response;
         }
 
@@ -255,5 +257,19 @@ class UserController extends Controller
             throw new Exception("Vous n'êtes pas authorisé à consulter cette page");
         }
         return $this->render('GediUserBundle:User:recent_user.html.twig');
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")
+     * Page de téléchargment des fichiers de l'application
+     */
+    public function downloadAction()
+    {
+        header('Content-Type: application/octet-stream');
+        header('Content-disposition: attachment; filename=archive.zip');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        readfile($this->getParameter('fichiers_directory') . 'archive.zip');
     }
 }

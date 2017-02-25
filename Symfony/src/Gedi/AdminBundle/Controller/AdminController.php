@@ -416,6 +416,7 @@ class AdminController extends Controller
 
     /**
      * Page de téléchargment des fichiers de l'application
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function downloadAction()
     {

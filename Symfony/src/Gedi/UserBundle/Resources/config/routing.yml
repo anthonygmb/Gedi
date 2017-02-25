@@ -21,3 +21,7 @@ shared_user:
     defaults: { _controller: GediUserBundle:User:shared }
     requirements:
         id:   \d{1,7}
+
+download:
+    path:     /{id}/download
+    defaults: { _controller: GediUserBundle:User:download }

@@ -365,7 +365,7 @@ function openBreadcrumb(id) {
 /**
  * Appel du menu contextuel
  */
-function menuContext(isFolder) {
+function menuContext(isFolder, id) {
     if (isFolder) {
         $(".context-download").hide();
         $(".context-open").show();
@@ -373,14 +373,10 @@ function menuContext(isFolder) {
         $(".context-download").show();
         $(".context-open").hide();
     }
-        $(".content-user").contextMenu({
-            menuSelector: "#contextMenu"
-            // menuSelected: function (invokedOn, selectedMenu) {
-            //     var msg = "You selected the menu item '" + selectedMenu.text() +
-            //         "' on the value '" + invokedOn.text() + "'";
-            //     alert(msg);
-            // }
-        });
+    $("#contextMenu").children().val(id);
+    $(".content-user").contextMenu({
+        menuSelector: "#contextMenu"
+    });
 }
 
 /**
@@ -689,6 +685,28 @@ $(function () {
         $('#data_idDocument').removeAttr('value');
     });
 
+    /**
+     * Ouvrir le dossier avec le menu contextuel
+     */
+    $("#context-open").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    });
+
+    $("#context-edit").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    });
+
+    $("#context-delete").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    });
+
+    /**
+     * Télécharger le fichier avec le menu contextuel
+     */
+    $("#context-download").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOWNLOAD);
+    });
+
     // ======================================================================================================
     // ENVOI AJAX CLIENT -> SERVEUR
     // ======================================================================================================
@@ -742,6 +760,11 @@ $(function () {
                         case types.DOWNLOAD:
                             $table.bootstrapTable('uncheckAll');
                             window.location = data.reponse;
+                            if (url == types.HOME_USER) {
+                                showNotify('<strong>Document téléchargé</strong>',
+                                    'glyphicon glyphicon-ok', 'success');
+                                return 0;
+                            }
                             break;
                         case types.UTILISATEUR:
                             if (url == types.GROUPE) {
@@ -865,9 +888,6 @@ $(function () {
                         .off('click')
                         .on('click', 'a', function (e) {
                             $menu.hide();
-                            var $invokedOn = $menu.data("invokedOn");
-                            var $selectedMenu = $(e.target);
-                            settings.menuSelected.call(this, $invokedOn, $selectedMenu);
                         });
                     return false;
                 });

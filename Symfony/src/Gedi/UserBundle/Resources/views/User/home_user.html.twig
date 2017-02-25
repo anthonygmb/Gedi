@@ -10,7 +10,7 @@
         <div class="col-md-2">
             <div class="panel full-transparent"><a id="{{ tab_projects.idProjet }}" class="content-user" href="#"
                                                    onclick="openFolder('{{ tab_projects.idProjet }}');"
-                                                   oncontextmenu="menuContext(true);">
+                                                   oncontextmenu="menuContext(true, this.id);">
                     <img src="{{ asset('img/folder.png') }}" alt="{{ tab_projects.nom }}"/>
                     <p class="text-white text-center">{{ tab_projects.nom }}</p>
                 </a>
