@@ -1,9 +1,7 @@
-{% extends "layout.html.twig" %}
+{% extends "GediUserBundle::layout_user.html.twig" %}
 
-{% block title %}Documents partagés{% endblock %}
+{% block titre_user %}Documents partagés - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 
-{% block content %}
+{% block user_contenu %}
 
 {% endblock %}
-
-

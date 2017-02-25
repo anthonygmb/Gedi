@@ -1,9 +1,7 @@
-{% extends "layout.html.twig" %}
+{% extends "GediUserBundle::layout_user.html.twig" %}
 
-{% block title %}Compte utilisateur{% endblock %}
+{% block titre_user %}Mon compte - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 
-{% block content %}
+{% block user_contenu %}
 
 {% endblock %}
-
-

@@ -1,11 +1,27 @@
 {% extends "GediUserBundle::layout_user.html.twig" %}
 
-{% block base_titre %}Mon espace{% endblock %}
+{% block titre_user %}Bureau - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 
-{% block base_contenu %}
-    <a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }} ">Documents partagés</a>
-    <br>
-    <a href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }} ">Mon compte</a>
-    <br>
-    <a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }} ">Recent</a>
+{% block user_contenu %}
+    {% for groupe in tab_groups %}
+        <p>{{ groupe.nom }}</p>
+    {% endfor %}
+    {% for projet in tab_projects %}
+        {#{% if is_granted('ROLE_ADMIN') %}#}
+{#{% elseif (utilisateur.actif == '0') %}#}
+    {#{% else %}#}
+        {#{% endif %}#}
+        <p>{{ projet.nom }}</p>
+    {% endfor %}
+    {% for document in tab_docs %}
+        <p>{{ document.nom }}</p>
+    {% endfor %}
 {% endblock %}
+
+{% block breadcrumb_user %}
+    Bureau {{ app.user.prenom }}
+{% endblock %}
+
+{% block popup_user_del_titre %}{% endblock %}
+
+{% block popup_user_add_contenu %}{% endblock %}

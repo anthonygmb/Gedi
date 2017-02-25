@@ -28,7 +28,7 @@ class BaseController extends Controller
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('home_admin');
-        } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+        } else if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             $usr= $this->getUser();
             return $this->redirectToRoute('home_user', array('id' => $usr->getIdUtilisateur()));
         }

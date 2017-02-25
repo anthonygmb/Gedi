@@ -73,7 +73,8 @@
                     {% else %}
                         <span data-toggle="tooltip" data-placement="bottom"
                               title="Accéder à l'espace utilisateur">
-                            <a type="button" class="btn btn-default btn-primary round-button">
+                            <a href="{{ path('home_user', { 'id': utilisateur.idUtilisateur }) }}" type="button"
+                               class="btn btn-default btn-primary round-button">
                                 <span class="glyphicon glyphicon-dashboard"></span>
                             </a>
                         </span>
