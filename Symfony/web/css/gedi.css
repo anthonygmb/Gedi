@@ -48,6 +48,13 @@
     background-color: #428bca;
 }
 
+#footer_user {
+    position:absolute;
+    bottom:0;
+    margin-left: 10%;
+    width:80%;
+}
+
 .background-app {
     background-color: rgba(0, 0, 0, 0.8);
 }

@@ -191,11 +191,11 @@ class UserController extends Controller
         }
 
         // importation de tous les groupes
-        $tab_groups = $this->get('groupe.service')->read();
+        $tab_groups = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
         // importation de tous les projets
-        $tab_projects = $this->get('projet.service')->read();
-        // importation de tous les documents
-        $tab_docs = $this->get('document.service')->read();
+        $tab_projects = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::PROJET)[0];
 
         return $this->render('GediUserBundle:User:home_user.html.twig', array(
             'groupe' => $groupe,
@@ -206,7 +206,6 @@ class UserController extends Controller
             'documentForm' => $documentForm->createView(),
             'tab_groups' => $tab_groups,
             'tab_projects' => $tab_projects,
-            'tab_docs' => $tab_docs,
         ));
     }
 

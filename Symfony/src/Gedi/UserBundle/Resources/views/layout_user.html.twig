@@ -24,23 +24,23 @@
                     <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
                             <span class="glyphicon glyphicon-th"></span> Nouveau groupe</a>
                     </li>
-                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add"><span class="glyphicon glyphicon-folder-close">
-                            </span> Nouveau projet</a>
+                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
+                            <span class="glyphicon glyphicon-folder-close"></span> Nouveau projet</a>
                     </li>
-                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add"><span class="glyphicon glyphicon-file">
-                            </span> Nouveau document</a>
+                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
+                            <span class="glyphicon glyphicon-file"></span> Nouveau document</a>
                     </li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 {% block user_contenu %}{% endblock %}
-                <ol class="breadcrumb">
-                    <li><a href="{{ path('start') }}">Home</a></li>
-                    <li class="active">{% block breadcrumb_user %}{% endblock %}</li>
-                </ol>
             </div>
         </div>
     </div>
+    <ol id="footer_user" class="breadcrumb">
+        <li><a href="{{ path('start') }}">Home</a></li>
+        <li class="active">{% block breadcrumb_user %}{% endblock %}</li>
+    </ol>
 
     <!-- Popup fenetre de suppression d'entité -->
     <div class="modal fade" id="popup-delete" role="dialog">

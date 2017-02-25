@@ -3,19 +3,35 @@
 {% block titre_user %}Bureau - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 
 {% block user_contenu %}
-    {% for groupe in tab_groups %}
-        <p>{{ groupe.nom }}</p>
-    {% endfor %}
-    {% for projet in tab_projects %}
-        {#{% if is_granted('ROLE_ADMIN') %}#}
-{#{% elseif (utilisateur.actif == '0') %}#}
-    {#{% else %}#}
-        {#{% endif %}#}
-        <p>{{ projet.nom }}</p>
-    {% endfor %}
-    {% for document in tab_docs %}
-        <p>{{ document.nom }}</p>
-    {% endfor %}
+    {#{% for groupe in tab_groups %}#}
+    {#<p>{{ groupe.nom }}</p>#}
+    {#{% endfor %}#}
+    <div class="row">
+    {#{% for projet in tab_projects %}#}
+        <div class="col-md-2">
+            <div class="panel full-transparent"><a href="#">
+                <img src="{{ asset('img/folder.png') }}" alt="{{ tab_projects.nom }}"/>
+                <p class="text-white text-center">{{ tab_projects.nom }}</p>
+                </a>
+            </div>
+        </div>
+    {#{% endfor %}#}
+
+    {#{% for document in tab_docs %}#}
+        {#<div class="col-md-2">#}
+            {#<div class="panel full-transparent">#}
+                {#{% if document.typeDoc == "jpg" %}#}
+                    {#<img src="{{ asset('img/jpgs.png') }}" alt="{{ document.nom }}"/>#}
+                {#{% elseif document.typeDoc == "pdf" %}#}
+                    {#<img src="{{ asset('img/pdfs.png') }}" alt="{{ document.nom }}"/>#}
+                {#{% else %}#}
+                    {#<img src="{{ asset('img/txts.png') }}" alt="{{ document.nom }}"/>#}
+                {#{% endif %}#}
+                {#<p class="text-white text-center">{{ document.nom }}</p>#}
+            {#</div>#}
+        {#</div>#}
+    {#{% endfor %}#}
+    </div>
 {% endblock %}
 
 {% block breadcrumb_user %}

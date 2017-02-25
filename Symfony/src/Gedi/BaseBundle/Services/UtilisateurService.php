@@ -203,6 +203,9 @@ class UtilisateurService
             case BaseEnum::PROJET:
                 return $objet->getIdUtilisateurFkProjet();
                 break;
+            case BaseEnum::GROUPE:
+                return $objet->getIdGroupeUg();
+                break;
             default:
                 throw new Exception('ChildType n\'est pas défini');
         }
