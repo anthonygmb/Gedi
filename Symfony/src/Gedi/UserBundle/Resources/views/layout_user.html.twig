@@ -66,17 +66,235 @@
         </div>
     </div>
 
-    <!-- Popup fenetre d'ajout d'entité -->
-    <div class="modal fade" id="popup-add" role="dialog">
+    <!-- Popup fenetre d'ajout de documents -->
+    <div class="modal fade" id="popup-add-file" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
                     <!-- Titre mis à jour dans gedi.js -->
-                    <h4 id="popup-admin-add-titre" class="modal-title"></h4>
+                    <h4 class="modal-title popup-admin-add-user"></h4>
                 </div>
                 <div class="modal-body">
-                    {% block popup_user_add_contenu %}{% endblock %}
+                    {{ form_start(documentForm, { 'attr':  {
+                        'class': 'form-document',
+                    }}) }}
+                    <div class="form-group">
+                        {{ form_row(documentForm.idDocument) }}
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">1</span>
+                                    {{ form_errors(documentForm.nom) }}
+                                    {{ form_widget(documentForm.nom, { 'attr':  {
+                                        'rows': '1',
+                                        'class': 'form-control',
+                                        'placeholder': 'Nom du document'
+                                    }}) }}
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon2">2</span>
+                                    {{ form_errors(documentForm.typeDoc) }}
+                                    {{ form_widget(documentForm.typeDoc, { 'attr':  {
+                                        'rows': '1',
+                                        'class': 'form-control',
+                                        'placeholder': 'Type'
+                                    }}) }}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon3">3</span>
+                            {{ form_errors(documentForm.tag) }}
+                            {{ form_widget(documentForm.tag, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Tags du document'
+                            }}) }}
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon4">4</span>
+                            {{ form_errors(documentForm.resume) }}
+                            {{ form_widget(documentForm.resume, { 'attr':  {
+                                'rows': '4',
+                                'class': 'form-control',
+                                'placeholder': 'Resumé du document',
+                                'style' : 'resize : none'
+                            }}) }}
+                        </div>
+                        {{ form_row(documentForm.idUtilisateurFkDocument) }}
+                        {{ form_row(documentForm.idProjetFkDocument) }}
+                        {{ form_errors(documentForm.fichier) }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="panel panel-info assign-user">
+                                <div class="panel-heading">
+                                    <h5>Définir le propriétaire du document</h5>
+                                </div>
+                                <div class="list-group">
+                                    {#{% for utilisateur in tab_users %}#}
+                                        {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
+                                            {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
+                                               {#class="list-group-item list-users-item list-activable-item"#}
+                                               {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
+                                                {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}#}
+                                            {#</a>#}
+                                        {#{% endif %}#}
+                                    {#{% endfor %}#}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-info assign-user">
+                                <div class="panel-heading">
+                                    <h5>Définir le projet parent</h5>
+                                </div>
+                                <div id="liste-projets" class="list-group"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <label id="bouton-upload" class="btn btn-primary"><span class="glyphicon glyphicon-cloud-upload"></span>
+                                Uploader
+                                {{ form_widget(documentForm.fichier, { 'attr':  {
+                                    'rows': '1',
+                                    'class': 'form-control',
+                                    'style': 'display: none'
+                                }}) }}
+                            </label>
+                            <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                        </div>
+                    </div>
+                    {{ form_end(documentForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup fenetre d'ajout de projets -->
+    <div class="modal fade" id="popup-add-folder" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
+                    <!-- Titre mis à jour dans gedi.js -->
+                    <h4 class="modal-title popup-admin-add-user"></h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(projetForm, { 'attr':  {
+                        'class': 'form-projet',
+                    }}) }}
+                    <div class="form-group">
+                        {{ form_row(projetForm.idProjet) }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">1</span>
+                            {{ form_errors(projetForm.nom) }}
+                            {{ form_widget(projetForm.nom, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Nom du projet'
+                            }}) }}
+                        </div>
+                        {{ form_row(projetForm.idUtilisateurFkProjet) }}
+                        {{ form_row(projetForm.parent) }}
+                        <br>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="panel panel-info assign-user">
+                                <div class="panel-heading">
+                                    <h5>Définir le propriétaire du projet</h5>
+                                </div>
+                                <div class="list-group">
+                                    {#{% for utilisateur in tab_users %}#}
+                                        {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
+                                            {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
+                                               {#class="list-group-item list-users-item list-activable-item"#}
+                                               {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
+                                                {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}</a>#}
+                                        {#{% endif %}#}
+                                    {#{% endfor %}#}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-info assign-user">
+                                <div class="panel-heading">
+                                    <h5>Définir le projet parent</h5>
+                                </div>
+                                <div id="liste-projets" class="list-group"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                        </div>
+                    </div>
+                    {{ form_end(projetForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup fenetre d'ajout de groupe -->
+    <div class="modal fade" id="popup-add-group" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
+                    <!-- Titre mis à jour dans gedi.js -->
+                    <h4 class="modal-title popup-admin-add-user"></h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(groupeForm, { 'attr':  {
+                        'class': 'form-groupe',
+                    }}) }}
+                    <div class="form-group">
+                        {{ form_row(groupeForm.idGroupe) }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">1</span>
+                            {{ form_errors(groupeForm.nom) }}
+                            {{ form_widget(groupeForm.nom, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Nom du groupe'
+                            }}) }}
+                        </div>
+                        {{ form_row(groupeForm.idUtilisateurFkGroupe) }}
+                        <br>
+                    </div>
+
+                    <div class="panel panel-info assign-user">
+                        <div class="panel-heading">
+                            <h5>Définir le propriétaire du groupe</h5>
+                        </div>
+                        <div class="list-group">
+                            {#{% for utilisateur in tab_users %}#}
+                                {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
+                                    {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
+                                       {#class="list-group-item list-activable-item"#}
+                                       {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
+                                        {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}</a>#}
+                                {#{% endif %}#}
+                            {#{% endfor %}#}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                        </div>
+                    </div>
+                    {{ form_end(groupeForm) }}
                 </div>
             </div>
         </div>
@@ -84,14 +302,23 @@
 
     <!-- Menu contextuel -->
     <ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none">
-        <li id="context-open" class="context-open"><a tabindex="-1" href="#"><span class="glyphicon glyphicon-folder-open">
+        <li id="context-open-folder" class="context-folder"><a tabindex="-1" href="#"><span
+                        class="glyphicon glyphicon-folder-open">
                 </span> Ouvrir</a></li>
-        <li id="context-edit"><a data-toggle="modal" data-target="#popup-add" onclick="" tabindex="-1" href="#">
+        <li id="context-edit-folder" class="context-folder"><a data-toggle="modal" data-target="#popup-add-folder" onclick=""
+                                                               tabindex="-1" href="#">
+                <span class="glyphicon glyphicon-pencil"></span> Modifier</a></li>
+        <li id="context-edit-file" class="context-file"><a data-toggle="modal" data-target="#popup-add-file" onclick=""
+                                                           tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-pencil"></span> Modifier</a></li>
         <li class="divider"></li>
-        <li id="context-delete"><a tabindex="-1" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer</a></li>
-        <li class="divider context-download"></li>
-        <li id="context-download" class="context-download"><a tabindex="-1" href="#"><span class="glyphicon glyphicon-cloud-download"></span>
+        <li id="context-delete-folder" class="context-folder"><a tabindex="-1" href="#"><span
+                        class="glyphicon glyphicon-trash"></span> Supprimer</a></li>
+        <li id="context-delete-file" class="context-file"><a tabindex="-1" href="#"><span
+                        class="glyphicon glyphicon-trash"></span> Supprimer</a></li>
+        <li class="divider context-file"></li>
+        <li id="context-download-file" class="context-file"><a tabindex="-1" href="#"><span
+                        class="glyphicon glyphicon-cloud-download"></span>
                 Télécharger</a></li>
     </ul>
 {% endblock %}

@@ -34,7 +34,8 @@ const types = {
     HOME_USER: "home_user", // page bureau utilisateur
     RECENT_USER: "recent_user", // page elements recents utilisateur
     SHARED_USER: "shared_user", // page elements partagés utilisateur
-    ACCOUNT_USER: "account_user" // page account_user
+    ACCOUNT_USER: "account_user", // page account_user
+    GET: "get" // demande d'informations sur une entité
 };
 
 // ======================================================================================================
@@ -234,6 +235,40 @@ function edit(js_object_arg) {
 }
 
 /**
+ * Fonction d'édition d'entité. La fonction renseigne les champs du formulaire.
+ * @param js_object, infos de l'entité à mettre dans le formulaire
+ * @param typeEntite, type d'entité éditée
+ */
+function edit2(js_object, typeEntite) {
+
+    // remplissages de champs des formulaires
+    for (var key in js_object) {
+        if (key == 'actif' && js_object[key] == '1') {
+            $('#gedi_basebundle_' + typeEntite + '_' + key).bootstrapToggle('on');
+        } else if (key == 'password') {
+            $('#gedi_basebundle_' + typeEntite + '_' + key + '_first').val(js_object[key]);
+            $('#gedi_basebundle_' + typeEntite + '_' + key + '_second').val(js_object[key]);
+        } else {
+            if (typeEntite == types.DOCUMENT) {
+                $('#data_' + key).val(js_object[key]);
+            } else {
+                $('#gedi_basebundle_' + typeEntite + '_' + key).val(js_object[key]);
+            }
+        }
+    }
+
+    // modification du popup ajout / edition
+    $('.popup-admin-add-user').html('Modifier un ' + typeEntite);
+    var $bsae = $('.bouton-submit-admin-entity');
+    $bsae.val('Appliquer');
+    $bsae.prop('disabled', false);
+    $('#data_nom').prop('disabled', false);
+    $('#data_typeDoc').prop('disabled', false);
+    $('.assign-user').hide(); // masque le panel d'assignation d'utilisateur
+    $('#data_fichier').prop('disabled', true); // desactive le bouton upload
+}
+
+/**
  * Fonction de vérification de formulaire
  */
 function validForm() {
@@ -347,7 +382,7 @@ function dashboardStart(counter) {
  * @param id
  */
 function openFolder(id) {
-    $('body').ajaxSend(id, types.DOCUMENT_PROJET);
+    $('body').ajaxSend(id, types.DOCUMENT_PROJET, null);
 }
 
 /**
@@ -355,7 +390,7 @@ function openFolder(id) {
  * @param id
  */
 function openBreadcrumb(id) {
-    $('body').ajaxSend(id, types.DOCUMENT_PROJET);
+    $('body').ajaxSend(id, types.DOCUMENT_PROJET, null);
     var $fu = $('#breadcrumb-flag');
     if ($fu.next()) {
         $fu.nextAll().remove();
@@ -367,11 +402,11 @@ function openBreadcrumb(id) {
  */
 function menuContext(isFolder, id) {
     if (isFolder) {
-        $(".context-download").hide();
-        $(".context-open").show();
+        $(".context-file").hide();
+        $(".context-folder").show();
     } else {
-        $(".context-download").show();
-        $(".context-open").hide();
+        $(".context-file").show();
+        $(".context-folder").hide();
     }
     $("#contextMenu").children().val(id);
     $(".content-user").contextMenu({
@@ -469,9 +504,9 @@ $(function () {
         $('#liste-children').empty(); // vide la liste
 
         if (url == types.GROUPE) {
-            $('body').ajaxSend(id, types.UTILISATEUR);
+            $('body').ajaxSend(id, types.UTILISATEUR, null);
         } else if (url == types.PROJET) {
-            $('body').ajaxSend(id, types.DOCUMENT);
+            $('body').ajaxSend(id, types.DOCUMENT, null);
         }
     });
 
@@ -525,7 +560,7 @@ $(function () {
      */
     $('.list-users-item').click(function (event) {
         var tmp = event.currentTarget.id; // récupère l'id de la ligne de l'utilisateur
-        $('body').ajaxSend(tmp.substring(20, tmp.length), types.PROJET);
+        $('body').ajaxSend(tmp.substring(20, tmp.length), types.PROJET, null);
     });
 
     /**
@@ -558,7 +593,7 @@ $(function () {
         var sel = $.map($table.bootstrapTable('getSelections'), function (row) {
             return row.id;
         });
-        $('body').ajaxSend(sel, types.DOWNLOAD);
+        $('body').ajaxSend(sel, types.DOWNLOAD, null);
     });
 
     /**
@@ -566,7 +601,7 @@ $(function () {
      * envoi la selection à supprimer au controller via ajaxSend
      */
     $('#delete-entity').click(function () {
-        $('body').ajaxSend(sel, types.SUPPRESSION);
+        $('body').ajaxSend(sel, types.SUPPRESSION, null);
     });
 
     /**
@@ -590,7 +625,7 @@ $(function () {
             var file = document.getElementById("data_fichier");
             formdata.append('typeAction', types.UPLOAD);
             formdata.append('fichier', file.files[0]);
-            $('body').ajaxSend(formdata, types.UPLOAD);
+            $('body').ajaxSend(formdata, types.UPLOAD, null);
         } else {
             // ne s'execute que sur la page users_admin
             if (url == types.UTILISATEUR) {
@@ -611,10 +646,61 @@ $(function () {
             }
 
             if (selection[0].value == "") {
-                $('body').ajaxSend(selection, types.ENREGISTREMENT);
+                $('body').ajaxSend(selection, types.ENREGISTREMENT, null);
             } else {
-                $('body').ajaxSend(selection, types.MODIFICATION);
+                $('body').ajaxSend(selection, types.MODIFICATION, null);
             }
+        }
+    });
+
+    $('.form-document').submit(function (event) {
+        // Eviter le comportement par défaut (soumettre le formulaire)
+        event.preventDefault();
+        $('#data_nom').prop('disabled', false);
+        $('#data_typeDoc').prop('disabled', false);
+
+        // récupération des données du formulaire
+        var $form = $(this);
+        var selection = $form.serializeArray();
+        var formdata = new FormData($form[0]);
+
+        var file = document.getElementById("data_fichier");
+        formdata.append('typeAction', types.UPLOAD);
+        formdata.append('fichier', file.files[0]);
+        $('body').ajaxSend(formdata, types.UPLOAD, types.DOCUMENT);
+    });
+
+    $('.form-projet').submit(function (event) {
+        // Eviter le comportement par défaut (soumettre le formulaire)
+        event.preventDefault();
+        $('#data_nom').prop('disabled', false);
+        $('#data_typeDoc').prop('disabled', false);
+
+        // récupération des données du formulaire
+        var $form = $(this);
+        var selection = $form.serializeArray();
+
+        if (selection[0].value == "") {
+            $('body').ajaxSend(selection, types.ENREGISTREMENT, types.PROJET);
+        } else {
+            $('body').ajaxSend(selection, types.MODIFICATION, types.PROJET);
+        }
+    });
+
+    $('.form-groupe').submit(function (event) {
+        // Eviter le comportement par défaut (soumettre le formulaire)
+        event.preventDefault();
+        $('#data_nom').prop('disabled', false);
+        $('#data_typeDoc').prop('disabled', false);
+
+        // récupération des données du formulaire
+        var $form = $(this);
+        var selection = $form.serializeArray();
+
+        if (selection[0].value == "") {
+            $('body').ajaxSend(selection, types.ENREGISTREMENT, types.GROUPE);
+        } else {
+            $('body').ajaxSend(selection, types.MODIFICATION, types.GROUPE);
         }
     });
 
@@ -688,23 +774,31 @@ $(function () {
     /**
      * Ouvrir le dossier avec le menu contextuel
      */
-    $("#context-open").click(function (event) {
-        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    $("#context-open-folder").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET, null);
     });
 
-    $("#context-edit").click(function (event) {
-        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    $("#context-edit-folder").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.GET, types.PROJET);
     });
 
-    $("#context-delete").click(function (event) {
-        $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    $("#context-edit-file").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.GET, types.DOCUMENT);
+    });
+
+    $("#context-delete-folder").click(function (event) {
+        // $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    });
+
+    $("#context-delete-folder").click(function (event) {
+        // $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
     });
 
     /**
      * Télécharger le fichier avec le menu contextuel
      */
-    $("#context-download").click(function (event) {
-        $(this).ajaxSend(event.currentTarget.value, types.DOWNLOAD);
+    $("#context-download-file").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.DOWNLOAD, null);
     });
 
     // ======================================================================================================
@@ -720,7 +814,7 @@ $(function () {
      * @param typeAction, type d'action à faire coté serveur [enregistré, modifié, supprimé, children]
      */
     $.fn.extend({
-        ajaxSend: function (selection, typeAction) {
+        ajaxSend: function (selection, typeAction, typeEntite) {
             var ct, pd;
 
             // upload de fichiers
@@ -729,7 +823,7 @@ $(function () {
                 pd = false;
             } else {
                 // toutes les autres requetes
-                selection = {'data': selection, 'typeAction': typeAction};
+                selection = {'data': selection, 'typeAction': typeAction, 'typeEntite': typeEntite};
                 ct = 'application/x-www-form-urlencoded; charset=UTF-8';
                 pd = true;
             }
@@ -747,8 +841,21 @@ $(function () {
                             completeRow(data); // finalise la création ou la modification
                             break;
                         case types.MODIFICATION:
-                            $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});
-                            completeRow(data); // finalise la création ou la modification
+                            if (url == types.HOME_USER) {
+                                var $dt = $('#desktop');
+                                $dt.empty();
+                                $dt.append('<div class="row">' + data.reponse + '</div>');
+                                $('#footer_user').append(data.fdparent);
+                                menuContext();
+                                $('form').trigger("reset"); // reset le formulaire de création
+                                $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
+                                $('#popup-add-folder').modal('toggle'); // fait disparaitre le modal de création
+                                // $('#popup-add-file').modal('toggle'); // fait disparaitre le modal de création
+                                return 0;
+                            } else {
+                                $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});
+                                completeRow(data); // finalise la création ou la modification
+                            }
                             break;
                         case types.SUPPRESSION:
                             deleteRow();
@@ -792,6 +899,13 @@ $(function () {
                                 $dt.empty();
                                 $dt.append('<div class="row">' + data.reponse + '</div>');
                                 $('#footer_user').append(data.fdparent);
+                            }
+                            menuContext();
+                            return 0;
+                            break;
+                        case types.GET:
+                            if (url == types.HOME_USER) {
+                                edit2(data.reponse, typeEntite);
                             }
                             menuContext();
                             return 0;

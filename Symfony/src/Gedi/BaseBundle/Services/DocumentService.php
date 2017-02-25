@@ -79,6 +79,16 @@ class DocumentService
     }
 
     /**
+     * Retourne l'entite correspondant à l'id $sel
+     * @param $sel
+     * @return null|object
+     */
+    public function findOne($sel)
+    {
+        return $this->em->find('GediBaseBundle:Document', $sel);
+    }
+
+    /**
      * Retourne les N derniers éléments
      * @param $max
      * @return array

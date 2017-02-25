@@ -50,6 +50,23 @@ class UserController extends Controller
             }
 
             switch ($_POST['typeAction']) {
+                case BaseEnum::GET:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        switch ($_POST['typeEntite']) {
+                            case BaseEnum::PROJET:
+                                $objet = $this->get('projet.service')->findOne($sel);
+                                break;
+                            case BaseEnum::DOCUMENT:
+                                $objet = $this->get('document.service')->findOne($sel);
+                                break;
+                            default:
+                                throw new Exception('typeEntite n\'est pas reconnu');
+                        }
+                        $rows = $objet->toArray();
+                    }
+                    break;
                 case BaseEnum::UPLOAD:
                     if (!isset($_FILES['fichier'])) {
                         throw new Exception('Le fichier n\'est pas uploadé');
@@ -115,6 +132,8 @@ class UserController extends Controller
                                 break;
                             case BaseEnum::PROJET:
                                 $objet = $this->get('projet.service')->update($sel);
+                                $sel = $objet->getParent();
+                                $tmp = $this->get('projet.service')->findOne($sel);
                                 break;
                             case BaseEnum::DOCUMENT:
                                 $objet = $this->get('document.service')->update($sel);
@@ -138,55 +157,36 @@ class UserController extends Controller
                     break;
                 case BaseEnum::DOCUMENT_PROJET:
                     $tmp = $this->get('projet.service')->findOne($sel);
-                    $projets = $this->get('projet.service')->getChildren($sel, BaseEnum::PROJET);
-                    $documents = $this->get('projet.service')->getChildren($sel, BaseEnum::DOCUMENT);
-
-                    if (sizeof($projets) > 0) {
-                        foreach ($projets as $child) {
-                            array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
-                                '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
-                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
-                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() .
-                                '</p></a></div></div>');
-                        }
-                    }
-                    if (sizeof($documents) > 0) {
-                        foreach ($documents as $child) {
-                            array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
-                                '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
-                                $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
-                                '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
-                        }
-                    }
-
-                    $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
-                    $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent));
-                    return $response;
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
             }
 
-            if ($_POST['typeAction'] == BaseEnum::UPLOAD || $_POST['typeAction'] == BaseEnum::MODIFICATION) {
-                $rows = [
-                    "ck" => 'data-checkbox="true"',
-                    "id" => $objet->getIdDocument(),
-                    "nom" => $objet->getNom(),
-                    "type" => '<span class="label label-default">' . $objet->getTypeDoc() . '</span>',
-                    "datec" => date_format($objet->getDateCreation(), 'Y-m-d H:i:s'),
-                    "datem" => date_format($objet->getDateModification(), 'Y-m-d H:i:s'),
-                    "nbdownload" => $objet->getNbDownload(),
-                    "projet" => $objet->getidProjetFkDocument()->getNom(),
-                    "propio" => $objet->getIdUtilisateurFkDocument()->getNom() . " " . $objet->getIdUtilisateurFkDocument()->getPrenom(),
-                    "ctrl" => '<span data-toggle="tooltip" data-placement="bottom" title="Editer le document">' .
-                        '<button type="button" class="btn btn-default btn-warning round-button" data-toggle="modal" ' .
-                        'data-target="#popup-add" onclick="edit(\'{&quot;idDocument&quot;:' . $objet->getIdDocument() .
-                        ',&quot;nom&quot;:&quot;' . $objet->getNom() .
-                        '&quot;,&quot;typeDoc&quot;:&quot;' . $objet->getTypeDoc() .
-                        '&quot;,&quot;tag&quot;:&quot;' . $objet->getTag() .
-                        '&quot;,&quot;resume&quot;:&quot;' . $objet->getResume() . '&quot;}\');">' .
-                        '<span class="glyphicon glyphicon-pencil"></span></button></span>',
-                ];
+            if ($_POST['typeAction'] == BaseEnum::DOCUMENT_PROJET || $_POST['typeAction'] == BaseEnum::MODIFICATION) {
+                $projets = $this->get('projet.service')->getChildren($sel, BaseEnum::PROJET);
+                $documents = $this->get('projet.service')->getChildren($sel, BaseEnum::DOCUMENT);
+
+                if (sizeof($projets) > 0) {
+                    foreach ($projets as $child) {
+                        array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                            '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
+                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
+                            $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() .
+                            '</p></a></div></div>');
+                    }
+                }
+                if (sizeof($documents) > 0) {
+                    foreach ($documents as $child) {
+                        array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                            '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
+                            $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
+                            '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
+                    }
+                }
+
+                $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
+                $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent));
+                return $response;
             }
             $response->setData(array('reponse' => (array)$rows));
             return $response;
