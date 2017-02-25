@@ -13,4 +13,5 @@ abstract class BaseEnum
     const DOCUMENT = "document"; // demande d'optention des documents d'une entité
     const PROJET = "projet"; // demande d'optention des projets d'une entité
     const GROUPE = "groupe"; // demande d'optention des groupes d'une entité
+    const DOCUMENT_PROJET = "document_projet"; // demande d'optention des documents et des projets
 }

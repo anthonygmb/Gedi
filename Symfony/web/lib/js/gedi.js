@@ -30,6 +30,7 @@ const types = {
     DOCUMENT: "document", // demande d'optention des documents d'une entité || page docs_admin
     PROJET: "projet", // demande d'optention des projets d'une entité || page projects_admin
     GROUPE: "groupe", // demande d'optention des groupes d'une entité || page groups_admin
+    DOCUMENT_PROJET: "document_projet", // demande d'optention des documents et des projets
     HOME_USER: "home_user", // page bureau utilisateur
     RECENT_USER: "recent_user", // page elements recents utilisateur
     SHARED_USER: "shared_user", // page elements partagés utilisateur
@@ -342,6 +343,26 @@ function dashboardStart(counter) {
 }
 
 /**
+ * Fonction pour ouvrir les dossiers en ajax
+ * @param id
+ */
+function openFolder(id) {
+    $('body').ajaxSend(id, types.DOCUMENT_PROJET);
+}
+
+/**
+ * Fonction pour revenir au dossier parent
+ * @param id
+ */
+function openBreadcrumb(id) {
+    $('body').ajaxSend(id, types.DOCUMENT_PROJET);
+    var $fu = $('#breadcrumb-flag');
+    if ($fu.next()) {
+        $fu.nextAll().remove();
+    }
+}
+
+/**
  * =======================================================================
  * block jquery
  */
@@ -430,9 +451,9 @@ $(function () {
         $('#liste-children').empty(); // vide la liste
 
         if (url == types.GROUPE) {
-            ajaxSend(id, types.UTILISATEUR);
+            $('body').ajaxSend(id, types.UTILISATEUR);
         } else if (url == types.PROJET) {
-            ajaxSend(id, types.DOCUMENT);
+            $('body').ajaxSend(id, types.DOCUMENT);
         }
     });
 
@@ -486,7 +507,7 @@ $(function () {
      */
     $('.list-users-item').click(function (event) {
         var tmp = event.currentTarget.id; // récupère l'id de la ligne de l'utilisateur
-        ajaxSend(tmp.substring(20, tmp.length), types.PROJET);
+        $('body').ajaxSend(tmp.substring(20, tmp.length), types.PROJET);
     });
 
     /**
@@ -519,7 +540,7 @@ $(function () {
         var sel = $.map($table.bootstrapTable('getSelections'), function (row) {
             return row.id;
         });
-        ajaxSend(sel, types.DOWNLOAD);
+        $('body').ajaxSend(sel, types.DOWNLOAD);
     });
 
     /**
@@ -527,7 +548,7 @@ $(function () {
      * envoi la selection à supprimer au controller via ajaxSend
      */
     $('#delete-entity').click(function () {
-        ajaxSend(sel, types.SUPPRESSION);
+        $('body').ajaxSend(sel, types.SUPPRESSION);
     });
 
     /**
@@ -551,7 +572,7 @@ $(function () {
             var file = document.getElementById("data_fichier");
             formdata.append('typeAction', types.UPLOAD);
             formdata.append('fichier', file.files[0]);
-            ajaxSend(formdata, types.UPLOAD);
+            $('body').ajaxSend(formdata, types.UPLOAD);
         } else {
             // ne s'execute que sur la page users_admin
             if (url == types.UTILISATEUR) {
@@ -572,9 +593,9 @@ $(function () {
             }
 
             if (selection[0].value == "") {
-                ajaxSend(selection, types.ENREGISTREMENT);
+                $('body').ajaxSend(selection, types.ENREGISTREMENT);
             } else {
-                ajaxSend(selection, types.MODIFICATION);
+                $('body').ajaxSend(selection, types.MODIFICATION);
             }
         }
     });
@@ -658,87 +679,98 @@ $(function () {
      * @param selection, données à envoyer au serveur
      * @param typeAction, type d'action à faire coté serveur [enregistré, modifié, supprimé, children]
      */
-    function ajaxSend(selection, typeAction) {
-        var ct, pd;
+    $.fn.extend({
+        ajaxSend: function (selection, typeAction) {
+            var ct, pd;
 
-        // upload de fichiers
-        if (typeAction == types.UPLOAD) {
-            ct = false;
-            pd = false;
-        } else {
-            // toutes les autres requetes
-            selection = {'data': selection, 'typeAction': typeAction};
-            ct = 'application/x-www-form-urlencoded; charset=UTF-8';
-            pd = true;
-        }
-
-        $.ajax({
-            type: 'POST', // type d'envoi
-            url: window.location, // url d'envoi, ici ce sera toujours la page courante
-            contentType: ct, // type de contenu
-            processData: pd, // pré-traitement de jquery
-            data: selection, // données à envoyer au serveur
-            success: function (data) { // traitement en cas de succes
-                switch (typeAction) {
-                    case types.ENREGISTREMENT:
-                        $table.bootstrapTable('append', data.reponse);
-                        completeRow(data); // finalise la création ou la modification
-                        break;
-                    case types.MODIFICATION:
-                        $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});
-                        completeRow(data); // finalise la création ou la modification
-                        break;
-                    case types.SUPPRESSION:
-                        deleteRow();
-                        break;
-                    case types.UPLOAD:
-                        $table.bootstrapTable('append', data.reponse);
-                        completeRow(data); // finalise la création ou la modification
-                        break;
-                    case types.DOWNLOAD:
-                        $table.bootstrapTable('uncheckAll');
-                        window.location = data.reponse;
-                        break;
-                    case types.UTILISATEUR:
-                        if (url == types.GROUPE) {
-                            $('#liste-children').prepend(data.reponse);
-                        }
-                        return 0;
-                        break;
-                    case types.DOCUMENT:
-                        if (url == types.PROJET) {
-                            $('#liste-children').prepend(data.reponse);
-                        }
-                        return 0;
-                        break;
-                    case types.PROJET:
-                        if (url == types.PROJET || url == types.DOCUMENT) {
-                            var $lp = $('#liste-projets');
-                            $lp.empty();
-                            $lp.prepend(data.reponse);
-                        }
-                        return 0;
-                        break;
-                    default:
-                }
-
-                sel = null; // remet la sélection à null
-                hideOuShow(0);
-                updateNbEntity();
-                activeDefault();
-
-                // affiche la notification de succes
-                showNotify('<strong>' + (url.charAt(0).toUpperCase() + url.slice(1)) +
-                    ((typeAction == types.SUPPRESSION && selection.length > 1) ? 's ' + typeAction + 's' :
-                        ' ' + typeAction) + '</strong>', 'glyphicon glyphicon-ok', 'success');
-            },
-            error: function () { // traitement en cas d'echec
-                // affiche la notification d'echec
-                showNotify('<strong>' + 'La requête n\'a pas abouti' + '</strong>',
-                    'glyphicon glyphicon-remove', 'danger');
+            // upload de fichiers
+            if (typeAction == types.UPLOAD) {
+                ct = false;
+                pd = false;
+            } else {
+                // toutes les autres requetes
+                selection = {'data': selection, 'typeAction': typeAction};
+                ct = 'application/x-www-form-urlencoded; charset=UTF-8';
+                pd = true;
             }
-        });
-    }
+
+            $.ajax({
+                type: 'POST', // type d'envoi
+                url: window.location, // url d'envoi, ici ce sera toujours la page courante
+                contentType: ct, // type de contenu
+                processData: pd, // pré-traitement de jquery
+                data: selection, // données à envoyer au serveur
+                success: function (data) { // traitement en cas de succes
+                    switch (typeAction) {
+                        case types.ENREGISTREMENT:
+                            $table.bootstrapTable('append', data.reponse);
+                            completeRow(data); // finalise la création ou la modification
+                            break;
+                        case types.MODIFICATION:
+                            $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});
+                            completeRow(data); // finalise la création ou la modification
+                            break;
+                        case types.SUPPRESSION:
+                            deleteRow();
+                            break;
+                        case types.UPLOAD:
+                            $table.bootstrapTable('append', data.reponse);
+                            completeRow(data); // finalise la création ou la modification
+                            break;
+                        case types.DOWNLOAD:
+                            $table.bootstrapTable('uncheckAll');
+                            window.location = data.reponse;
+                            break;
+                        case types.UTILISATEUR:
+                            if (url == types.GROUPE) {
+                                $('#liste-children').prepend(data.reponse);
+                            }
+                            return 0;
+                            break;
+                        case types.DOCUMENT:
+                            if (url == types.PROJET) {
+                                $('#liste-children').prepend(data.reponse);
+                            }
+                            return 0;
+                            break;
+                        case types.PROJET:
+                            if (url == types.PROJET || url == types.DOCUMENT) {
+                                var $lp = $('#liste-projets');
+                                $lp.empty();
+                                $lp.prepend(data.reponse);
+                            }
+                            return 0;
+                            break;
+                        case types.DOCUMENT_PROJET:
+                            if (url == types.HOME_USER) {
+                                var $dt = $('#desktop');
+                                $dt.empty();
+                                $dt.append('<div class="row">' + data.reponse + '</div>');
+                                $('#footer_user').append(data.fdparent);
+                            }
+                            return 0;
+                            break;
+                        default:
+                    }
+
+                    sel = null; // remet la sélection à null
+                    hideOuShow(0);
+                    updateNbEntity();
+                    activeDefault();
+
+                    // affiche la notification de succes
+                    showNotify('<strong>' + (url.charAt(0).toUpperCase() + url.slice(1)) +
+                        ((typeAction == types.SUPPRESSION && selection.length > 1) ? 's ' + typeAction + 's' :
+                            ' ' + typeAction) + '</strong>', 'glyphicon glyphicon-ok', 'success');
+                },
+                error: function () { // traitement en cas d'echec
+                    // affiche la notification d'echec
+                    showNotify('<strong>' + 'La requête n\'a pas abouti' + '</strong>',
+                        'glyphicon glyphicon-remove', 'danger');
+                }
+            });
+        }
+    });
 
     // ======================================================================================================
     // FONCTIONS REPONSE SERVEUR -> CLIENT

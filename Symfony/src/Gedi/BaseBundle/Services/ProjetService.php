@@ -76,6 +76,16 @@ class ProjetService
     }
 
     /**
+     * Retourne l'entite correspondant à l'id $sel
+     * @param $sel
+     * @return null|object
+     */
+    public function findOne($sel)
+    {
+        return $this->em->find('GediBaseBundle:Projet', $sel);
+    }
+
+    /**
      * Retourne les N derniers éléments
      * @param $max
      * @return array
@@ -150,6 +160,9 @@ class ProjetService
         switch ($childType) {
             case BaseEnum::DOCUMENT:
                 return $objet->getIdProjetFkDocument();
+                break;
+            case BaseEnum::PROJET:
+                return $objet->getChildren();
                 break;
             default:
                 throw new Exception('ChildType n\'est pas défini');

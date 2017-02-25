@@ -135,31 +135,28 @@ class UserController extends Controller
                         array_push($rows, '<li class="list-group-item">... vide</li>');
                     }
                     break;
-                case BaseEnum::PROJET:
-                    $tmp = $this->get('utilisateur.service')->getChildren($sel, $_POST['typeAction']);
+                case BaseEnum::DOCUMENT_PROJET:
+                    $tmp = $this->get('projet.service')->findOne($sel);
+                    $projets = $this->get('projet.service')->getChildren($sel, BaseEnum::PROJET);
+                    $documents = $this->get('projet.service')->getChildren($sel, BaseEnum::DOCUMENT);
 
-                    if (sizeof($tmp) > 0) {
-                        foreach ($tmp as $child) {
-                            array_push($rows, '<a id="list-activable-item-project-' . $child->getidProjet() .
-                                '" href="#" onclick="addProject(' . $child->getidProjet() .
-                                ')" class="list-group-item list-activable-item"><span class="glyphicon glyphicon-folder-close"></span> ' .
-                                $child->getNom() . '</a>');
+                    if (sizeof($projets) > 0) {
+                        foreach ($projets as $child) {
+                            array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                                '" class="folder-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
+                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
                         }
-                    } else {
-                        array_push($rows, '<a href="#" class="list-group-item">... vide</a>');
                     }
-                    break;
-                case BaseEnum::DOCUMENT:
-                    $tmp = $this->get('projet.service')->getChildren($sel, $_POST['typeAction']);
+                    if (sizeof($documents) > 0) {
+                        foreach ($documents as $child) {
+                            array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                                '" class="folder-user" href="#"><img src="/Gedi/Symfony/web/img/' . $child->getTypeDoc() . 's.png" alt="' .
+                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
+                        }
+                    }
 
-                    if (sizeof($tmp) > 0) {
-                        foreach ($tmp as $child) {
-                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
-                                $child->getTypeDoc() . " - " . $child->getTag() . '</li>');
-                        }
-                    } else {
-                        array_push($rows, '<li class="list-group-item">... vide</li>');
-                    }
+                    $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
+                    $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent));
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
@@ -186,7 +183,7 @@ class UserController extends Controller
                         '<span class="glyphicon glyphicon-pencil"></span></button></span>',
                 ];
             }
-            $response->setData(array('reponse' => (array)$rows));
+//            $response->setData(array('reponse' => (array)$rows));
             return $response;
         }
 
