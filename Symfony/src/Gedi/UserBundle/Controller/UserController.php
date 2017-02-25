@@ -143,15 +143,18 @@ class UserController extends Controller
                     if (sizeof($projets) > 0) {
                         foreach ($projets as $child) {
                             array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
-                                '" class="folder-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
-                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
+                                '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
+                                oncontextmenu="menuContext(true);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
+                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() .
+                                '</p></a></div></div>');
                         }
                     }
                     if (sizeof($documents) > 0) {
                         foreach ($documents as $child) {
                             array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
-                                '" class="folder-user" href="#"><img src="/Gedi/Symfony/web/img/' . $child->getTypeDoc() . 's.png" alt="' .
-                                $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
+                                '" class="content-user" href="#" oncontextmenu="menuContext(false);"><img src="/Gedi/Symfony/web/img/' .
+                                $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
+                                '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
                         }
                     }
 

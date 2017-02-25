@@ -363,6 +363,27 @@ function openBreadcrumb(id) {
 }
 
 /**
+ * Appel du menu contextuel
+ */
+function menuContext(isFolder) {
+    if (isFolder) {
+        $(".context-download").hide();
+        $(".context-open").show();
+    } else {
+        $(".context-download").show();
+        $(".context-open").hide();
+    }
+        $(".content-user").contextMenu({
+            menuSelector: "#contextMenu"
+            // menuSelected: function (invokedOn, selectedMenu) {
+            //     var msg = "You selected the menu item '" + selectedMenu.text() +
+            //         "' on the value '" + invokedOn.text() + "'";
+            //     alert(msg);
+            // }
+        });
+}
+
+/**
  * =======================================================================
  * block jquery
  */
@@ -375,6 +396,7 @@ $(function () {
     $(document).ready(function () {
         $('.bouton-desactive').prop('disabled', true); // désactive par défaut les boutons de la classe bouton-desactive
         $('#content').attr('style', 'visibility: visible');
+        menuContext(); // active le menu contextuel
 
         // change la variable nom en fonction de la page courante
         // charge les animations sur les pages
@@ -748,6 +770,7 @@ $(function () {
                                 $dt.append('<div class="row">' + data.reponse + '</div>');
                                 $('#footer_user').append(data.fdparent);
                             }
+                            menuContext();
                             return 0;
                             break;
                         default:
@@ -818,4 +841,52 @@ $(function () {
         $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
         $('#popup-add').modal('toggle'); // fait disparaitre le modal de création
     }
+
+    /**
+     * Appel du menu contextuel
+     */
+    (function ($, window) {
+        $.fn.contextMenu = function (settings) {
+            return this.each(function () {
+                // ouvrir le menu contextuel
+                $(this).on("contextmenu", function (e) {
+                    // return native menu if pressing control
+                    if (e.ctrlKey) return;
+
+                    // ouvrir le menu
+                    var $menu = $(settings.menuSelector)
+                        .data("invokedOn", $(e.target))
+                        .show()
+                        .css({
+                            position: "absolute",
+                            left: getMenuPosition(e.clientX, 'width', 'scrollLeft'),
+                            top: getMenuPosition(e.clientY, 'height', 'scrollTop')
+                        })
+                        .off('click')
+                        .on('click', 'a', function (e) {
+                            $menu.hide();
+                            var $invokedOn = $menu.data("invokedOn");
+                            var $selectedMenu = $(e.target);
+                            settings.menuSelected.call(this, $invokedOn, $selectedMenu);
+                        });
+                    return false;
+                });
+
+                // fermer le menu quand on clique en dehors
+                $('html').click(function () {
+                    $("#contextMenu").hide();
+                });
+            });
+
+            function getMenuPosition(mouse, direction, scrollDir) {
+                var win = $(window)[direction](),
+                    scroll = $(window)[scrollDir](),
+                    menu = $(settings.menuSelector)[direction](),
+                    position = mouse + scroll;
+                if (mouse + menu > win && menu < mouse)
+                    position -= menu;
+                return position;
+            }
+        };
+    })(jQuery, window);
 });
