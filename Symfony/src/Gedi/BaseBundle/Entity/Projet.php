@@ -90,6 +90,7 @@ class Projet
 
     /**
      * Plusieurs projets ont un projet parent
+     * @var Projet
      * @ORM\ManyToOne(targetEntity="Projet", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id_projet")
      */

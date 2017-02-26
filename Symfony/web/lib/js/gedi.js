@@ -353,7 +353,8 @@ function dashboardStart(counter) {
 // USER
 // ======================================================================================================
 
-var parent;
+var cache_parent;
+var cache_type;
 /**
  * Fonction d'édition d'entité. La fonction renseigne les champs du formulaire.
  * @param js_object, infos de l'entité à mettre dans le formulaire
@@ -383,7 +384,6 @@ function edit2(js_object, typeEntite) {
     $bsae.prop('disabled', false);
     $('#data_nom').prop('disabled', false);
     $('#data_typeDoc').prop('disabled', false);
-    $('.assign-user').hide(); // masque le panel d'assignation d'utilisateur
     $('#data_fichier').prop('disabled', true); // desactive le bouton upload
 }
 
@@ -611,7 +611,11 @@ $(function () {
      * envoi la selection à supprimer au controller via ajaxSend
      */
     $('#delete-entity').click(function () {
-        $('body').ajaxSend(sel, types.SUPPRESSION, null);
+        if (url == types.HOME_USER) {
+            $('body').ajaxSend(sel, types.SUPPRESSION, cache_type);
+        } else {
+            $('body').ajaxSend(sel, types.SUPPRESSION, null);
+        }
     });
 
     /**
@@ -806,18 +810,22 @@ $(function () {
         $(this).ajaxSend(event.currentTarget.value, types.GET, types.DOCUMENT);
     });
 
-    // $("#context-delete-folder").click(function (event) {
-    //     // $(this).ajaxSend(event.currentTarget.value, types.SUPPRESSION, types.PROJET);
-    // });
-    //
-    $("#context-delete-file").click(function (event) {
+    /**
+     * Supprimer un projet
+     */
+    $("#context-delete-folder").click(function (event) {
+        $('#nbSel').html('Vous êtes sur le point de supprimer définitivement un ' + types.PROJET);
+        cache_type = types.PROJET;
         sel = event.currentTarget.value;
-        var tmp = types.DOCUMENT;
-        if (typeof sel != 'undefined') {
-            (sel.length > 1) ? tmp += 's' : tmp;
-            $('#nbSel').html('Vous êtes sur le point de supprimer définitivement ' +
-                sel.length + ' ' + tmp);
-        }
+    });
+
+    /**
+     * Supprimer un document
+     */
+    $("#context-delete-file").click(function (event) {
+        $('#nbSel').html('Vous êtes sur le point de supprimer définitivement un ' + types.DOCUMENT);
+        cache_type = types.DOCUMENT;
+        sel = event.currentTarget.value;
     });
 
     /**
@@ -880,7 +888,10 @@ $(function () {
                             break;
                         case types.SUPPRESSION:
                             if (url == types.HOME_USER) {
-
+                                openBreadcrumb(data.idparent);
+                                showNotify('<strong>' +(typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                    ' supprimé</strong>', 'glyphicon glyphicon-ok', 'success');
+                                return 0;
                             } else {
                                 deleteRow();
                             }
@@ -924,7 +935,7 @@ $(function () {
                                 $dk.empty();
                                 $dk.append('<div class="row text-center">' + data.reponse + '</div>');
                                 $('#footer_user').append(data.fdparent);
-                                parent = data.idparent;
+                                cache_parent = data.idparent;
                             }
                             menuContext();
                             return 0;

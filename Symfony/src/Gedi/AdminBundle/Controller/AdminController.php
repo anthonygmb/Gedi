@@ -350,7 +350,7 @@ class AdminController extends Controller
                     break;
                 case BaseEnum::DOWNLOAD:
                     $this->get('document.service')->download($sel);
-                    $rows = "download";
+                    $rows = "download_admin";
                     break;
                 case BaseEnum::SUPPRESSION:
                     $rows = $this->get('document.service')->delete($sel);

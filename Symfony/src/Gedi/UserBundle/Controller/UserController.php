@@ -42,6 +42,7 @@ class UserController extends Controller
 
         if ($request->isMethod('POST') && isset($_POST['data']) && isset($_POST['typeAction'])) {
             $rows = [];
+            $parent = null;
             $response = new JsonResponse();
             $sel = $_POST['data'];
 
@@ -86,7 +87,10 @@ class UserController extends Controller
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
-                        $rows = $this->get($_POST['typeEntite'] . '.service')->delete($sel);
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
+                        array_push($rows, array('id' => $sel));
+                        $this->get($_POST['typeEntite'] . '.service')->delete($rows);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
                     }
                     break;
                 case BaseEnum::MODIFICATION:
@@ -94,19 +98,8 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
-                        switch ($_POST['typeEntite']) {
-                            case BaseEnum::GROUPE:
-                                break;
-                            case BaseEnum::PROJET:
-                                $sel = $objet->getParent();
-                                break;
-                            case BaseEnum::DOCUMENT:
-                                $sel = $objet->getIdProjetFkDocument();
-                                break;
-                            default:
-                                throw new Exception('typeEntite n\'est pas reconnu');
-                        }
-                        $tmp = $this->get('projet.service')->findOne($sel);
+                        $parent = $this->getParent($objet, $_POST['typeEntite']);
+                        return $this->createArborescence($parent);
                     }
                     break;
                 case BaseEnum::UTILISATEUR:
@@ -122,38 +115,13 @@ class UserController extends Controller
                     }
                     break;
                 case BaseEnum::DOCUMENT_PROJET:
-                    $tmp = $this->get('projet.service')->findOne($sel);
+                    $parent = $this->get('projet.service')->findOne($sel);
+                    return $this->createArborescence($parent);
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
             }
 
-            if ($_POST['typeAction'] == BaseEnum::DOCUMENT_PROJET || $_POST['typeAction'] == BaseEnum::MODIFICATION) {
-                $projets = $this->get('projet.service')->getChildren($sel, BaseEnum::PROJET);
-                $documents = $this->get('projet.service')->getChildren($sel, BaseEnum::DOCUMENT);
-
-                if (sizeof($projets) > 0) {
-                    foreach ($projets as $child) {
-                        array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
-                            '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
-                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
-                            $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
-                            '</strong></p></a></div></div>');
-                    }
-                }
-                if (sizeof($documents) > 0) {
-                    foreach ($documents as $child) {
-                        array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
-                            '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
-                            $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
-                            '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
-                    }
-                }
-
-                $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
-                $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent, 'idparent' => $tmp->getIdProjet()));
-                return $response;
-            }
             $response->setData(array('reponse' => (array)$rows));
             return $response;
         }
@@ -237,5 +205,52 @@ class UserController extends Controller
         header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
         readfile($this->getParameter('fichiers_directory') . 'archive.zip');
+    }
+
+    public function getParent($objet, $typeEntite) {
+        $parent = null;
+        switch ($typeEntite) {
+            case BaseEnum::GROUPE:
+                break;
+            case BaseEnum::PROJET:
+                $parent = $objet->getParent();
+                break;
+            case BaseEnum::DOCUMENT:
+                $parent = $objet->getIdProjetFkDocument();
+                break;
+            default:
+                throw new Exception('typeEntite n\'est pas reconnu');
+        }
+        return $parent;
+    }
+
+    public function createArborescence($parent)
+    {
+        $rows = [];
+        $response = new JsonResponse();
+        $projets = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::PROJET);
+        $documents = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::DOCUMENT);
+
+        if (sizeof($projets) > 0) {
+            foreach ($projets as $child) {
+                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                    '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
+                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
+                    $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
+                    '</strong></p></a></div></div>');
+            }
+        }
+        if (sizeof($documents) > 0) {
+            foreach ($documents as $child) {
+                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                    '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
+                    $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
+                    '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
+            }
+        }
+
+        $parent_line = '<li><a onclick="openBreadcrumb(' . $parent->getIdProjet() . ');">' . $parent->getNom() . '</a></li>';
+        $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent_line, 'idparent' => $parent->getIdProjet()));
+        return $response;
     }
 }

@@ -18,6 +18,6 @@ docs_admin:
     path:     /docs_admin
     defaults: { _controller: GediAdminBundle:Admin:documents }
 
-download:
-    path:     /download
+download_admin:
+    path:     /download_admin
     defaults: { _controller: GediAdminBundle:Admin:download }
