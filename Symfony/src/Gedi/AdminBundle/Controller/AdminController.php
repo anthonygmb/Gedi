@@ -83,9 +83,35 @@ class AdminController extends Controller
                     break;
                 case BaseEnum::ENREGISTREMENT:
                     $objet = $this->get('utilisateur.service')->create($sel);
+                    if ($objet->getActif() == true) {
+                        $message3 = \Swift_Message::newInstance()
+                            ->setSubject('Validation de compte GEDI')
+                            ->setFrom('gedi.l3imiage@gmail.com')
+                            ->setTo($objet->getUsername())
+                            ->setBody('Bonjour, 
+            
+Suite à votre inscription sur notre site, votre compte a été passé \'actif\' et est prêt à l\'utilisation !
+Vous pouvez dès maintenant stocker tous vos documents gratuitement.
+                 
+Cordialement, l\'équipe Gedi.');
+                        $this->get('mailer')->send($message3);
+                    }
                     break;
                 case BaseEnum::MODIFICATION:
                     $objet = $this->get('utilisateur.service')->update($sel);
+                    if ($objet->getActif() == true) {
+                        $message4 = \Swift_Message::newInstance()
+                            ->setSubject('Validation de compte GEDI')
+                            ->setFrom('gedi.l3imiage@gmail.com')
+                            ->setTo($objet->getUsername())
+                            ->setBody('Bonjour, 
+            
+Suite à votre inscription sur notre site, votre compte a été passé \'actif\' et est prêt à l\'utilisation !
+Vous pouvez dès maintenant stocker tous vos documents gratuitement.
+                 
+Cordialement, l\'équipe Gedi.');
+                        $this->get('mailer')->send($message4);
+                    }
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');

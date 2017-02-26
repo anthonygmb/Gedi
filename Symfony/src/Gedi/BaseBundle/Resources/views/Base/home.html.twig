@@ -1,7 +1,23 @@
 {% extends "GediBaseBundle::layout_base.html.twig" %}
 
 {% block base_titre %}
+    Accueil
+    {% if is_granted('ROLE_ADMIN') %}
+        {# affichage de l'espace admin si l'utilisateur est admin #}
+        Administration
+    {% elseif is_granted('ROLE_USER') %}
+        {# affichage de l'espace user si l'utilisateur est user #}
+        Utilisateur
+    {% endif %}
 {% endblock %}
 
 {% block base_contenu %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {#<!-- affichage de l'espace admin si l'utilisateur est admin -->#}
+        {{ render(controller("GediAdminBundle:Admin:home")) }}
+    {% elseif is_granted('ROLE_USER') %}
+        {#<!-- affichage de l'espace user si l'utilisateur est user -->#}
+        {{ render(controller("GediUserBundle:User:home")) }}
 {% endblock %}
+
+

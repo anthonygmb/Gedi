@@ -168,12 +168,9 @@ function showNotify(texte, icon, type) {
  */
 function showNotifyContact() {
     var icon = '../img/contact_img.png';
-    if (url == types.HOME_USER || url == types.SHARED_USER ||
-        url == types.RECENT_USER || url == types.ACCOUNT_USER) {
-        icon = '../../img/contact_img.png';
-    }
     $.notify({
         icon: icon,
+        message: '',
         url: 'http://localhost/Gedi/Symfony/web/app_dev.php/contact'
     }, {
         type: 'null',
@@ -184,13 +181,13 @@ function showNotifyContact() {
             align: "right"
         },
         offset: {
-            x: -270,
+            x: -310,
             y: ($(window).height() / 2)
         },
         delay: 0,
         url_target: '_self',
         animate: {
-            enter: 'animated bounceInRight'
+            enter: 'animated slideInRight'
         }
     });
 }
@@ -393,8 +390,8 @@ $(function () {
             url = types.RECENT_USER;
             showNotifyContact();
         } else if (window.location.href.indexOf("shared_user") > -1) {
-            url = types.SHARED_USER;
             showNotifyContact();
+            url = types.SHARED_USER;
         }
         updateNbEntity(); // met à jour le nombre d'entités
         activeDefault(); // active les éléments par défaut
