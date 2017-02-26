@@ -244,7 +244,7 @@ class UserController extends Controller
             foreach ($documents as $child) {
                 array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
                     '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
-                    $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
+                    $child->getTypeDoc() . '.png" alt="' . $child->getNom() .
                     '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
             }
         }
