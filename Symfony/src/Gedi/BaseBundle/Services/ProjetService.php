@@ -126,6 +126,9 @@ class ProjetService
         $newPath = substr($oldPath, 0, strrpos($oldPath, "/") + 1) . $objet->getNom();
         $objet->setPath($newPath);
         rename($this->targetDir . $oldPath, $this->targetDir . $newPath);
+
+
+
         $this->em->merge($objet);
         $this->em->flush();
         return $objet;

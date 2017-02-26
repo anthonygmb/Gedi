@@ -62,7 +62,7 @@ class DocumentService
         $projet = $this->em->find('GediBaseBundle:Projet', $sel['idProjetFkDocument']);
         $projet->addIdProjetFkDocument($objet);
         $objet->setIdProjetFkDocument($projet);
-        $fileName = $this->fs->upload($file, $projet->getPath());
+        $fileName = $this->fs->upload($file, $projet->getPath(), $objet->getTypeDoc());
         $objet->setFichier($projet->getPath() . '/' . $fileName);
         $this->em->persist($objet);
         $this->em->flush();

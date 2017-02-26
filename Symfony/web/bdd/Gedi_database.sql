@@ -96,7 +96,7 @@ ALTER TABLE Projet ADD FOREIGN KEY (parent_id) REFERENCES Projet(id_projet);
 CREATE TABLE IF NOT EXISTS Document (
 	id_document INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id document', -- id document
 	nom VARCHAR(50) NOT NULL COMMENT 'nom du document', -- nom du document
-	type_doc ENUM('doc', 'xls', 'ppt', 'docx', 'xlsx', 'pptx', 'pdf', 'odt', 'ods', 'odp', 'rtf', 'txt', 'wps', 'sxw', 'jpeg', 'jpg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'mp3', 'wav', 'ogg', 'wma', 'mid', 'rar', 'ace', '7z', 'tar', 'bz2', 'tar.bz2', 'gz', 'tar.gz', 'avi', 'mov', 'mpg', 'mpa', 'asf', 'mp2', 'm2p', 'wmv', 'vob') NOT NULL COMMENT 'type du document', -- type du document
+	type_doc ENUM('css', 'html', 'psd', 'mp4', 'flac', 'js', 'doc', 'xls', 'ppt', 'docx', 'xlsx', 'pptx', 'pdf', 'odt', 'ods', 'odp', 'rtf', 'txt', 'wps', 'sxw', 'jpeg', 'jpg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'mp3', 'wav', 'ogg', 'wma', 'mid', 'rar', 'ace', '7z', 'tar', 'bz2', 'tar.bz2', 'gz', 'tar.gz', 'avi', 'mov', 'mpg', 'mpa', 'asf', 'mp2', 'm2p', 'wmv', 'vob', 'aac') NOT NULL COMMENT 'type du document', -- type du document
 	date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT 'date de création document', -- date de création du document
 	date_modification TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'date de modification document', -- date de modification du document
 	tag VARCHAR(255) DEFAULT NULL COMMENT 'tags du document', -- tags du document
