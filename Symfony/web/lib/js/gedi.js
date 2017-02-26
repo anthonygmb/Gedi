@@ -1,3 +1,7 @@
+// ======================================================================================================
+// COMMUN
+// ======================================================================================================
+
 /**
  * Variable de selection d'entité
  * @var {object} sel
@@ -9,12 +13,6 @@ var sel;
  * @var {string} url
  */
 var url;
-
-/**
- * Tableau des logins
- * @var {array} logins
- */
-var logins;
 
 /**
  * Enumération des types d'actions possibles sur le serveur
@@ -37,10 +35,6 @@ const types = {
     ACCOUNT_USER: "account_user", // page account_user
     GET: "get" // demande d'informations sur une entité
 };
-
-// ======================================================================================================
-// FONCTIONS CLIENT
-// ======================================================================================================
 
 /**
  * Fonction permettant d'activer le back to top
@@ -72,6 +66,75 @@ function activeDefault() {
     $('[data-toggle="tooltip"]').tooltip(); // permet de jouer les tooltips
     $('[data-toggle="popover"]').popover(); // permet de jouer les popover
 }
+
+
+/**
+ * Fonction d'affichage de popups de notification.
+ * @param texte, texte à afficher
+ * @param icon, icone bootstrap à afficher
+ * @param type, type de notification à afficher [success, info, primary, warning, danger]
+ */
+function showNotify(texte, icon, type) {
+    if (texte.length > 1) {
+        $.notify({
+            icon: icon,
+            message: texte
+        }, {
+            type: type,
+            placement: {
+                from: "top",
+                align: "left"
+            },
+            animate: {
+                enter: 'animated bounceInDown',
+                exit: 'animated bounceOutUp'
+            }
+        });
+    }
+}
+
+/**
+ * Fonction d'affichage de pop-up de contact
+ */
+function showNotifyContact() {
+    var icon = '../img/contact_img.png';
+    if (url == types.HOME_USER || url == types.SHARED_USER ||
+        url == types.RECENT_USER || url == types.ACCOUNT_USER) {
+        icon = '../../../img/contact_img.png';
+    }
+    $.notify({
+        icon: icon,
+        url: 'http://localhost/Gedi/Symfony/web/app_dev.php/contact'
+    }, {
+        type: 'null',
+        icon_type: 'image',
+        allow_dismiss: false,
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        offset: {
+            x: -270,
+            y: ($(window).height() / 2)
+        },
+        delay: 0,
+        url_target: '_self',
+        animate: {
+            enter: 'animated bounceInRight'
+        }
+    });
+}
+
+
+// ======================================================================================================
+// ADMIN
+// ======================================================================================================
+
+/**
+ * Tableau des logins
+ * @var {array} logins
+ */
+var logins;
 
 /**
  * Fonction pour mettre à jour le nombre d'utilisateurs inactifs
@@ -141,63 +204,6 @@ function hideOuShow(nbSel) {
 }
 
 /**
- * Fonction d'affichage de popups de notification.
- * @param texte, texte à afficher
- * @param icon, icone bootstrap à afficher
- * @param type, type de notification à afficher [success, info, primary, warning, danger]
- */
-function showNotify(texte, icon, type) {
-    if (texte.length > 1) {
-        $.notify({
-            icon: icon,
-            message: texte
-        }, {
-            type: type,
-            placement: {
-                from: "top",
-                align: "left"
-            },
-            animate: {
-                enter: 'animated bounceInDown',
-                exit: 'animated bounceOutUp'
-            }
-        });
-    }
-}
-
-/**
- * Fonction d'affichage de pop-up de contact
- */
-function showNotifyContact() {
-    var icon = '../img/contact_img.png';
-    if (url == types.HOME_USER || url == types.SHARED_USER ||
-        url == types.RECENT_USER || url == types.ACCOUNT_USER) {
-        icon = '../../../img/contact_img.png';
-    }
-    $.notify({
-        icon: icon,
-        url: 'http://localhost/Gedi/Symfony/web/app_dev.php/contact'
-    }, {
-        type: 'null',
-        icon_type: 'image',
-        allow_dismiss: false,
-        placement: {
-            from: "top",
-            align: "right"
-        },
-        offset: {
-            x: -270,
-            y: ($(window).height() / 2)
-        },
-        delay: 0,
-        url_target: '_self',
-        animate: {
-            enter: 'animated bounceInRight'
-        }
-    });
-}
-
-/**
  * Fonction d'édition d'entité. La fonction renseigne les champs du formulaire.
  * @param js_object_arg, infos de l'entité à mettre dans le formulaire
  */
@@ -225,40 +231,6 @@ function edit(js_object_arg) {
 
     // modification du popup ajout / edition
     $('#popup-admin-add-titre').html('Modifier un ' + url);
-    var $bsae = $('.bouton-submit-admin-entity');
-    $bsae.val('Appliquer');
-    $bsae.prop('disabled', false);
-    $('#data_nom').prop('disabled', false);
-    $('#data_typeDoc').prop('disabled', false);
-    $('.assign-user').hide(); // masque le panel d'assignation d'utilisateur
-    $('#data_fichier').prop('disabled', true); // desactive le bouton upload
-}
-
-/**
- * Fonction d'édition d'entité. La fonction renseigne les champs du formulaire.
- * @param js_object, infos de l'entité à mettre dans le formulaire
- * @param typeEntite, type d'entité éditée
- */
-function edit2(js_object, typeEntite) {
-
-    // remplissages de champs des formulaires
-    for (var key in js_object) {
-        if (key == 'actif' && js_object[key] == '1') {
-            $('#gedi_basebundle_' + typeEntite + '_' + key).bootstrapToggle('on');
-        } else if (key == 'password') {
-            $('#gedi_basebundle_' + typeEntite + '_' + key + '_first').val(js_object[key]);
-            $('#gedi_basebundle_' + typeEntite + '_' + key + '_second').val(js_object[key]);
-        } else {
-            if (typeEntite == types.DOCUMENT) {
-                $('#data_' + key).val(js_object[key]);
-            } else {
-                $('#gedi_basebundle_' + typeEntite + '_' + key).val(js_object[key]);
-            }
-        }
-    }
-
-    // modification du popup ajout / edition
-    $('.popup-admin-add-user').html('Modifier un ' + typeEntite);
     var $bsae = $('.bouton-submit-admin-entity');
     $bsae.val('Appliquer');
     $bsae.prop('disabled', false);
@@ -352,6 +324,7 @@ function validFormDoc() {
         $bt.prop('disabled', false);
     }
 }
+
 /**
  * Fonction executée sur le dashboard administrateur
  * @param counter
@@ -375,6 +348,44 @@ function dashboardStart(counter) {
             }
         }, 1500);
     }
+}
+
+// ======================================================================================================
+// USER
+// ======================================================================================================
+
+var parent;
+/**
+ * Fonction d'édition d'entité. La fonction renseigne les champs du formulaire.
+ * @param js_object, infos de l'entité à mettre dans le formulaire
+ * @param typeEntite, type d'entité éditée
+ */
+function edit2(js_object, typeEntite) {
+
+    // remplissages de champs des formulaires
+    for (var key in js_object) {
+        if (key == 'password') {
+            $('#gedi_basebundle_' + typeEntite + '_' + key + '_first').val(js_object[key]);
+            $('#gedi_basebundle_' + typeEntite + '_' + key + '_second').val(js_object[key]);
+        } else {
+            if (typeEntite == types.DOCUMENT) {
+                $('#data_' + key).val(js_object[key]);
+            } else {
+                $('#gedi_basebundle_' + typeEntite + '_' + key).val(js_object[key]);
+            }
+        }
+    }
+    // $('#data_idProjetFkDocument').val(parent);
+
+    // modification du popup ajout / edition
+    $('.popup-admin-add-user').html('Modifier un ' + typeEntite);
+    var $bsae = $('.bouton-submit-admin-entity');
+    $bsae.val('Appliquer');
+    $bsae.prop('disabled', false);
+    $('#data_nom').prop('disabled', false);
+    $('#data_typeDoc').prop('disabled', false);
+    $('.assign-user').hide(); // masque le panel d'assignation d'utilisateur
+    $('#data_fichier').prop('disabled', true); // desactive le bouton upload
 }
 
 /**
@@ -664,10 +675,14 @@ $(function () {
         var selection = $form.serializeArray();
         var formdata = new FormData($form[0]);
 
-        var file = document.getElementById("data_fichier");
-        formdata.append('typeAction', types.UPLOAD);
-        formdata.append('fichier', file.files[0]);
-        $('body').ajaxSend(formdata, types.UPLOAD, types.DOCUMENT);
+        if (selection[0].value == "") {
+            var file = document.getElementById("data_fichier");
+            formdata.append('typeAction', types.UPLOAD);
+            formdata.append('fichier', file.files[0]);
+            $('body').ajaxSend(formdata, types.UPLOAD, types.DOCUMENT);
+        } else {
+            $('body').ajaxSend(selection, types.MODIFICATION, types.DOCUMENT);
+        }
     });
 
     $('.form-projet').submit(function (event) {
@@ -787,11 +802,11 @@ $(function () {
     });
 
     $("#context-delete-folder").click(function (event) {
-        // $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+        // $(this).ajaxSend(event.currentTarget.value, types.SUPPRESSION, types.PROJET);
     });
 
-    $("#context-delete-folder").click(function (event) {
-        // $(this).ajaxSend(event.currentTarget.value, types.DOCUMENT_PROJET);
+    $("#context-delete-file").click(function (event) {
+        $(this).ajaxSend(event.currentTarget.value, types.SUPPRESSION, types.DOCUMENT)
     });
 
     /**
@@ -842,15 +857,14 @@ $(function () {
                             break;
                         case types.MODIFICATION:
                             if (url == types.HOME_USER) {
-                                var $dt = $('#desktop');
-                                $dt.empty();
-                                $dt.append('<div class="row">' + data.reponse + '</div>');
-                                $('#footer_user').append(data.fdparent);
-                                menuContext();
+                                openBreadcrumb(data.idparent);
                                 $('form').trigger("reset"); // reset le formulaire de création
                                 $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
-                                $('#popup-add-folder').modal('toggle'); // fait disparaitre le modal de création
-                                // $('#popup-add-file').modal('toggle'); // fait disparaitre le modal de création
+                                if (typeEntite == types.PROJET) {
+                                    $('#popup-add-folder').modal('toggle'); // fait disparaitre le modal de création
+                                } else if (typeEntite == types.DOCUMENT) {
+                                    $('#popup-add-file').modal('toggle'); // fait disparaitre le modal de création
+                                }
                                 return 0;
                             } else {
                                 $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});
@@ -895,10 +909,11 @@ $(function () {
                             break;
                         case types.DOCUMENT_PROJET:
                             if (url == types.HOME_USER) {
-                                var $dt = $('#desktop');
-                                $dt.empty();
-                                $dt.append('<div class="row">' + data.reponse + '</div>');
+                                var $dk = $('#desktop');
+                                $dk.empty();
+                                $dk.append('<div class="row">' + data.reponse + '</div>');
                                 $('#footer_user').append(data.fdparent);
+                                parent = data.idparent;
                             }
                             menuContext();
                             return 0;

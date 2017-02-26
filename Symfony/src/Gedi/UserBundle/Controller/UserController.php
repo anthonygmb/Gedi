@@ -137,6 +137,8 @@ class UserController extends Controller
                                 break;
                             case BaseEnum::DOCUMENT:
                                 $objet = $this->get('document.service')->update($sel);
+                                $sel = $objet->getIdProjetFkDocument();
+                                $tmp = $this->get('projet.service')->findOne($sel);
                                 break;
                             default:
                                 throw new Exception('typeEntite n\'est pas reconnu');
@@ -185,7 +187,7 @@ class UserController extends Controller
                 }
 
                 $parent = '<li><a onclick="openBreadcrumb(' . $tmp->getIdProjet() . ');">' . $tmp->getNom() . '</a></li>';
-                $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent));
+                $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent, 'idparent' => $tmp->getIdProjet()));
                 return $response;
             }
             $response->setData(array('reponse' => (array)$rows));

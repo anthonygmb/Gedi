@@ -126,37 +126,11 @@
                                 'style' : 'resize : none'
                             }}) }}
                         </div>
-                        {{ form_row(documentForm.idUtilisateurFkDocument) }}
+                        {{ form_row(documentForm.idUtilisateurFkDocument, { 'attr':  {
+                            'value': app.user.idUtilisateur
+                        }}) }}
                         {{ form_row(documentForm.idProjetFkDocument) }}
                         {{ form_errors(documentForm.fichier) }}
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="panel panel-info assign-user">
-                                <div class="panel-heading">
-                                    <h5>Définir le propriétaire du document</h5>
-                                </div>
-                                <div class="list-group">
-                                    {#{% for utilisateur in tab_users %}#}
-                                        {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
-                                            {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
-                                               {#class="list-group-item list-users-item list-activable-item"#}
-                                               {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
-                                                {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}#}
-                                            {#</a>#}
-                                        {#{% endif %}#}
-                                    {#{% endfor %}#}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-info assign-user">
-                                <div class="panel-heading">
-                                    <h5>Définir le projet parent</h5>
-                                </div>
-                                <div id="liste-projets" class="list-group"></div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
@@ -202,36 +176,11 @@
                                 'placeholder': 'Nom du projet'
                             }}) }}
                         </div>
-                        {{ form_row(projetForm.idUtilisateurFkProjet) }}
+                        {{ form_row(projetForm.idUtilisateurFkProjet, { 'attr':  {
+                            'value': app.user.idUtilisateur
+                        }}) }}
                         {{ form_row(projetForm.parent) }}
                         <br>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="panel panel-info assign-user">
-                                <div class="panel-heading">
-                                    <h5>Définir le propriétaire du projet</h5>
-                                </div>
-                                <div class="list-group">
-                                    {#{% for utilisateur in tab_users %}#}
-                                        {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
-                                            {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
-                                               {#class="list-group-item list-users-item list-activable-item"#}
-                                               {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
-                                                {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}</a>#}
-                                        {#{% endif %}#}
-                                    {#{% endfor %}#}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-info assign-user">
-                                <div class="panel-heading">
-                                    <h5>Définir le projet parent</h5>
-                                </div>
-                                <div id="liste-projets" class="list-group"></div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
@@ -269,24 +218,10 @@
                                 'placeholder': 'Nom du groupe'
                             }}) }}
                         </div>
-                        {{ form_row(groupeForm.idUtilisateurFkGroupe) }}
+                        {{ form_row(groupeForm.idUtilisateurFkGroupe, { 'attr':  {
+                            'value': app.user.idUtilisateur
+                        }}) }}
                         <br>
-                    </div>
-
-                    <div class="panel panel-info assign-user">
-                        <div class="panel-heading">
-                            <h5>Définir le propriétaire du groupe</h5>
-                        </div>
-                        <div class="list-group">
-                            {#{% for utilisateur in tab_users %}#}
-                                {#{% if (utilisateur.role == 'ROLE_USER' and utilisateur.actif == '1') %}#}
-                                    {#<a id="list-activable-item-{{ utilisateur.idUtilisateur }}" href="#"#}
-                                       {#class="list-group-item list-activable-item"#}
-                                       {#onclick="addUser('{{ utilisateur.idUtilisateur }}');">#}
-                                        {#<span class="glyphicon glyphicon-user"></span> {{ utilisateur.nom }} {{ utilisateur.prenom }}</a>#}
-                                {#{% endif %}#}
-                            {#{% endfor %}#}
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
