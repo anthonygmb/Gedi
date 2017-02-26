@@ -880,6 +880,8 @@ $(function () {
                                 $('form').trigger("reset"); // reset le formulaire de création
                                 $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
+                                showNotify('<strong>' +(typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                    ' modifié</strong>', 'glyphicon glyphicon-ok', 'success');
                                 return 0;
                             } else {
                                 $table.bootstrapTable('updateByUniqueId', {id: data.reponse.id, row: data.reponse});

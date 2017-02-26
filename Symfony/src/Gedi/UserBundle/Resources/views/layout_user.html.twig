@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block app_contenu %}
+    <ol id="footer_user" class="breadcrumb">
+        <li><a href="{{ path('start') }}">Home</a></li>
+        <li id="breadcrumb-flag">{% block breadcrumb_user %}{% endblock %}</li>
+    </ol>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
@@ -32,15 +36,11 @@
                     </li>
                 </ul>
             </div>
-            <div id="desktop" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div id="desktop" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main folder-line-down">
                 {% block user_contenu %}{% endblock %}
             </div>
         </div>
     </div>
-    <ol id="footer_user" class="breadcrumb">
-        <li><a href="{{ path('start') }}">Home</a></li>
-        <li id="breadcrumb-flag">{% block breadcrumb_user %}{% endblock %}</li>
-    </ol>
 
     <!-- Popup fenetre de suppression d'entité -->
     <div class="modal fade" id="popup-delete" role="dialog">

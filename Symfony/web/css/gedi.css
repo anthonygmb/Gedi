@@ -50,9 +50,10 @@
 
 #footer_user {
     position:absolute;
-    bottom:0;
+    /*bottom:0;*/
     margin-left: 10%;
-    width:80%;
+    width:81%;
+    margin-top: -1%;
 }
 
 .background-app {
@@ -83,6 +84,10 @@
 
 .down-decale {
     margin-top: 2%;
+}
+
+.folder-line-down {
+    margin-top: 5%;
 }
 
 .up-decale {
