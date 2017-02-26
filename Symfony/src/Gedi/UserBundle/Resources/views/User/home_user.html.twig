@@ -6,13 +6,13 @@
     {#{% for groupe in tab_groups %}#}
     {#<p>{{ groupe.nom }}</p>#}
     {#{% endfor %}#}
-    <div class="row">
+    <div class="row text-center">
         <div class="col-md-2">
             <div class="panel full-transparent"><a id="{{ tab_projects.idProjet }}" class="content-user" href="#"
                                                    onclick="openFolder('{{ tab_projects.idProjet }}');"
                                                    oncontextmenu="menuContext(true, this.id);">
                     <img src="{{ asset('img/folder.png') }}" alt="{{ tab_projects.nom }}"/>
-                    <p class="text-white text-center">{{ tab_projects.nom }}</p>
+                    <p class="text-white"><strong>{{ tab_projects.nom }}</strong></p>
                 </a>
             </div>
         </div>
@@ -22,7 +22,5 @@
 {% block breadcrumb_user %}
     <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">Bureau {{ app.user.prenom }}</a>
 {% endblock %}
-
-{% block popup_user_del_titre %}{% endblock %}
 
 {% block popup_user_add_contenu %}{% endblock %}

@@ -48,7 +48,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Suppression {% block popup_user_del_titre %}{% endblock %}</h4>
+                    <h4 class="modal-title">Suppression </h4>
                 </div>
                 <!-- contenu mis à jour dans majPopupDelete de gedi.js -->
                 <div class="modal-body">
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Popup fenetre d'ajout de documents -->
-    <div class="modal fade" id="popup-add-file" role="dialog">
+    <div class="modal fade" id="popup-add-document" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,7 +134,8 @@
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
-                            <label id="bouton-upload" class="btn btn-primary"><span class="glyphicon glyphicon-cloud-upload"></span>
+                            <label id="bouton-upload" class="btn btn-primary"><span
+                                        class="glyphicon glyphicon-cloud-upload"></span>
                                 Uploader
                                 {{ form_widget(documentForm.fichier, { 'attr':  {
                                     'rows': '1',
@@ -143,7 +144,9 @@
                                 }}) }}
                             </label>
                             <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
-                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">
+                                Annuler
+                            </button>
                         </div>
                     </div>
                     {{ form_end(documentForm) }}
@@ -153,7 +156,7 @@
     </div>
 
     <!-- Popup fenetre d'ajout de projets -->
-    <div class="modal fade" id="popup-add-folder" role="dialog">
+    <div class="modal fade" id="popup-add-projet" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -185,7 +188,9 @@
                     <div class="modal-footer">
                         <div class="form-group">
                             <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
-                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">
+                                Annuler
+                            </button>
                         </div>
                     </div>
                     {{ form_end(projetForm) }}
@@ -226,7 +231,9 @@
                     <div class="modal-footer">
                         <div class="form-group">
                             <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
-                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">
+                                Annuler
+                            </button>
                         </div>
                     </div>
                     {{ form_end(groupeForm) }}
@@ -240,16 +247,18 @@
         <li id="context-open-folder" class="context-folder"><a tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-folder-open">
                 </span> Ouvrir</a></li>
-        <li id="context-edit-folder" class="context-folder"><a data-toggle="modal" data-target="#popup-add-folder" onclick=""
+        <li id="context-edit-folder" class="context-folder"><a data-toggle="modal" data-target="#popup-add-projet"
                                                                tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-pencil"></span> Modifier</a></li>
-        <li id="context-edit-file" class="context-file"><a data-toggle="modal" data-target="#popup-add-file" onclick=""
+        <li id="context-edit-file" class="context-file"><a data-toggle="modal" data-target="#popup-add-document"
                                                            tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-pencil"></span> Modifier</a></li>
         <li class="divider"></li>
-        <li id="context-delete-folder" class="context-folder"><a tabindex="-1" href="#"><span
+        <li id="context-delete-folder" class="context-folder"><a data-toggle="modal" data-target="#popup-delete"
+                                                                 tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-trash"></span> Supprimer</a></li>
-        <li id="context-delete-file" class="context-file"><a tabindex="-1" href="#"><span
+        <li id="context-delete-file" class="context-file"><a data-toggle="modal" data-target="#popup-delete"
+                                                             tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-trash"></span> Supprimer</a></li>
         <li class="divider context-file"></li>
         <li id="context-download-file" class="context-file"><a tabindex="-1" href="#"><span

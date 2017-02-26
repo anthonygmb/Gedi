@@ -54,16 +54,7 @@ class UserController extends Controller
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
-                        switch ($_POST['typeEntite']) {
-                            case BaseEnum::PROJET:
-                                $objet = $this->get('projet.service')->findOne($sel);
-                                break;
-                            case BaseEnum::DOCUMENT:
-                                $objet = $this->get('document.service')->findOne($sel);
-                                break;
-                            default:
-                                throw new Exception('typeEntite n\'est pas reconnu');
-                        }
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
                         $rows = $objet->toArray();
                     }
                     break;
@@ -88,61 +79,34 @@ class UserController extends Controller
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
-                        switch ($_POST['typeEntite']) {
-                            case BaseEnum::GROUPE:
-                                $objet = $this->get('groupe.service')->create($sel);
-                                break;
-                            case BaseEnum::PROJET:
-                                $objet = $this->get('projet.service')->create($sel);
-                                break;
-                            case BaseEnum::DOCUMENT:
-                                $objet = $this->get('document.service')->create($sel);
-                                break;
-                            default:
-                                throw new Exception('typeEntite n\'est pas reconnu');
-                        }
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
                     }
                     break;
                 case BaseEnum::SUPPRESSION:
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
-                        switch ($_POST['typeEntite']) {
-                            case BaseEnum::GROUPE:
-                                $rows = $this->get('groupe.service')->delete($sel);
-                                break;
-                            case BaseEnum::PROJET:
-                                $rows = $this->get('projet.service')->delete($sel);
-                                break;
-                            case BaseEnum::DOCUMENT:
-                                $rows = $this->get('document.service')->delete($sel);
-                                break;
-                            default:
-                                throw new Exception('typeEntite n\'est pas reconnu');
-                        }
+                        $rows = $this->get($_POST['typeEntite'] . '.service')->delete($sel);
                     }
                     break;
                 case BaseEnum::MODIFICATION:
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
                         switch ($_POST['typeEntite']) {
                             case BaseEnum::GROUPE:
-                                $objet = $this->get('groupe.service')->update($sel);
                                 break;
                             case BaseEnum::PROJET:
-                                $objet = $this->get('projet.service')->update($sel);
                                 $sel = $objet->getParent();
-                                $tmp = $this->get('projet.service')->findOne($sel);
                                 break;
                             case BaseEnum::DOCUMENT:
-                                $objet = $this->get('document.service')->update($sel);
                                 $sel = $objet->getIdProjetFkDocument();
-                                $tmp = $this->get('projet.service')->findOne($sel);
                                 break;
                             default:
                                 throw new Exception('typeEntite n\'est pas reconnu');
                         }
+                        $tmp = $this->get('projet.service')->findOne($sel);
                     }
                     break;
                 case BaseEnum::UTILISATEUR:
@@ -173,8 +137,8 @@ class UserController extends Controller
                         array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
                             '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
                                 oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
-                            $child->getNom() . '"/><p class="text-white text-center">' . $child->getNom() .
-                            '</p></a></div></div>');
+                            $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
+                            '</strong></p></a></div></div>');
                     }
                 }
                 if (sizeof($documents) > 0) {
@@ -182,7 +146,7 @@ class UserController extends Controller
                         array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
                             '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
                             $child->getTypeDoc() . 's.png" alt="' . $child->getNom() .
-                            '"/><p class="text-white text-center">' . $child->getNom() . '</p></a></div></div>');
+                            '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
                     }
                 }
 
@@ -194,10 +158,10 @@ class UserController extends Controller
             return $response;
         }
 
-        // importation de tous les groupes
+        // importation des groupes de l'utilisateur
         $tab_groups = $this->get('utilisateur.service')->
         getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
-        // importation de tous les projets
+        // importation des projets de l'utilisateur
         $tab_projects = $this->get('utilisateur.service')->
         getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::PROJET)[0];
 
