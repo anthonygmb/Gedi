@@ -207,4 +207,20 @@ class UtilisateurService
                 throw new Exception('ChildType n\'est pas défini');
         }
     }
+
+   /* public function mailAction($username)
+    {
+        //envoi d'un mail de validation de compte
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Validation de compte GEDI')
+            ->setFrom('gedi.l3imiage@gmail.com')
+            ->setTo($username)
+            ->setBody('Bonjour, 
+            
+Suite à votre inscription sur notre site, votre compte a été passé \'actif\' et est prêt à l\'utilisation !
+Vous pouvez dès maintenant stocker tous vos documents gratuitement.
+                 
+Cordialement, l\'équipe Gedi.');
+        $this->get('mailer')->send($message);
+    }*/
 }
