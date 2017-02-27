@@ -58,11 +58,13 @@ class GroupeService
     /**
      * Retourne l'entite correspondant à l'id $sel
      * @param $sel
-     * @return null|object
+     * @return Groupe
      */
     public function findOne($sel)
     {
-        return $this->em->find('GediBaseBundle:Groupe', $sel);
+        /* @var $objet Groupe */
+        $objet = $this->em->find('GediBaseBundle:Groupe', $sel);
+        return $objet;
     }
 
     /**
@@ -96,10 +98,11 @@ class GroupeService
     /**
      * Met à jour un groupe
      * @param $sel
-     * @return null|object
+     * @return Groupe
      */
     public function update($sel)
     {
+        /* @var $objet Groupe */
         $objet = $this->em->find('GediBaseBundle:Groupe', $sel[0]['value']);
         $objet->setNom($sel[1]['value']);
         $this->em->merge($objet);
@@ -126,11 +129,12 @@ class GroupeService
      * Permet de récupérer les entités enfants d'un objet
      * @param $sel
      * @param $childType
-     * @return array
+     * @return \Doctrine\Common\Collections\Collection
      * @throws Exception
      */
     public function getChildren($sel, $childType)
     {
+        /* @var $objet Groupe */
         $objet = $this->em->find('GediBaseBundle:Groupe', $sel);
         switch ($childType) {
             case BaseEnum::UTILISATEUR:

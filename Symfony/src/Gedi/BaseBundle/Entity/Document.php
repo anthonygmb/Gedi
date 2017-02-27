@@ -146,6 +146,16 @@ class Document
     }
 
     /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
      * Set nom
      *
      * @param string $nom
@@ -160,13 +170,13 @@ class Document
     }
 
     /**
-     * Get nom
+     * Get typeDoc
      *
      * @return string
      */
-    public function getNom()
+    public function getTypeDoc()
     {
-        return $this->nom;
+        return $this->typeDoc;
     }
 
     /**
@@ -184,13 +194,13 @@ class Document
     }
 
     /**
-     * Get typeDoc
+     * Get dateCreation
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getTypeDoc()
+    public function getDateCreation()
     {
-        return $this->typeDoc;
+        return $this->dateCreation;
     }
 
     /**
@@ -208,13 +218,13 @@ class Document
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+    public function getDateModification()
     {
-        return $this->dateCreation;
+        return $this->dateModification;
     }
 
     /**
@@ -232,13 +242,13 @@ class Document
     }
 
     /**
-     * Get dateModification
+     * Get tag
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDateModification()
+    public function getTag()
     {
-        return $this->dateModification;
+        return $this->tag;
     }
 
     /**
@@ -256,13 +266,13 @@ class Document
     }
 
     /**
-     * Get tag
+     * Get resume
      *
      * @return string
      */
-    public function getTag()
+    public function getResume()
     {
-        return $this->tag;
+        return $this->resume;
     }
 
     /**
@@ -280,13 +290,13 @@ class Document
     }
 
     /**
-     * Get resume
+     * Get fichier
      *
      * @return string
      */
-    public function getResume()
+    public function getFichier()
     {
-        return $this->resume;
+        return $this->fichier;
     }
 
     /**
@@ -301,16 +311,6 @@ class Document
         $this->fichier = $fichier;
 
         return $this;
-    }
-
-    /**
-     * Get fichier
-     *
-     * @return string
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
     }
 
     /**
@@ -338,6 +338,16 @@ class Document
     }
 
     /**
+     * Get idProjetFkDocument
+     *
+     * @return Projet
+     */
+    public function getIdProjetFkDocument()
+    {
+        return $this->idProjetFkDocument;
+    }
+
+    /**
      * Set idProjetFkDocument
      *
      * @param $idProjetFkDocument
@@ -352,13 +362,13 @@ class Document
     }
 
     /**
-     * Get idProjetFkDocument
+     * Get idUtilisateurFkDocument
      *
-     * @return Projet
+     * @return Utilisateur
      */
-    public function getIdProjetFkDocument()
+    public function getIdUtilisateurFkDocument()
     {
-        return $this->idProjetFkDocument;
+        return $this->idUtilisateurFkDocument;
     }
 
     /**
@@ -373,16 +383,6 @@ class Document
         $this->idUtilisateurFkDocument = $idUtilisateurFkDocument;
 
         return $this;
-    }
-
-    /**
-     * Get idUtilisateurFkDocument
-     *
-     * @return Utilisateur
-     */
-    public function getIdUtilisateurFkDocument()
-    {
-        return $this->idUtilisateurFkDocument;
     }
 
     /**

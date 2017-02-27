@@ -4,7 +4,6 @@ namespace Gedi\BaseBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 use Gedi\BaseBundle\Entity\Document;
-use Symfony\Component\HttpFoundation\File\File;
 use ZipArchive;
 
 /**
@@ -81,11 +80,13 @@ class DocumentService
     /**
      * Retourne l'entite correspondant à l'id $sel
      * @param $sel
-     * @return null|object
+     * @return Document
      */
     public function findOne($sel)
     {
-        return $this->em->find('GediBaseBundle:Document', $sel);
+        /* @var $objet Document */
+        $objet = $this->em->find('GediBaseBundle:Document', $sel);
+        return $objet;
     }
 
     /**
@@ -154,10 +155,11 @@ class DocumentService
     /**
      * Met à jour un document
      * @param $sel
-     * @return null|object
+     * @return Document
      */
     public function update($sel)
     {
+        /* @var $objet Document */
         $objet = $this->em->find('GediBaseBundle:Document', $sel[0]['value']);
         $objet->setNom($sel[1]['value']);
         $objet->setTypeDoc($sel[2]['value']);

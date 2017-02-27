@@ -105,11 +105,13 @@ class UtilisateurService
     /**
      * Retourne l'entite correspondant à l'id $sel
      * @param $sel
-     * @return null|object
+     * @return Utilisateur
      */
     public function findOne($sel)
     {
-        return $this->em->find('GediBaseBundle:Utilisateur', $sel);
+        /* @var $objet Utilisateur */
+        $objet = $this->em->find('GediBaseBundle:Utilisateur', $sel);
+        return $objet;
     }
 
     /**
@@ -157,10 +159,11 @@ class UtilisateurService
      * Met à jour un utilisateur et crée son repertoire de sauvegarde
      * si il n'était pas actif
      * @param $sel
-     * @return null|object
+     * @return Utilisateur
      */
     public function update($sel)
     {
+        /* @var $objet Utilisateur */
         $objet = $this->em->find('GediBaseBundle:Utilisateur', $sel[0]['value']);
         $objet->setUsername($sel[1]['value']);
         if ($objet->getPassword() != $sel[2]['value']) {
@@ -203,11 +206,12 @@ class UtilisateurService
      * Permet de récupérer les entités enfants d'un objet
      * @param $sel
      * @param $childType
-     * @return array
+     * @return \Doctrine\Common\Collections\Collection
      * @throws Exception
      */
     public function getChildren($sel, $childType)
     {
+        /* @var $objet Utilisateur */
         $objet = $this->em->find('GediBaseBundle:Utilisateur', $sel);
         switch ($childType) {
             case BaseEnum::PROJET:

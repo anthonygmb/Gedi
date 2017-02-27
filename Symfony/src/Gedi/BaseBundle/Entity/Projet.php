@@ -119,6 +119,16 @@ class Projet
     }
 
     /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
      * Set nom
      *
      * @param string $nom
@@ -133,13 +143,13 @@ class Projet
     }
 
     /**
-     * Get nom
+     * Get path
      *
      * @return string
      */
-    public function getNom()
+    public function getPath()
     {
-        return $this->nom;
+        return $this->path;
     }
 
     /**
@@ -157,13 +167,13 @@ class Projet
     }
 
     /**
-     * Get path
+     * Get dateCreation
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getPath()
+    public function getDateCreation()
     {
-        return $this->path;
+        return $this->dateCreation;
     }
 
     /**
@@ -181,13 +191,13 @@ class Projet
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+    public function getDateModification()
     {
-        return $this->dateCreation;
+        return $this->dateModification;
     }
 
     /**
@@ -205,13 +215,13 @@ class Projet
     }
 
     /**
-     * Get dateModification
+     * Get idUtilisateurFkProjet
      *
-     * @return \DateTime
+     * @return Utilisateur
      */
-    public function getDateModification()
+    public function getIdUtilisateurFkProjet()
     {
-        return $this->dateModification;
+        return $this->idUtilisateurFkProjet;
     }
 
     /**
@@ -226,16 +236,6 @@ class Projet
         $this->idUtilisateurFkProjet = $idUtilisateurFkProjet;
 
         return $this;
-    }
-
-    /**
-     * Get idUtilisateurFkProjet
-     *
-     * @return Utilisateur
-     */
-    public function getIdUtilisateurFkProjet()
-    {
-        return $this->idUtilisateurFkProjet;
     }
 
     /**

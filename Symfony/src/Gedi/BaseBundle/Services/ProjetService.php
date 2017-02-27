@@ -33,6 +33,7 @@ class ProjetService
      * ProjetService constructor.
      * @param EntityManager $entityManager
      * @param $targetDir
+     * @param FileService $fileService
      */
     public function __construct(EntityManager $entityManager, $targetDir, FileService $fileService)
     {
@@ -78,11 +79,13 @@ class ProjetService
     /**
      * Retourne l'entite correspondant à l'id $sel
      * @param $sel
-     * @return null|object
+     * @return Projet
      */
     public function findOne($sel)
     {
-        return $this->em->find('GediBaseBundle:Projet', $sel);
+        /* @var $objet Projet */
+        $objet = $this->em->find('GediBaseBundle:Projet', $sel);
+        return $objet;
     }
 
     /**
@@ -116,19 +119,17 @@ class ProjetService
     /**
      * Met à jour un projet
      * @param $sel
-     * @return null|object
+     * @return Projet
      */
     public function update($sel)
     {
+        /* @var $objet Projet */
         $objet = $this->em->find('GediBaseBundle:Projet', $sel[0]['value']);
         $objet->setNom($sel[1]['value']);
         $oldPath = $objet->getPath();
         $newPath = substr($oldPath, 0, strrpos($oldPath, "/") + 1) . $objet->getNom();
         $objet->setPath($newPath);
         rename($this->targetDir . $oldPath, $this->targetDir . $newPath);
-
-
-
         $this->em->merge($objet);
         $this->em->flush();
         return $objet;
@@ -154,11 +155,12 @@ class ProjetService
      * Permet de récupérer les entités enfants d'un objet
      * @param $sel
      * @param $childType
-     * @return array
+     * @return \Doctrine\Common\Collections\Collection|mixed
      * @throws Exception
      */
     public function getChildren($sel, $childType)
     {
+        /* @var $objet Projet */
         $objet = $this->em->find('GediBaseBundle:Projet', $sel);
         switch ($childType) {
             case BaseEnum::DOCUMENT:

@@ -165,6 +165,7 @@ class AdminController extends Controller
                     $tmp = $this->get('groupe.service')->getChildren($sel, $_POST['typeAction']);
 
                     if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
                             array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
                                 $child->getPrenom() . " - " . $child->getUsername() . '</li>');
@@ -250,6 +251,7 @@ class AdminController extends Controller
                     $tmp = $this->get('projet.service')->getChildren($sel, $_POST['typeAction']);
 
                     if (sizeof($tmp) > 0) {
+                        /* @var $child Document */
                         foreach ($tmp as $child) {
                             array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
                                 $child->getTypeDoc() . " - " . $child->getTag() . '</li>');
@@ -262,6 +264,7 @@ class AdminController extends Controller
                     $tmp = $this->get('utilisateur.service')->getChildren($sel, $_POST['typeAction']);
 
                     if (sizeof($tmp) > 0) {
+                        /* @var $child Projet */
                         foreach ($tmp as $child) {
                             array_push($rows, '<a id="list-activable-item-project-' . $child->getidProjet() .
                                 '" href="#" onclick="addProject(' . $child->getidProjet() .
@@ -363,6 +366,7 @@ class AdminController extends Controller
 
                     if (sizeof($tmp) > 0) {
                         foreach ($tmp as $child) {
+                            /* @var $child Projet */
                             array_push($rows, '<a id="list-activable-item-project-' . $child->getidProjet() .
                                 '" href="#" onclick="addProject(' . $child->getidProjet() .
                                 ')" class="list-group-item list-activable-item"><span class="glyphicon glyphicon-folder-close"></span> ' .

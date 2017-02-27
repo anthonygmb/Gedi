@@ -176,6 +176,16 @@ class Utilisateur implements UserInterface
     }
 
     /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
      * Set username
      *
      * @param string $username
@@ -190,13 +200,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get username
+     * Get password
      *
      * @return string
      */
-    public function getUsername()
+    public function getPassword()
     {
-        return $this->username;
+        return $this->password;
     }
 
     /**
@@ -214,13 +224,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get password
+     * Get nom
      *
      * @return string
      */
-    public function getPassword()
+    public function getNom()
     {
-        return $this->password;
+        return $this->nom;
     }
 
     /**
@@ -238,13 +248,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get nom
+     * Get prenom
      *
      * @return string
      */
-    public function getNom()
+    public function getPrenom()
     {
-        return $this->nom;
+        return $this->prenom;
     }
 
     /**
@@ -262,13 +272,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get prenom
+     * Get salt
      *
      * @return string
      */
-    public function getPrenom()
+    public function getSalt()
     {
-        return $this->prenom;
+        return $this->salt;
     }
 
     /**
@@ -283,40 +293,6 @@ class Utilisateur implements UserInterface
         $this->salt = $salt;
 
         return $this;
-    }
-
-    /**
-     * Get salt
-     *
-     * @return string
-     */
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return Utilisateur
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -340,6 +316,40 @@ class Utilisateur implements UserInterface
     }
 
     /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set role
+     *
+     * @param string $role
+     *
+     * @return Utilisateur
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get actif
+     *
+     * @return boolean
+     */
+    public function getActif()
+    {
+        return $this->actif;
+    }
+
+    /**
      * Set actif
      *
      * @param boolean $actif
@@ -354,13 +364,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get actif
+     * Get dateCreation
      *
-     * @return boolean
+     * @return \DateTime
      */
-    public function getActif()
+    public function getDateCreation()
     {
-        return $this->actif;
+        return $this->dateCreation;
     }
 
     /**
@@ -378,13 +388,13 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+    public function getDateModification()
     {
-        return $this->dateCreation;
+        return $this->dateModification;
     }
 
     /**
@@ -399,16 +409,6 @@ class Utilisateur implements UserInterface
         $this->dateModification = $dateModification;
 
         return $this;
-    }
-
-    /**
-     * Get dateModification
-     *
-     * @return \DateTime
-     */
-    public function getDateModification()
-    {
-        return $this->dateModification;
     }
 
     /**

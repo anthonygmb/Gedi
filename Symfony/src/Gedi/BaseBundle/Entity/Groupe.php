@@ -121,6 +121,16 @@ class Groupe
     }
 
     /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
      * Set nom
      *
      * @param string $nom
@@ -135,13 +145,13 @@ class Groupe
     }
 
     /**
-     * Get nom
+     * Get dateCreation
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getNom()
+    public function getDateCreation()
     {
-        return $this->nom;
+        return $this->dateCreation;
     }
 
     /**
@@ -159,13 +169,13 @@ class Groupe
     }
 
     /**
-     * Get dateCreation
+     * Get dateModification
      *
      * @return \DateTime
      */
-    public function getDateCreation()
+    public function getDateModification()
     {
-        return $this->dateCreation;
+        return $this->dateModification;
     }
 
     /**
@@ -183,13 +193,13 @@ class Groupe
     }
 
     /**
-     * Get dateModification
+     * Get idUtilisateurFkGroupe
      *
-     * @return \DateTime
+     * @return Utilisateur
      */
-    public function getDateModification()
+    public function getIdUtilisateurFkGroupe()
     {
-        return $this->dateModification;
+        return $this->idUtilisateurFkGroupe;
     }
 
     /**
@@ -204,16 +214,6 @@ class Groupe
         $this->idUtilisateurFkGroupe = $idUtilisateurFkGroupe;
 
         return $this;
-    }
-
-    /**
-     * Get idUtilisateurFkGroupe
-     *
-     * @return Utilisateur
-     */
-    public function getIdUtilisateurFkGroupe()
-    {
-        return $this->idUtilisateurFkGroupe;
     }
 
     /**

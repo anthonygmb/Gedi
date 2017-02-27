@@ -5,6 +5,7 @@ namespace Gedi\UserBundle\Controller;
 use Gedi\BaseBundle\Entity\Document;
 use Gedi\BaseBundle\Entity\Groupe;
 use Gedi\BaseBundle\Entity\Projet;
+use Gedi\BaseBundle\Entity\Utilisateur;
 use Gedi\BaseBundle\Resources\Enum\BaseEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+define('TYPE_ICON', '.png');
+define('FOLDER_ICON', 'folder.png');
 
 class UserController extends Controller
 {
@@ -55,6 +59,7 @@ class UserController extends Controller
                     if (!isset($_POST['typeEntite'])) {
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
+                        /* @var $objet Projet|Document|Groupe|Utilisateur */
                         $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
                         $rows = $objet->toArray();
                     }
@@ -106,6 +111,7 @@ class UserController extends Controller
                     $tmp = $this->get('groupe.service')->getChildren($sel, $_POST['typeAction']);
 
                     if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
                             array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
                                 $child->getPrenom() . " - " . $child->getUsername() . '</li>');
@@ -143,6 +149,63 @@ class UserController extends Controller
             'tab_groups' => $tab_groups,
             'tab_projects' => $tab_projects,
         ));
+    }
+
+    /**
+     * @param $parent Projet
+     * @return JsonResponse
+     */
+    public function createArborescence($parent)
+    {
+        $rows = [];
+        $response = new JsonResponse();
+        $projets = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::PROJET);
+        $documents = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::DOCUMENT);
+
+        if (sizeof($projets) > 0) {
+            /* @var $child Projet */
+            foreach ($projets as $child) {
+                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                    '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
+                                oncontextmenu="menuContext(true, this.id);"><img src="' . $this->getParameter('image_folder_directory') . FOLDER_ICON . '" alt="' .
+                    $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
+                    '</strong></p></a></div></div>');
+            }
+        }
+        if (sizeof($documents) > 0) {
+            /* @var $child Document */
+            foreach ($documents as $child) {
+                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                    '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
+                    $child->getTypeDoc() . TYPE_ICON . '" alt="' . $child->getNom() .
+                    '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
+            }
+        }
+
+        $parent_line = '<li><a onclick="openBreadcrumb(' . $parent->getIdProjet() . ');">' . $parent->getNom() . '</a></li>';
+        $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent_line, 'idparent' => $parent->getIdProjet()));
+        return $response;
+    }
+
+    /**
+     * @param $objet Projet|Document
+     * @param $typeEntite string
+     * @return Projet
+     */
+    public function getParent($objet, $typeEntite)
+    {
+        $parent = null;
+        switch ($typeEntite) {
+            case BaseEnum::PROJET:
+                $parent = $objet->getParent();
+                break;
+            case BaseEnum::DOCUMENT:
+                $parent = $objet->getIdProjetFkDocument();
+                break;
+            default:
+                throw new Exception('typeEntite n\'est pas reconnu');
+        }
+        return $parent;
     }
 
     /**
@@ -205,52 +268,5 @@ class UserController extends Controller
         header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
         readfile($this->getParameter('fichiers_directory') . 'archive.zip');
-    }
-
-    public function getParent($objet, $typeEntite) {
-        $parent = null;
-        switch ($typeEntite) {
-            case BaseEnum::GROUPE:
-                break;
-            case BaseEnum::PROJET:
-                $parent = $objet->getParent();
-                break;
-            case BaseEnum::DOCUMENT:
-                $parent = $objet->getIdProjetFkDocument();
-                break;
-            default:
-                throw new Exception('typeEntite n\'est pas reconnu');
-        }
-        return $parent;
-    }
-
-    public function createArborescence($parent)
-    {
-        $rows = [];
-        $response = new JsonResponse();
-        $projets = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::PROJET);
-        $documents = $this->get('projet.service')->getChildren($parent->getIdProjet(), BaseEnum::DOCUMENT);
-
-        if (sizeof($projets) > 0) {
-            foreach ($projets as $child) {
-                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
-                    '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
-                                oncontextmenu="menuContext(true, this.id);"><img src="/Gedi/Symfony/web/img/folder.png" alt="' .
-                    $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
-                    '</strong></p></a></div></div>');
-            }
-        }
-        if (sizeof($documents) > 0) {
-            foreach ($documents as $child) {
-                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
-                    '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="/Gedi/Symfony/web/img/' .
-                    $child->getTypeDoc() . '.png" alt="' . $child->getNom() .
-                    '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
-            }
-        }
-
-        $parent_line = '<li><a onclick="openBreadcrumb(' . $parent->getIdProjet() . ');">' . $parent->getNom() . '</a></li>';
-        $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent_line, 'idparent' => $parent->getIdProjet()));
-        return $response;
     }
 }

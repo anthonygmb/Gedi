@@ -8,6 +8,8 @@ imports:
 parameters:
     locale: fr
     fichiers_directory: '%kernel.root_dir%/../bankFile/'
+    image_icon_directory: '/Gedi/Symfony/web/img/icon file/'
+    image_folder_directory: '/Gedi/Symfony/web/img/'
 
 framework:
     #esi:             ~

@@ -214,16 +214,18 @@ function edit(js_object_arg) {
 
     // remplissages de champs des formulaires
     for (var key in js_object) {
-        if (key == 'actif' && js_object[key] == '1') {
-            $('#gedi_basebundle_' + url + '_' + key).bootstrapToggle('on');
-        } else if (key == 'password') {
-            $('#gedi_basebundle_' + url + '_' + key + '_first').val(js_object[key]);
-            $('#gedi_basebundle_' + url + '_' + key + '_second').val(js_object[key]);
-        } else {
-            if (url == types.DOCUMENT) {
-                $('#data_' + key).val(js_object[key]);
+        if (js_object.hasOwnProperty(key)) {
+            if (key == 'actif' && js_object[key] == '1') {
+                $('#gedi_basebundle_' + url + '_' + key).bootstrapToggle('on');
+            } else if (key == 'password') {
+                $('#gedi_basebundle_' + url + '_' + key + '_first').val(js_object[key]);
+                $('#gedi_basebundle_' + url + '_' + key + '_second').val(js_object[key]);
             } else {
-                $('#gedi_basebundle_' + url + '_' + key).val(js_object[key]);
+                if (url == types.DOCUMENT) {
+                    $('#data_' + key).val(js_object[key]);
+                } else {
+                    $('#gedi_basebundle_' + url + '_' + key).val(js_object[key]);
+                }
             }
         }
     }
@@ -364,14 +366,16 @@ function edit2(js_object, typeEntite) {
 
     // remplissages de champs des formulaires
     for (var key in js_object) {
-        if (key == 'password') {
-            $('#gedi_basebundle_' + typeEntite + '_' + key + '_first').val(js_object[key]);
-            $('#gedi_basebundle_' + typeEntite + '_' + key + '_second').val(js_object[key]);
-        } else {
-            if (typeEntite == types.DOCUMENT) {
-                $('#data_' + key).val(js_object[key]);
+        if (js_object.hasOwnProperty(key)) {
+            if (key == 'password') {
+                $('#gedi_basebundle_' + typeEntite + '_' + key + '_first').val(js_object[key]);
+                $('#gedi_basebundle_' + typeEntite + '_' + key + '_second').val(js_object[key]);
             } else {
-                $('#gedi_basebundle_' + typeEntite + '_' + key).val(js_object[key]);
+                if (typeEntite == types.DOCUMENT) {
+                    $('#data_' + key).val(js_object[key]);
+                } else {
+                    $('#gedi_basebundle_' + typeEntite + '_' + key).val(js_object[key]);
+                }
             }
         }
     }
@@ -707,9 +711,7 @@ $(function () {
         $('.assign-user').show(); // affiche le panel d'assignation d'utilisateur
         $bsae.prop('disabled', true); // desactive le bouton submit du formulaire
         $('#gedi_basebundle_' + url + '_idUtilisateurFk' + (url.charAt(0).toUpperCase() + url.slice(1))).removeAttr('value');
-        ;
         $('#gedi_basebundle_' + url + '_id' + (url.charAt(0).toUpperCase() + url.slice(1))).removeAttr('value');
-        ;
 
         // users_admin
         $('#gedi_basebundle_utilisateur_actif').bootstrapToggle('off'); // met le toggle sur off
@@ -1039,7 +1041,7 @@ $(function () {
                             top: getMenuPosition(e.clientY, 'height', 'scrollTop')
                         })
                         .off('click')
-                        .on('click', 'a', function (e) {
+                        .on('click', 'a', function () {
                             $menu.hide();
                         });
                     return false;
