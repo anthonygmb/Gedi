@@ -938,7 +938,8 @@ $(function () {
                                 var $dk = $('#desktop');
                                 $dk.empty();
                                 $dk.append('<div class="row text-center">' + data.reponse + '</div>');
-                                $('#footer_user').append(data.fdparent);
+                                var $fu = $('#footer_user');
+                                $fu.append(data.fdparent);
                                 cache_parent = data.idparent;
                             }
                             menuContext();
