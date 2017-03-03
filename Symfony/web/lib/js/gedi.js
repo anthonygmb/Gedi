@@ -935,9 +935,10 @@ $(function () {
                             break;
                         case types.DOCUMENT_PROJET:
                             if (url == types.HOME_USER) {
+                                console.log(data.reponse);
                                 var $dk = $('#desktop');
                                 $dk.empty();
-                                $dk.append('<div class="row text-center">' + data.reponse + '</div>');
+                                $dk.append('<div class="row text-center">' + data.reponse + '</div>');//bug
                                 var $fu = $('#footer_user');
                                 $fu.append(data.fdparent);
                                 cache_parent = data.idparent;
