@@ -882,7 +882,7 @@ $(function () {
                                 $('form').trigger("reset"); // reset le formulaire de création
                                 $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
-                                showNotify('<strong>' +(typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' modifié</strong>', 'glyphicon glyphicon-ok', 'success');
                                 return 0;
                             } else {
@@ -893,7 +893,7 @@ $(function () {
                         case types.SUPPRESSION:
                             if (url == types.HOME_USER) {
                                 openBreadcrumb(data.idparent);
-                                showNotify('<strong>' +(typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' supprimé</strong>', 'glyphicon glyphicon-ok', 'success');
                                 return 0;
                             } else {
@@ -923,7 +923,7 @@ $(function () {
                             if (url == types.PROJET) {
                                 $('#liste-children').prepend(data.reponse);
                             }
-                            return 0; // ici
+                            return 0;
                             break;
                         case types.PROJET:
                             if (url == types.PROJET || url == types.DOCUMENT) {
@@ -935,10 +935,19 @@ $(function () {
                             break;
                         case types.DOCUMENT_PROJET:
                             if (url == types.HOME_USER) {
-                                console.log(data.reponse);
                                 var $dk = $('#desktop');
                                 $dk.empty();
-                                $dk.append('<div class="row text-center">' + data.reponse + '</div>');//bug
+                                var nbItemByRow = 5;
+                                for (var i = 0; i < data.reponse.length; i++) {
+                                    if (i > 6) {
+                                        nbItemByRow = 6;
+                                    }
+                                    if (i % nbItemByRow == 0 && i != 0) {
+                                        $dk.append('<div class="row text-center">' + data.reponse[i] + '</div>');
+                                    } else {
+                                        $dk.append('<div class="text-center">' + data.reponse[i] + '</div>');
+                                    }
+                                }
                                 var $fu = $('#footer_user');
                                 $fu.append(data.fdparent);
                                 cache_parent = data.idparent;
