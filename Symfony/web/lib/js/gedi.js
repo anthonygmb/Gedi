@@ -923,7 +923,7 @@ $(function () {
                             if (url == types.PROJET) {
                                 $('#liste-children').prepend(data.reponse);
                             }
-                            return 0;
+                            return 0; // ici
                             break;
                         case types.PROJET:
                             if (url == types.PROJET || url == types.DOCUMENT) {
