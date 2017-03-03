@@ -941,7 +941,7 @@ $(function () {
                                 $dk.append('<div class="row text-center">' + data.reponse + '</div>');//bug
                                 var $fu = $('#footer_user');
                                 $fu.append(data.fdparent);
-                                cache_parent = data.idparent;
+                                cache_parent = data.idparent; // ici
                             }
                             menuContext();
                             return 0;
