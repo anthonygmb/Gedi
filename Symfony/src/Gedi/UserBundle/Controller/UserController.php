@@ -252,7 +252,34 @@ class UserController extends Controller
         ) {
             throw new Exception("Vous n'êtes pas authorisé à consulter cette page");
         }
-        return $this->render('GediUserBundle:User:shared_user.html.twig');
+
+        $groupe = new Groupe();
+        $projet = new Projet();
+        $document = new Document();
+        $groupeForm = $this->createForm('Gedi\BaseBundle\Form\GroupeType', $groupe);
+        $groupeForm->handleRequest($request);
+        $projetForm = $this->createForm('Gedi\BaseBundle\Form\ProjetType', $projet);
+        $projetForm->handleRequest($request);
+        $documentForm = $this->createForm('Gedi\BaseBundle\Form\DocumentType', $document);
+        $documentForm->handleRequest($request);
+
+        // importation des groupes de l'utilisateur
+        $tab_groups = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
+        // importation des projets de l'utilisateur
+        $tab_projects = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::PROJET)[0];
+
+        return $this->render('GediUserBundle:User:shared_user.html.twig', array(
+            'groupe' => $groupe,
+            'projet' => $projet,
+            'document' => $document,
+            'groupeForm' => $groupeForm->createView(),
+            'projetForm' => $projetForm->createView(),
+            'documentForm' => $documentForm->createView(),
+            'tab_groups' => $tab_groups,
+            'tab_projects' => $tab_projects,
+        ));
     }
 
     /**
@@ -268,7 +295,35 @@ class UserController extends Controller
         ) {
             throw new Exception("Vous n'êtes pas authorisé à consulter cette page");
         }
-        return $this->render('GediUserBundle:User:recent_user.html.twig');
+
+        $groupe = new Groupe();
+        $projet = new Projet();
+        $document = new Document();
+        $groupeForm = $this->createForm('Gedi\BaseBundle\Form\GroupeType', $groupe);
+        $groupeForm->handleRequest($request);
+        $projetForm = $this->createForm('Gedi\BaseBundle\Form\ProjetType', $projet);
+        $projetForm->handleRequest($request);
+        $documentForm = $this->createForm('Gedi\BaseBundle\Form\DocumentType', $document);
+        $documentForm->handleRequest($request);
+
+        // importation des groupes de l'utilisateur
+        $tab_groups = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
+        // importation des projets de l'utilisateur
+        $tab_projects = $this->get('projet.service')->readLast(6);
+        $tab_docs = $this->get('document.service')->readLast(6);
+
+        return $this->render('GediUserBundle:User:recent_user.html.twig', array(
+            'groupe' => $groupe,
+            'projet' => $projet,
+            'document' => $document,
+            'groupeForm' => $groupeForm->createView(),
+            'projetForm' => $projetForm->createView(),
+            'documentForm' => $documentForm->createView(),
+            'tab_groups' => $tab_groups,
+            'tab_projects' => $tab_projects,
+            'tab_docs' => $tab_docs,
+        ));
     }
 
     /**

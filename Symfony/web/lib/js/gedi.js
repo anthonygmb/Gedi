@@ -494,15 +494,23 @@ $(function () {
             dashboardStart(1);
         } else if (window.location.href.indexOf("home_user") > -1) {
             url = types.HOME_USER;
+            $('.nav-sidebar').children().removeClass('active');
+            $('#home-user').addClass('active');
             showNotifyContact();
         } else if (window.location.href.indexOf("account_user") > -1) {
             url = types.ACCOUNT_USER;
+            $('.nav-sidebar').children().removeClass('active');
+            $('#account-user').addClass('active');
             showNotifyContact();
         } else if (window.location.href.indexOf("recent_user") > -1) {
             url = types.RECENT_USER;
+            $('.nav-sidebar').children().removeClass('active');
+            $('#recent-user').addClass('active');
             showNotifyContact();
         } else if (window.location.href.indexOf("shared_user") > -1) {
             url = types.SHARED_USER;
+            $('.nav-sidebar').children().removeClass('active');
+            $('#shared-user').addClass('active');
             showNotifyContact();
         }
         updateNbEntity(); // met à jour le nombre d'entités

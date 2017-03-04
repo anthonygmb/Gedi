@@ -5,3 +5,9 @@
 {% block user_contenu %}
 
 {% endblock %}
+
+{% block breadcrumb_user %}
+    <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">
+        <span class="glyphicon glyphicon-briefcase"></span> Bureau {{ app.user.prenom }}</a>
+    <li><span class="glyphicon glyphicon-globe"></span> Partagés</li>
+{% endblock %}
