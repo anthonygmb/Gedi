@@ -300,9 +300,17 @@ function validFormUser() {
  * Fonction de vérification de formulaire groupe et projet
  */
 function validFormGP() {
-    var nomE = $('#gedi_basebundle_' + url + '_nom').val();
-    var user = $('#gedi_basebundle_' + url + '_idUtilisateurFk' +
-        (url.charAt(0).toUpperCase() + url.slice(1))).val();
+    var nomE;
+    var user;
+    if (url == types.HOME_USER || url == types.RECENT_USER || url == types.SHARED_USER || url == types.ACCOUNT_USER) {
+        nomE = $('#gedi_basebundle_' + cache_type + '_nom').val();
+        user = $('#gedi_basebundle_' + cache_type + '_idUtilisateurFk' +
+            (cache_type.charAt(0).toUpperCase() + cache_type.slice(1))).val();
+    } else {
+        nomE = $('#gedi_basebundle_' + url + '_nom').val();
+        user = $('#gedi_basebundle_' + url + '_idUtilisateurFk' +
+            (url.charAt(0).toUpperCase() + url.slice(1))).val();
+    }
 
     var $bt = $('.bouton-submit-admin-entity');
     // test si tous les champs sont remplis
@@ -380,6 +388,8 @@ function edit2(js_object, typeEntite) {
         }
     }
     // $('#data_idProjetFkDocument').val(parent);
+    $('#gedi_basebundle_projet_parent').val(cache_parent);
+    $('#data_idProjetFkDocument').val(cache_parent);
 
     // modification du popup ajout / edition
     $('.popup-admin-add-titre').html('Modifier un ' + typeEntite);
@@ -693,6 +703,24 @@ $(function () {
         'click': validForm
     });
 
+    $('#popup-add-groupe').on({
+        'keyup': validFormGP,
+        'focusout': validFormGP,
+        'click': validFormGP
+    });
+
+    $('#popup-add-document').on({
+        'keyup': validFormDoc,
+        'focusout': validFormDoc,
+        'click': validFormDoc
+    });
+
+    $('#popup-add-projet').on({
+        'keyup': validFormGP,
+        'focusout': validFormGP,
+        'click': validFormGP
+    });
+
     /**
      * Listener sur les elements de classe bouton-dismiss-entity
      * Vide le formulaire de son contenu.
@@ -716,11 +744,20 @@ $(function () {
         // toutes les pages
         $('form').trigger("reset"); // reset le formulaire
         if (url == types.HOME_USER || url == types.RECENT_USER || url == types.SHARED_USER || url == types.ACCOUNT_USER) {
-            if (event.currentTarget.id == "context-new-file") {
+            if (event.currentTarget.id == "new-document") {
                 $('.popup-admin-add-titre').html('Créer un document'); // écrit le titre du modal
-            } else {
+                $('#data_idProjetFkDocument').val(cache_parent);
+                cache_type = types.DOCUMENT;
+            } else if (event.currentTarget.id == "new-projet") {
                 $('.popup-admin-add-titre').html('Créer un projet'); // écrit le titre du modal
+                $('#gedi_basebundle_projet_idProjet').removeAttr('value');
+                cache_type = types.PROJET;
+            } else {
+                $('.popup-admin-add-titre').html('Créer un groupe'); // écrit le titre du modal
+                $('#gedi_basebundle_groupe_idGroupe').removeAttr('value');
+                cache_type = types.GROUPE;
             }
+            $('#gedi_basebundle_projet_parent').val(cache_parent);
         } else {
             $('.popup-admin-add-titre').html('Créer un ' + url); // écrit le titre du modal
         }
@@ -741,16 +778,20 @@ $(function () {
         }
 
         // projects_admin
-        $('#gedi_basebundle_projet_parent').removeAttr('value');
-        $('#liste-projets').empty(); // vide la liste des projets sur projects_admin
+        if (url == types.PROJET) {
+            $('#gedi_basebundle_projet_parent').removeAttr('value');
+            $('#liste-projets').empty(); // vide la liste des projets sur projects_admin
+        }
 
         // docs_admin
         $('#bouton-upload').show(); // affiche le bouton upload
         $('#data_nom').prop('disabled', true);
         $('#data_typeDoc').prop('disabled', true);
         $('#data_fichier').prop('disabled', false); // desactive le bouton upload
-        $('#data_idUtilisateurFkDocument').removeAttr('value');
-        $('#data_idProjetFkDocument').removeAttr('value');
+        if (url == types.DOCUMENT) {
+            $('#data_idUtilisateurFkDocument').removeAttr('value');
+            $('#data_idProjetFkDocument').removeAttr('value');
+        }
         $('#data_idDocument').removeAttr('value');
     });
 
@@ -891,14 +932,20 @@ $(function () {
                 success: function (data) { // traitement en cas de succes
                     switch (typeAction) {
                         case types.ENREGISTREMENT:
-                            $table.bootstrapTable('append', data.reponse);
-                            completeRow(data); // finalise la création ou la modification
+                            if (url == types.HOME_USER) {
+                                $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
+                                openBreadcrumb(data.idparent);
+                                showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                    ' enregistré</strong>', 'glyphicon glyphicon-ok', 'success');
+                                return 0;
+                            } else {
+                                $table.bootstrapTable('append', data.reponse);
+                                completeRow(data); // finalise la création ou la modification
+                            }
                             break;
                         case types.MODIFICATION:
                             if (url == types.HOME_USER) {
                                 openBreadcrumb(data.idparent);
-                                $('form').trigger("reset"); // reset le formulaire de création
-                                $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' modifié</strong>', 'glyphicon glyphicon-ok', 'success');

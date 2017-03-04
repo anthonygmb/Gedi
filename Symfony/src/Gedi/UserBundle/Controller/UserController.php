@@ -86,6 +86,7 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
                     }
                     break;
                 case BaseEnum::SUPPRESSION:
@@ -103,8 +104,7 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
-                        $parent = $this->getParent($objet, $_POST['typeEntite']);
-                        return $this->createArborescence($parent);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
                     }
                     break;
                 case BaseEnum::UTILISATEUR:

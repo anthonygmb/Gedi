@@ -21,13 +21,13 @@
                     <li role="separator" class="divider"></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
+                    <li id="new-groupe" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-groupe">
                             <span class="glyphicon glyphicon-th"></span> Nouveau groupe</a>
                     </li>
-                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
+                    <li id="new-projet" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-projet">
                             <span class="glyphicon glyphicon-folder-close"></span> Nouveau projet</a>
                     </li>
-                    <li class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add">
+                    <li id="new-document" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-document">
                             <span class="glyphicon glyphicon-file"></span> Nouveau document</a>
                     </li>
                 </ul>
@@ -202,7 +202,7 @@
     </div>
 
     <!-- Popup fenetre d'ajout de groupe -->
-    <div class="modal fade" id="popup-add-group" role="dialog">
+    <div class="modal fade" id="popup-add-groupe" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -246,12 +246,12 @@
 
     <!-- Menu contextuel -->
     <ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none">
-        <li id="context-new-folder" class="bouton-admin-popup-add"><a data-toggle="modal"
+        <li id="new-projet" class="bouton-admin-popup-add"><a data-toggle="modal"
                                                                       data-target="#popup-add-projet"
                                                                       tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-folder-close">
                 </span> Nouveau projet</a></li>
-        <li id="context-new-file" class="bouton-admin-popup-add"><a data-toggle="modal"
+        <li id="new-document" class="bouton-admin-popup-add"><a data-toggle="modal"
                                                                     data-target="#popup-add-document"
                                                                     tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-file"></span> Nouveau document</a></li>
