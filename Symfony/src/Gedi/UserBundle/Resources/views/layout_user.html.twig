@@ -5,16 +5,12 @@
 {% endblock %}
 
 {% block app_contenu %}
-    <ol id="footer_user" class="breadcrumb">
-        <li><a href="{{ path('start') }}">Home</a></li>
-        <li id="breadcrumb-flag">{% block breadcrumb_user %}{% endblock %}</li>
-    </ol>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li class="active"><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
-                                    class="glyphicon glyphicon-home"><span class="sr-only">(current)</span></span>
+                                    class="glyphicon glyphicon-briefcase"><span class="sr-only">(current)</span></span>
                             Bureau</a></li>
                     <li><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-globe"></span> Partagé</a></li>
@@ -36,6 +32,10 @@
                     </li>
                 </ul>
             </div>
+            <ol id="footer_user" class="breadcrumb">
+                <li><a href="{{ path('start') }}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li id="breadcrumb-flag">{% block breadcrumb_user %}{% endblock %}</li>
+            </ol>
             <div id="desktop" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main folder-line-down">
                 {% block user_contenu %}{% endblock %}
             </div>

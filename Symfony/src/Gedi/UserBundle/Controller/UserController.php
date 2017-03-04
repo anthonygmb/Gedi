@@ -165,7 +165,7 @@ class UserController extends Controller
         if (sizeof($projets) > 0) {
             /* @var $child Projet */
             foreach ($projets as $child) {
-                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
                     '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
                                 oncontextmenu="menuContext(true, this.id);"><img src="' . $this->getParameter('image_folder_directory') . FOLDER_ICON . '" alt="' .
                     $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
@@ -175,14 +175,15 @@ class UserController extends Controller
         if (sizeof($documents) > 0) {
             /* @var $child Document */
             foreach ($documents as $child) {
-                array_push($rows, '<div class="col-md-2"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
                     '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
                     $child->getTypeDoc() . TYPE_ICON . '" alt="' . $child->getNom() .
                     '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
             }
         }
 
-        $parent_line = '<li><a onclick="openBreadcrumb(' . $parent->getIdProjet() . ');">' . $parent->getNom() . '</a></li>';
+        $parent_line = '<li id="list-item-' . $parent->getIdProjet() . '"><a onclick="openBreadcrumb(' . $parent->getIdProjet() . ');">' .
+            '<span class="glyphicon glyphicon-folder-close"></span> ' . $parent->getNom() . '</a></li>';
         $response->setData(array('reponse' => (array)$rows, 'fdparent' => $parent_line, 'idparent' => $parent->getIdProjet()));
         return $response;
     }

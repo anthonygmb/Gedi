@@ -7,7 +7,7 @@
     {#<p>{{ groupe.nom }}</p>#}
     {#{% endfor %}#}
     <div class="row text-center">
-        <div class="col-md-2">
+        <div class="col-md-2 container-data">
             <div class="panel full-transparent"><a id="{{ tab_projects.idProjet }}" class="content-user" href="#"
                                                    onclick="openFolder('{{ tab_projects.idProjet }}');"
                                                    oncontextmenu="menuContext(true, this.id);">
@@ -20,5 +20,6 @@
 {% endblock %}
 
 {% block breadcrumb_user %}
-    <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">Bureau {{ app.user.prenom }}</a>
+    <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">
+        <span class="glyphicon glyphicon-briefcase"></span> Bureau {{ app.user.prenom }}</a>
 {% endblock %}

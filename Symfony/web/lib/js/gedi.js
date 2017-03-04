@@ -405,10 +405,9 @@ function openFolder(id) {
  */
 function openBreadcrumb(id) {
     $('body').ajaxSend(id, types.DOCUMENT_PROJET, null);
-    var $fu = $('#breadcrumb-flag');
-    if ($fu.next()) {
-        $fu.nextAll().remove();
-    }
+    var $fu = $('#list-item-' + id);
+    $fu.nextAll().remove();
+    $fu.remove();
 }
 
 /**
@@ -935,22 +934,7 @@ $(function () {
                             break;
                         case types.DOCUMENT_PROJET:
                             if (url == types.HOME_USER) {
-                                var $dk = $('#desktop');
-                                $dk.empty();
-                                var nbItemByRow = 5;
-                                for (var i = 0; i < data.reponse.length; i++) {
-                                    if (i > 6) {
-                                        nbItemByRow = 6;
-                                    }
-                                    if (i % nbItemByRow == 0 && i != 0) {
-                                        $dk.append('<div class="row text-center">' + data.reponse[i] + '</div>');
-                                    } else {
-                                        $dk.append('<div class="text-center">' + data.reponse[i] + '</div>');
-                                    }
-                                }
-                                var $fu = $('#footer_user');
-                                $fu.append(data.fdparent);
-                                cache_parent = data.idparent;
+                                completeDesktop(data);
                             }
                             menuContext();
                             return 0;
@@ -1029,6 +1013,25 @@ $(function () {
         $('form').trigger("reset"); // reset le formulaire de création
         $('.modal-backdrop').remove(); // enlève le modal-backdrop du formulaire
         $('#popup-add').modal('toggle'); // fait disparaitre le modal de création
+    }
+
+    function completeDesktop(data) {
+        var $dk = $('#desktop');
+        $dk.empty();
+        var nbItemByRow = 5;
+        for (var i = 0; i < data.reponse.length; i++) {
+            if (i > 6) {
+                nbItemByRow = 6;
+            }
+            if (i % nbItemByRow == 0 && i != 0 && i % 12 != 0) {
+                $dk.append('<div class="row text-center">' + data.reponse[i] + '</div>');
+            } else {
+                $dk.append('<div class="text-center">' + data.reponse[i] + '</div>');
+            }
+        }
+        var $fu = $('#footer_user');
+        $fu.append(data.fdparent);
+        cache_parent = data.idparent;
     }
 
     /**

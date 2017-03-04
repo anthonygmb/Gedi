@@ -49,11 +49,24 @@
 }
 
 #footer_user {
-    position:absolute;
+    position: absolute;
     /*bottom:0;*/
-    margin-left: 10%;
-    width:81%;
+    margin-left: 135px;
+    min-width: calc(100% - 350px);
+    width: calc(100% - 19%);
     margin-top: -1%;
+}
+
+.container-data :hover {
+    background-color: rgba(205, 205, 205, 0.51);
+}
+
+.container-data {
+    padding: 1px 1px 1px 1px;
+}
+
+.container-data > div :hover {
+    background-color: initial;
 }
 
 .background-app {
