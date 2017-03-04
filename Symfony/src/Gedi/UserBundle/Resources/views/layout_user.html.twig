@@ -36,7 +36,9 @@
                 <li><a href="{{ path('start') }}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                 <li id="breadcrumb-flag">{% block breadcrumb_user %}{% endblock %}</li>
             </ol>
-            <div id="desktop" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main folder-line-down">
+            <div id="desktop"
+                 class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main folder-line-down content-user"
+                 oncontextmenu="menuContext(this.id, this.id);">
                 {% block user_contenu %}{% endblock %}
             </div>
         </div>
@@ -73,7 +75,7 @@
                 <div class="modal-header">
                     <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
                     <!-- Titre mis à jour dans gedi.js -->
-                    <h4 class="modal-title popup-admin-add-user"></h4>
+                    <h4 class="modal-title popup-admin-add-titre"></h4>
                 </div>
                 <div class="modal-body">
                     {{ form_start(documentForm, { 'attr':  {
@@ -162,7 +164,7 @@
                 <div class="modal-header">
                     <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
                     <!-- Titre mis à jour dans gedi.js -->
-                    <h4 class="modal-title popup-admin-add-user"></h4>
+                    <h4 class="modal-title popup-admin-add-titre"></h4>
                 </div>
                 <div class="modal-body">
                     {{ form_start(projetForm, { 'attr':  {
@@ -206,7 +208,7 @@
                 <div class="modal-header">
                     <button type="button" class="close bouton-dismiss-entity" data-dismiss="modal">&times;</button>
                     <!-- Titre mis à jour dans gedi.js -->
-                    <h4 class="modal-title popup-admin-add-user"></h4>
+                    <h4 class="modal-title popup-admin-add-titre"></h4>
                 </div>
                 <div class="modal-body">
                     {{ form_start(groupeForm, { 'attr':  {
@@ -244,6 +246,15 @@
 
     <!-- Menu contextuel -->
     <ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none">
+        <li id="context-new-folder" class="bouton-admin-popup-add"><a data-toggle="modal"
+                                                                      data-target="#popup-add-projet"
+                                                                      tabindex="-1" href="#"><span
+                        class="glyphicon glyphicon-folder-close">
+                </span> Nouveau projet</a></li>
+        <li id="context-new-file" class="bouton-admin-popup-add"><a data-toggle="modal"
+                                                                    data-target="#popup-add-document"
+                                                                    tabindex="-1" href="#">
+                <span class="glyphicon glyphicon-file"></span> Nouveau document</a></li>
         <li id="context-open-folder" class="context-folder"><a tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-folder-open">
                 </span> Ouvrir</a></li>
@@ -253,7 +264,8 @@
         <li id="context-edit-file" class="context-file"><a data-toggle="modal" data-target="#popup-add-document"
                                                            tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-pencil"></span> Modifier</a></li>
-        <li class="divider"></li>
+        <li class="divider context-file"></li>
+        <li class="divider context-folder"></li>
         <li id="context-delete-folder" class="context-folder"><a data-toggle="modal" data-target="#popup-delete"
                                                                  tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-trash"></span> Supprimer</a></li>

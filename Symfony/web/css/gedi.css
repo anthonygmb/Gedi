@@ -48,6 +48,13 @@
     background-color: #428bca;
 }
 
+#desktop {
+    height: 800px;
+    width: 100%;
+    margin: 1px 1px 1px 100px;
+    padding: 50px 10px 1px 60px;
+}
+
 #footer_user {
     position: absolute;
     /*bottom:0;*/

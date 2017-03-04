@@ -231,7 +231,7 @@ function edit(js_object_arg) {
     }
 
     // modification du popup ajout / edition
-    $('#popup-admin-add-titre').html('Modifier un ' + url);
+    $('.popup-admin-add-titre').html('Modifier un ' + url);
     var $bsae = $('.bouton-submit-admin-entity');
     $bsae.val('Appliquer');
     $bsae.prop('disabled', false);
@@ -382,7 +382,7 @@ function edit2(js_object, typeEntite) {
     // $('#data_idProjetFkDocument').val(parent);
 
     // modification du popup ajout / edition
-    $('.popup-admin-add-user').html('Modifier un ' + typeEntite);
+    $('.popup-admin-add-titre').html('Modifier un ' + typeEntite);
     var $bsae = $('.bouton-submit-admin-entity');
     $bsae.val('Appliquer');
     $bsae.prop('disabled', false);
@@ -414,14 +414,26 @@ function openBreadcrumb(id) {
  * Appel du menu contextuel
  */
 function menuContext(isFolder, id) {
-    if (isFolder) {
-        $(".context-file").hide();
-        $(".context-folder").show();
-    } else {
-        $(".context-file").show();
-        $(".context-folder").hide();
+    var $fol = $(".context-folder");
+    var $fil = $(".context-file");
+    var $cm = $("#contextMenu");
+    switch (isFolder) {
+        case true:
+            $fil.hide();
+            $fol.show();
+            $cm.children().val(id);
+            break;
+        case false:
+            $fil.show();
+            $fol.hide();
+            $cm.children().val(id);
+            break;
+        default:
+            $fil.hide();
+            $fol.hide();
+
+            break;
     }
-    $("#contextMenu").children().val(id);
     $(".content-user").contextMenu({
         menuSelector: "#contextMenu"
     });
@@ -700,11 +712,18 @@ $(function () {
      * de la classe bouton-admin-popup-add
      * La fonction vide le formulaire de son contenu et met à jour le modal
      */
-    $(".bouton-admin-popup-add").click(function () {
-
+    $(".bouton-admin-popup-add").click(function (event) {
         // toutes les pages
         $('form').trigger("reset"); // reset le formulaire
-        $('#popup-admin-add-titre').html('Créer un ' + url); // écrit le titre du modal
+        if (url == types.HOME_USER || url == types.RECENT_USER || url == types.SHARED_USER || url == types.ACCOUNT_USER) {
+            if (event.currentTarget.id == "context-new-file") {
+                $('.popup-admin-add-titre').html('Créer un document'); // écrit le titre du modal
+            } else {
+                $('.popup-admin-add-titre').html('Créer un projet'); // écrit le titre du modal
+            }
+        } else {
+            $('.popup-admin-add-titre').html('Créer un ' + url); // écrit le titre du modal
+        }
         var $bsae = $('.bouton-submit-admin-entity'); // récupère l'element de la classe bouton-submit-admin-entity
         $bsae.val('Créer'); // change la valeur de $bsae
         $('.assign-user').show(); // affiche le panel d'assignation d'utilisateur
