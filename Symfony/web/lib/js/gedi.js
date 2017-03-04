@@ -966,8 +966,16 @@ $(function () {
                             }
                             break;
                         case types.UPLOAD:
-                            $table.bootstrapTable('append', data.reponse);
-                            completeRow(data); // finalise la création ou la modification
+                            if (url == types.HOME_USER) {
+                                $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
+                                openBreadcrumb(data.idparent);
+                                showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
+                                    ' enregistré</strong>', 'glyphicon glyphicon-ok', 'success');
+                                return 0;
+                            } else {
+                                $table.bootstrapTable('append', data.reponse);
+                                completeRow(data); // finalise la création ou la modification
+                            }
                             break;
                         case types.DOWNLOAD:
                             $table.bootstrapTable('uncheckAll');

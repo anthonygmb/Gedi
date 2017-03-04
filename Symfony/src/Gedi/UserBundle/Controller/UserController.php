@@ -74,6 +74,7 @@ class UserController extends Controller
                         }
                         $uploadedFile = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['size']);
                         $objet = $this->get('document.service')->create($sel, $uploadedFile);
+                        return $this->createArborescence($this->getParent($objet, BaseEnum::DOCUMENT));
                     }
                     break;
                 case BaseEnum::DOWNLOAD:
