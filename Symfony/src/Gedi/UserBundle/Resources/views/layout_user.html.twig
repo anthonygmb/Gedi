@@ -9,25 +9,48 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li id="home-user" class="hvr-grow active"><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="home-user" class="hvr-grow active"><a
+                                href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-briefcase"><span class="sr-only">(current)</span></span>
                             Bureau</a></li>
-                    <li id="shared-user" class="hvr-grow"><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="shared-user" class="hvr-grow"><a
+                                href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-globe"></span> Partagé</a></li>
-                    <li id="recent-user" class="hvr-grow"><a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="recent-user" class="hvr-grow"><a
+                                href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-time"></span> Recent</a></li>
-                    <li id="account-user" class="hvr-grow"><a href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="account-user" class="hvr-grow"><a
+                                href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-user"></span> Mon compte</a></li>
                     <li role="separator" class="divider"></li>
                 </ul>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                       aria-expanded="true" aria-controls="collapseOne">
+                        <span class="glyphicon glyphicon-chevron-down"></span> Groupes
+                    </a>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                         aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <li id="new-groupe" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal"
+                                                                                           data-target="#popup-add-groupe">
+                                    <span class="glyphicon glyphicon-plus"></span> Nouveau groupe</a>
+                            </li>
+                            <li id="manage-groupe" class="bouton-admin-popup-add hvr-grow"><a href=""
+                                                                                              data-toggle="modal"
+                                                                                              data-target="#popup-add-groupe">
+                                    <span class="glyphicon glyphicon-th"></span> Gérer les groupes</a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
                 <ul class="nav nav-sidebar">
-                    <li id="new-groupe" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-groupe">
-                            <span class="glyphicon glyphicon-th"></span> Nouveau groupe</a>
-                    </li>
-                    <li id="new-projet" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-projet">
+                    <li id="new-projet" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal"
+                                                                                   data-target="#popup-add-projet">
                             <span class="glyphicon glyphicon-folder-close"></span> Nouveau projet</a>
                     </li>
-                    <li id="new-document" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-document">
+                    <li id="new-document" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal"
+                                                                                     data-target="#popup-add-document">
                             <span class="glyphicon glyphicon-file"></span> Nouveau document</a>
                     </li>
                 </ul>
@@ -230,6 +253,19 @@
                         }}) }}
                         <br>
                     </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h5>Liste des groupes</h5>
+                        </div>
+                        <div class="list-group">
+                            {% for groupe in tab_groups %}
+                                <a id="list-activable-item-{{ groupe.idGroupe }}" href="#"
+                                   class="list-group-item list-activable-item"
+                                   onclick="addUser('{{ groupe.idGroupe }}');">
+                                    <span class="glyphicon glyphicon-user"></span> {{ groupe.nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <div class="form-group">
                             <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
@@ -247,13 +283,13 @@
     <!-- Menu contextuel -->
     <ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none">
         <li id="new-projet" class="bouton-admin-popup-add"><a data-toggle="modal"
-                                                                      data-target="#popup-add-projet"
-                                                                      tabindex="-1" href="#"><span
+                                                              data-target="#popup-add-projet"
+                                                              tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-folder-close">
                 </span> Nouveau projet</a></li>
         <li id="new-document" class="bouton-admin-popup-add"><a data-toggle="modal"
-                                                                    data-target="#popup-add-document"
-                                                                    tabindex="-1" href="#">
+                                                                data-target="#popup-add-document"
+                                                                tabindex="-1" href="#">
                 <span class="glyphicon glyphicon-file"></span> Nouveau document</a></li>
         <li id="context-open-folder" class="context-folder"><a tabindex="-1" href="#"><span
                         class="glyphicon glyphicon-folder-open">

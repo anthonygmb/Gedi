@@ -211,7 +211,7 @@ class UtilisateurService
      * Permet de récupérer les entités enfants d'un objet
      * @param $sel
      * @param $childType
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|mixed
      * @throws Exception
      */
     public function getChildren($sel, $childType)
