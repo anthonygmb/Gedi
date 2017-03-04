@@ -33,7 +33,9 @@ const types = {
     RECENT_USER: "recent_user", // page elements recents utilisateur
     SHARED_USER: "shared_user", // page elements partagés utilisateur
     ACCOUNT_USER: "account_user", // page account_user
-    GET: "get" // demande d'informations sur une entité
+    GET: "get", // demande d'informations sur une entité
+    SHARED_DOCUMENT: "shared_document", // demande d'optention des documents partagés
+    SHARED_PROJET: "shared_projet" // demande d'optention des projets partagés
 };
 
 /**
@@ -644,7 +646,8 @@ $(function () {
      * envoi la selection à supprimer au controller via ajaxSend
      */
     $('#delete-entity').click(function () {
-        if (url == types.HOME_USER) {
+        if (url == types.HOME_USER || url == types.SHARED_USER ||
+            url == types.RECENT_USER) {
             $('body').ajaxSend(sel, types.SUPPRESSION, cache_type);
         } else {
             $('body').ajaxSend(sel, types.SUPPRESSION, null);
@@ -940,7 +943,8 @@ $(function () {
                 success: function (data) { // traitement en cas de succes
                     switch (typeAction) {
                         case types.ENREGISTREMENT:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
                                 openBreadcrumb(data.idparent);
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
@@ -952,7 +956,8 @@ $(function () {
                             }
                             break;
                         case types.MODIFICATION:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 openBreadcrumb(data.idparent);
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
@@ -964,7 +969,8 @@ $(function () {
                             }
                             break;
                         case types.SUPPRESSION:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 openBreadcrumb(data.idparent);
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' supprimé</strong>', 'glyphicon glyphicon-ok', 'success');
@@ -974,7 +980,8 @@ $(function () {
                             }
                             break;
                         case types.UPLOAD:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
                                 openBreadcrumb(data.idparent);
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
@@ -988,7 +995,8 @@ $(function () {
                         case types.DOWNLOAD:
                             $table.bootstrapTable('uncheckAll');
                             window.location = data.reponse;
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 showNotify('<strong>Document téléchargé</strong>',
                                     'glyphicon glyphicon-ok', 'success');
                                 return 0;
@@ -1015,14 +1023,16 @@ $(function () {
                             return 0;
                             break;
                         case types.DOCUMENT_PROJET:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 completeDesktop(data);
                             }
                             menuContext();
                             return 0;
                             break;
                         case types.GET:
-                            if (url == types.HOME_USER) {
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
                                 edit2(data.reponse, typeEntite);
                             }
                             menuContext();

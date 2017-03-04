@@ -15,4 +15,6 @@ abstract class BaseEnum
     const GROUPE = "groupe"; // demande d'optention des groupes d'une entité
     const DOCUMENT_PROJET = "document_projet"; // demande d'optention des documents et des projets
     const GET = "get"; // demande d'informations sur une entité
+    const SHARED_DOCUMENT = "shared_document"; // demande d'optention des documents partagés
+    const SHARED_PROJET = "shared_projet"; // demande d'optention des projets partagés
 }

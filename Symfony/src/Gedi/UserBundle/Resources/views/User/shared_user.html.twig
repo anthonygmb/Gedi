@@ -3,11 +3,37 @@
 {% block titre_user %}Documents partagés - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 
 {% block user_contenu %}
-
+    <div class="row text-center">
+        {% for projet in tab_projects %}
+            <div class="col-md-2 container-data">
+                <div class="panel full-transparent"><a id="{{ projet.idProjet }}" class="content-user" href="#"
+                                                       onclick="openFolder('{{ projet.idProjet }}');"
+                                                       oncontextmenu="menuContext(true, this.id);">
+                        <img src="{{ asset('img/folder.png') }}" alt="{{ projet.nom }}"/>
+                        <p class="text-white"><strong>{{ projet.nom }}</strong></p>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row text-center">
+        {% for document in tab_docs %}
+            <div class="col-md-2 container-data">
+                <div class="panel full-transparent"><a id="{{ document.idDocument }}" class="content-user" href="#"
+                                                       onclick="openFolder('{{ document.idDocument }}');"
+                                                       oncontextmenu="menuContext(false, this.id);">
+                        <img src="{{ asset('img/icon file/'~document.typeDoc~'.png') }}" alt="{{ document.nom }}"/>
+                        <p class="text-white"><strong>{{ document.nom }}</strong></p>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block breadcrumb_user %}
     <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">
         <span class="glyphicon glyphicon-briefcase"></span> Bureau {{ app.user.prenom }}</a>
-    <li><span class="glyphicon glyphicon-globe"></span> Partagés</li>
+    <li><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}">
+            <span class="glyphicon glyphicon-globe"></span> Partagés</a></li>
 {% endblock %}

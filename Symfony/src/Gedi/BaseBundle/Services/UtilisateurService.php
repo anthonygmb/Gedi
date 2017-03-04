@@ -225,6 +225,12 @@ class UtilisateurService
             case BaseEnum::GROUPE:
                 return $objet->getIdGroupeUg();
                 break;
+            case BaseEnum::SHARED_DOCUMENT:
+                return $objet->getIdDocumentDu();
+                break;
+            case BaseEnum::SHARED_PROJET:
+                return $objet->getIdDocumentDu();
+                break;
             default:
                 throw new Exception('ChildType n\'est pas défini');
         }

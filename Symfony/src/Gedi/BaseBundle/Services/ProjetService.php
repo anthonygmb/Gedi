@@ -105,6 +105,24 @@ class ProjetService
     }
 
     /**
+     * Retourne les N derniers éléments d'un utilisateur
+     * @param $max
+     * @param $id
+     * @return array
+     */
+    public function readLastByUser($max, $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('u')
+            ->from('GediBaseBundle:Projet', 'u')
+            ->where('u.idUtilisateurFkProjet =' . $id)
+            ->orderBy('u.dateCreation', 'DESC')
+            ->setMaxResults($max);
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+    /**
      * Retourne le nombre d'entités en BDD
      * @return mixed
      */

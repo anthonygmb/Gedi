@@ -7,6 +7,7 @@
         {% for projet in tab_projects %}
             <div class="col-md-2 container-data">
                 <div class="panel full-transparent"><a id="{{ projet.idProjet }}" class="content-user" href="#"
+                                                       onclick="openFolder('{{ projet.idProjet }}');"
                                                        oncontextmenu="menuContext(true, this.id);">
                         <img src="{{ asset('img/folder.png') }}" alt="{{ projet.nom }}"/>
                         <p class="text-white"><strong>{{ projet.nom }}</strong></p>
@@ -19,7 +20,8 @@
         {% for document in tab_docs %}
             <div class="col-md-2 container-data">
                 <div class="panel full-transparent"><a id="{{ document.idDocument }}" class="content-user" href="#"
-                                                       oncontextmenu="menuContext(true, this.id);">
+                                                       onclick="openFolder('{{ document.idDocument }}');"
+                                                       oncontextmenu="menuContext(false, this.id);">
                         <img src="{{ asset('img/icon file/'~document.typeDoc~'.png') }}" alt="{{ document.nom }}"/>
                         <p class="text-white"><strong>{{ document.nom }}</strong></p>
                     </a>
@@ -32,5 +34,6 @@
 {% block breadcrumb_user %}
     <a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}">
         <span class="glyphicon glyphicon-briefcase"></span> Bureau {{ app.user.prenom }}</a>
-    <li><span class="glyphicon glyphicon-time"></span> Recent</li>
+    <li><a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}">
+            <span class="glyphicon glyphicon-time"></span> Recent</a></li>
 {% endblock %}

@@ -263,12 +263,101 @@ class UserController extends Controller
         $documentForm = $this->createForm('Gedi\BaseBundle\Form\DocumentType', $document);
         $documentForm->handleRequest($request);
 
-        // importation des groupes de l'utilisateur
-        $tab_groups = $this->get('utilisateur.service')->
-        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
-        // importation des projets de l'utilisateur
+        if ($request->isMethod('POST') && isset($_POST['data']) && isset($_POST['typeAction'])) {
+            $rows = [];
+            $parent = null;
+            $response = new JsonResponse();
+            $sel = $_POST['data'];
+
+            if ($sel == null || $sel == "") {
+                throw new Exception('La selection est nulle');
+            }
+
+            switch ($_POST['typeAction']) {
+                case BaseEnum::GET:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        /* @var $objet Projet|Document|Groupe|Utilisateur */
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
+                        $rows = $objet->toArray();
+                    }
+                    break;
+                case BaseEnum::UPLOAD:
+                    if (!isset($_FILES['fichier'])) {
+                        throw new Exception('Le fichier n\'est pas uploadé');
+                    } else {
+                        $file = $_FILES['fichier'];
+                        if ($file == null || $file == "") {
+                            throw new Exception('Le fichier est nul');
+                        }
+                        $uploadedFile = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['size']);
+                        $objet = $this->get('document.service')->create($sel, $uploadedFile);
+                        return $this->createArborescence($this->getParent($objet, BaseEnum::DOCUMENT));
+                    }
+                    break;
+                case BaseEnum::DOWNLOAD:
+                    $tmp = [$sel];
+                    $this->get('document.service')->download($tmp);
+                    $rows = "download";
+                    break;
+                case BaseEnum::ENREGISTREMENT:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::SUPPRESSION:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
+                        array_push($rows, array('id' => $sel));
+                        $this->get($_POST['typeEntite'] . '.service')->delete($rows);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::MODIFICATION:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::UTILISATEUR:
+                    $tmp = $this->get('groupe.service')->getChildren($sel, $_POST['typeAction']);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
+                    break;
+                case BaseEnum::DOCUMENT_PROJET:
+                    $parent = $this->get('projet.service')->findOne($sel);
+                    return $this->createArborescence($parent);
+                    break;
+                default:
+                    throw new Exception('Typeaction n\'est pas reconnu');
+            }
+
+            $response->setData(array('reponse' => (array)$rows));
+            return $response;
+        }
+
+        // importation des documents partagés de l'utilisateur
+        $tab_docs = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::SHARED_DOCUMENT);
+        // importation des projets partagés de l'utilisateur
         $tab_projects = $this->get('utilisateur.service')->
-        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::PROJET)[0];
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::SHARED_PROJET);
 
         return $this->render('GediUserBundle:User:shared_user.html.twig', array(
             'groupe' => $groupe,
@@ -277,7 +366,7 @@ class UserController extends Controller
             'groupeForm' => $groupeForm->createView(),
             'projetForm' => $projetForm->createView(),
             'documentForm' => $documentForm->createView(),
-            'tab_groups' => $tab_groups,
+            'tab_docs' => $tab_docs,
             'tab_projects' => $tab_projects,
         ));
     }
@@ -306,12 +395,102 @@ class UserController extends Controller
         $documentForm = $this->createForm('Gedi\BaseBundle\Form\DocumentType', $document);
         $documentForm->handleRequest($request);
 
+        if ($request->isMethod('POST') && isset($_POST['data']) && isset($_POST['typeAction'])) {
+            $rows = [];
+            $parent = null;
+            $response = new JsonResponse();
+            $sel = $_POST['data'];
+
+            if ($sel == null || $sel == "") {
+                throw new Exception('La selection est nulle');
+            }
+
+            switch ($_POST['typeAction']) {
+                case BaseEnum::GET:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        /* @var $objet Projet|Document|Groupe|Utilisateur */
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
+                        $rows = $objet->toArray();
+                    }
+                    break;
+                case BaseEnum::UPLOAD:
+                    if (!isset($_FILES['fichier'])) {
+                        throw new Exception('Le fichier n\'est pas uploadé');
+                    } else {
+                        $file = $_FILES['fichier'];
+                        if ($file == null || $file == "") {
+                            throw new Exception('Le fichier est nul');
+                        }
+                        $uploadedFile = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['size']);
+                        $objet = $this->get('document.service')->create($sel, $uploadedFile);
+                        return $this->createArborescence($this->getParent($objet, BaseEnum::DOCUMENT));
+                    }
+                    break;
+                case BaseEnum::DOWNLOAD:
+                    $tmp = [$sel];
+                    $this->get('document.service')->download($tmp);
+                    $rows = "download";
+                    break;
+                case BaseEnum::ENREGISTREMENT:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::SUPPRESSION:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
+                        array_push($rows, array('id' => $sel));
+                        $this->get($_POST['typeEntite'] . '.service')->delete($rows);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::MODIFICATION:
+                    if (!isset($_POST['typeEntite'])) {
+                        throw new Exception('typeEntite n\'est pas defini');
+                    } else {
+                        $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
+                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                    }
+                    break;
+                case BaseEnum::UTILISATEUR:
+                    $tmp = $this->get('groupe.service')->getChildren($sel, $_POST['typeAction']);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
+                    break;
+                case BaseEnum::DOCUMENT_PROJET:
+                    $parent = $this->get('projet.service')->findOne($sel);
+                    return $this->createArborescence($parent);
+                    break;
+                default:
+                    throw new Exception('Typeaction n\'est pas reconnu');
+            }
+
+            $response->setData(array('reponse' => (array)$rows));
+            return $response;
+        }
+
         // importation des groupes de l'utilisateur
         $tab_groups = $this->get('utilisateur.service')->
         getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
-        // importation des projets de l'utilisateur
-        $tab_projects = $this->get('projet.service')->readLast(6);
-        $tab_docs = $this->get('document.service')->readLast(6);
+        // importation des projets recent de l'utilisateur
+        $tab_projects = $this->get('projet.service')->readLastByUser(6, $id);
+        // importation des documents recent de l'utilisateur
+        $tab_docs = $this->get('document.service')->readLastByUser(6, $id);
 
         return $this->render('GediUserBundle:User:recent_user.html.twig', array(
             'groupe' => $groupe,
