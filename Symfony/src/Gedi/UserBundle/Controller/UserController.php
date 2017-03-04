@@ -166,7 +166,7 @@ class UserController extends Controller
         if (sizeof($projets) > 0) {
             /* @var $child Projet */
             foreach ($projets as $child) {
-                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent"><a id="' . $child->getIdProjet() .
+                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent hvr-float-shadow"><a id="' . $child->getIdProjet() .
                     '" class="content-user" href="#" onclick="openFolder(' . $child->getIdProjet() . ');" 
                                 oncontextmenu="menuContext(true, this.id);"><img src="' . $this->getParameter('image_folder_directory') . FOLDER_ICON . '" alt="' .
                     $child->getNom() . '"/><p class="text-white"><strong>' . $child->getNom() .
@@ -176,7 +176,7 @@ class UserController extends Controller
         if (sizeof($documents) > 0) {
             /* @var $child Document */
             foreach ($documents as $child) {
-                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent"><a id="' . $child->getIdDocument() .
+                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent hvr-float-shadow"><a id="' . $child->getIdDocument() .
                     '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
                     $child->getTypeDoc() . TYPE_ICON . '" alt="' . $child->getNom() .
                     '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');

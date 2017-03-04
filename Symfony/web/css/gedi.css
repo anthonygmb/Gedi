@@ -64,16 +64,8 @@
     margin-top: -1%;
 }
 
-.container-data :hover {
-    background-color: rgba(205, 205, 205, 0.51);
-}
-
 .container-data {
     padding: 1px 1px 1px 1px;
-}
-
-.container-data > div :hover {
-    background-color: initial;
 }
 
 .background-app {
@@ -163,6 +155,20 @@ body {
 .alert {
     padding-left: 3%;
     max-width: 25%;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+
+.alert:hover, .alert:focus, .alert:active {
+    -webkit-transform: translateX(-8px);
+    transform: translateX(-8px);
 }
 
 .popover {

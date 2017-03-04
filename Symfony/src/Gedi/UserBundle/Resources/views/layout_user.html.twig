@@ -9,25 +9,25 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li id="home-user" class="active"><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="home-user" class="hvr-grow active"><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-briefcase"><span class="sr-only">(current)</span></span>
                             Bureau</a></li>
-                    <li id="shared-user"><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="shared-user" class="hvr-grow"><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-globe"></span> Partagé</a></li>
-                    <li id="recent-user"><a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="recent-user" class="hvr-grow"><a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-time"></span> Recent</a></li>
-                    <li id="account-user"><a href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }}"><span
+                    <li id="account-user" class="hvr-grow"><a href="{{ path('account_user', { 'id': app.user.idUtilisateur }) }}"><span
                                     class="glyphicon glyphicon-user"></span> Mon compte</a></li>
                     <li role="separator" class="divider"></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li id="new-groupe" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-groupe">
+                    <li id="new-groupe" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-groupe">
                             <span class="glyphicon glyphicon-th"></span> Nouveau groupe</a>
                     </li>
-                    <li id="new-projet" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-projet">
+                    <li id="new-projet" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-projet">
                             <span class="glyphicon glyphicon-folder-close"></span> Nouveau projet</a>
                     </li>
-                    <li id="new-document" class="bouton-admin-popup-add"><a href="" data-toggle="modal" data-target="#popup-add-document">
+                    <li id="new-document" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal" data-target="#popup-add-document">
                             <span class="glyphicon glyphicon-file"></span> Nouveau document</a>
                     </li>
                 </ul>
