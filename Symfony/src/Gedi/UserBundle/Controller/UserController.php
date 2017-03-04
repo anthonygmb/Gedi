@@ -223,7 +223,20 @@ class UserController extends Controller
         ) {
             throw new Exception("Vous n'êtes pas authorisé à consulter cette page");
         }
-        return $this->render('GediUserBundle:User:account_user.html.twig');
+
+        $utilisateur = new Utilisateur();
+        $utilisateurForm = $this->createForm('Gedi\BaseBundle\Form\UtilisateurType', $utilisateur);
+        $utilisateurForm->handleRequest($request);
+
+        // enregistre l'utilisateur lorsque le formulaire est soumis
+        if ($utilisateurForm->isSubmitted() && $utilisateurForm->isValid()) {
+            $this->get('utilisateur.service')->register($utilisateur);
+            return $this->redirectToRoute('logout');
+        }
+
+        return $this->render('GediUserBundle:User:account_user.html.twig', array(
+            'utilisateur' => $utilisateur,
+            'utilisateurForm' => $utilisateurForm->createView()));
     }
 
     /**

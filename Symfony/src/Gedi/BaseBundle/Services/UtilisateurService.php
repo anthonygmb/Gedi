@@ -64,7 +64,12 @@ class UtilisateurService
         $encoder = $this->ef->getEncoder($objet);
         $password = $encoder->encodePassword($objet->getPassword(), $objet->getSalt());
         $objet->setPassword($password);
-        $this->em->persist($objet);
+        if ($objet->getIdUtilisateur() != "" || $objet->getIdUtilisateur() != null) {
+            $objet->setActif(true);
+            $this->em->merge($objet);
+        } else {
+            $this->em->persist($objet);
+        }
         $this->em->flush();
     }
 

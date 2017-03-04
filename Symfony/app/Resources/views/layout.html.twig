@@ -79,9 +79,12 @@
                                     <b
                                             class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
+                                    <li><a href="{{ path('start', { 'id': app.user.idUtilisateur }) }}"><span
                                                     class="glyphicon glyphicon-home"></span>
                                             Accueil</a></li>
+                                    <li><a href="{{ path('home_user', { 'id': app.user.idUtilisateur }) }}"><span
+                                                    class="glyphicon glyphicon-briefcase"></span>
+                                            Bureau</a></li>
                                     <li><a href="{{ path('shared_user', { 'id': app.user.idUtilisateur }) }}"><span
                                                     class="glyphicon glyphicon-globe"></span> Partagé</a></li>
                                     <li><a href="{{ path('recent_user', { 'id': app.user.idUtilisateur }) }}"><span

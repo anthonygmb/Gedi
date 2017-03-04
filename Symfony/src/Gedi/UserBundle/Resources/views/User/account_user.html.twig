@@ -1,7 +1,74 @@
-{% extends "GediUserBundle::layout_user.html.twig" %}
+{% extends "::layout.html.twig" %}
 
-{% block titre_user %}Mon compte - {{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
+{% block app_titre %}
+    Mon compte - {{ app.user.nom }} {{ app.user.prenom }}
+{% endblock %}
 
-{% block user_contenu %}
-
+{% block app_contenu %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-sm-offset-2 col-md-8 col-md-offset-2">
+                <div class="panel effect-transparent">
+                    {{ form_start(utilisateurForm) }}
+                    <div class="panel-heading full-transparent">
+                        <h2>Mon compte</h2>
+                        <p>Vous pouvez modifier les informations de votre compte Gedi, Tous les champs sont obligatoires
+                            <br><span class="glyphicon glyphicon-info-sign"></span> Après la modification de votre
+                            compte, vous devrez vous reconnecter</p>
+                    </div>
+                    <div class="panel-body full-transparent">
+                        {{ form_row(utilisateurForm.idUtilisateur, { 'attr':  {
+                            'value': app.user.idUtilisateur
+                        }}) }}
+                        <div class="form-group full-transparent">
+                            {{ form_errors(utilisateurForm.username) }}
+                            {{ form_widget(utilisateurForm.username, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Email',
+                                'value': app.user.username
+                            }}) }}
+                            <br>
+                            {{ form_errors(utilisateurForm.password.first) }}
+                            {{ form_widget(utilisateurForm.password.first, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Mot de passe'
+                            }}) }}
+                            <br>
+                            {{ form_errors(utilisateurForm.password.second) }}
+                            {{ form_widget(utilisateurForm.password.second, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Confirmation de mot de passe'
+                            }}) }}
+                            <br>
+                            {{ form_errors(utilisateurForm.nom) }}
+                            {{ form_widget(utilisateurForm.nom, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Nom',
+                                'value': app.user.nom
+                            }}) }}
+                            <br>
+                            {{ form_errors(utilisateurForm.prenom) }}
+                            {{ form_widget(utilisateurForm.prenom, { 'attr':  {
+                                'rows': '1',
+                                'class': 'form-control',
+                                'placeholder': 'Prenom',
+                                'value': app.user.prenom
+                            }}) }}
+                            <div class="hidden">
+                                {{ form_row(utilisateurForm.actif) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer full-transparent">
+                        <input type="submit" class="btn btn-success" value="Enregistrer"/>
+                    </div>
+                    {{ form_end(utilisateurForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
