@@ -139,7 +139,7 @@ class UserController extends Controller
 
                     if (sizeof($tmp) > 0) {
                         /* @var $groupes \Doctrine\Common\Collections\Collection */
-                        $groupes = $this->get('utilisateur.service')->getChildren($id, BaseEnum::GROUPE);
+                        $groupes = $this->get('utilisateur.service')->getChildren($id, BaseEnum::GROUPE_PARTAGE);
 
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {

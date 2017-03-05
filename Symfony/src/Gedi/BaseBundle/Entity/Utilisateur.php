@@ -137,6 +137,14 @@ class Utilisateur implements UserInterface
     private $idUtilisateurFkProjet;
 
     /**
+     * Groupes dont l'utilisateur est propriétaire
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Groupe", mappedBy="idUtilisateurFkGroupe", cascade={"all"})
+     */
+    private $idUtilisateurFkGroupe;
+
+    /**
      * Documents dont l'utilisateur est propriétaire
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -509,6 +517,38 @@ class Utilisateur implements UserInterface
     public function removeIdUtilisateurFkProjet($idUtilisateurFkProjet)
     {
         $this->idUtilisateurFkProjet->removeElement($idUtilisateurFkProjet);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIdUtilisateurFkGroupe()
+    {
+        return $this->idUtilisateurFkGroupe;
+    }
+
+    /**
+     * Add idUtilisateurFkGroupe
+     *
+     * @param $idUtilisateurFkGroupe
+     *
+     * @return Utilisateur
+     */
+    public function addIdUtilisateurFkGroupe($idUtilisateurFkGroupe)
+    {
+        $this->idUtilisateurFkGroupe[] = $idUtilisateurFkGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove idUtilisateurFkGroupe
+     *
+     * @param $idUtilisateurFkGroupe
+     */
+    public function removeIdUtilisateurFkGroupe($idUtilisateurFkGroupe)
+    {
+        $this->idUtilisateurFkGroupe->removeElement($idUtilisateurFkGroupe);
     }
 
     /**

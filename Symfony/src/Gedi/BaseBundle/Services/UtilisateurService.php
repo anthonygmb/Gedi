@@ -240,6 +240,9 @@ class UtilisateurService
                 return $objet->getIdUtilisateurFkProjet();
                 break;
             case BaseEnum::GROUPE:
+                return $objet->getIdUtilisateurFkGroupe();
+                break;
+            case BaseEnum::GROUPE_PARTAGE:
                 return $objet->getIdGroupeUg();
                 break;
             case BaseEnum::SHARED_DOCUMENT:

@@ -46,6 +46,11 @@ class GroupeService
         return $objet;
     }
 
+    /**
+     * Fonction d'ajout de membre à un groupe
+     * @param $sel
+     * @return Groupe
+     */
     public function addMembre($sel)
     {
         /* @var $objet Groupe */

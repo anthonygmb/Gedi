@@ -19,4 +19,5 @@ abstract class BaseEnum
     const SHARED_PROJET = "shared_projet"; // demande d'optention des projets partagés
     const RECHERCHER = "rechercher"; // demande de recherche d'entité
     const AJOUTER_MEMBRE = "ajouter_membre"; // demande d'ajout de membre à un groupe
+    const GROUPE_PARTAGE = "groupe_partage"; // demande d'optention des groupes partagés
 }
