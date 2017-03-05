@@ -135,6 +135,18 @@ class UtilisateurService
         return $query->getResult();
     }
 
+    public function search($sel)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('u')
+            ->from('GediBaseBundle:Utilisateur', 'u')
+            ->where('u.prenom =\'' . $sel . '\'')
+            ->orWhere('u.nom =\'' . $sel . '\'')
+            ->orWhere('u.username =\'' . $sel . '\'');
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     /**
      * Retourne le nombre d'entités en BDD
      * @return mixed

@@ -35,7 +35,8 @@ const types = {
     ACCOUNT_USER: "account_user", // page account_user
     GET: "get", // demande d'informations sur une entité
     SHARED_DOCUMENT: "shared_document", // demande d'optention des documents partagés
-    SHARED_PROJET: "shared_projet" // demande d'optention des projets partagés
+    SHARED_PROJET: "shared_projet", // demande d'optention des projets partagés
+    RECHERCHER: "rechercher" // demande de recherche d'entité
 };
 
 /**
@@ -209,7 +210,13 @@ function hideOuShow(nbSel) {
  * @param js_object_arg, infos de l'entité à mettre dans le formulaire
  */
 function edit(js_object_arg) {
-
+    var tmp_url = url;
+    if (url == types.HOME_USER || url == types.SHARED_USER ||
+        url == types.RECENT_USER) {
+        url = types.GROUPE;
+        cache_type = types.GROUPE;
+        $('#bouton-delete-group').prop('disabled', false);
+    }
     // récupération de l'entité au format json et transformation
     // en tableau javascript
     var js_object = JSON.parse(js_object_arg);
@@ -241,6 +248,11 @@ function edit(js_object_arg) {
     $('#data_typeDoc').prop('disabled', false);
     $('.assign-user').hide(); // masque le panel d'assignation d'utilisateur
     $('#data_fichier').prop('disabled', true); // desactive le bouton upload
+    if (tmp_url == types.HOME_USER || tmp_url == types.SHARED_USER ||
+        tmp_url == types.RECENT_USER) {
+        url = tmp_url;
+        sel = js_object['idGroupe'];
+    }
 }
 
 /**
@@ -858,6 +870,8 @@ $(function () {
             $('body').ajaxSend(selection, types.ENREGISTREMENT, types.GROUPE);
         } else {
             $('body').ajaxSend(selection, types.MODIFICATION, types.GROUPE);
+            $('#list-activable-item-groupe-' + selection[0].value).html('<span class="glyphicon glyphicon-th"></span> ' +
+                selection[1].value);
         }
     });
 
@@ -907,6 +921,29 @@ $(function () {
         $(this).ajaxSend(event.currentTarget.value, types.DOWNLOAD, null);
     });
 
+    $("#new-groupe").click(function () {
+        $('#liste-groupes').hide();
+        $('#liste-utilisateurs').hide();
+    });
+
+    $("#manage-groupe").click(function () {
+        $('.list-activable-item').removeClass('active');
+        $('#liste-groupes').show();
+        $('#liste-utilisateurs').show();
+        $('#bouton-delete-group').prop('disabled', true);
+    });
+
+    $("#search-users-group").keyup(function (event) {
+        if (event.currentTarget.value.length > 3) {
+            $(this).ajaxSend(event.currentTarget.value, types.RECHERCHER, types.UTILISATEUR);
+        }
+    });
+
+    $("#bouton-delete-group").click(function () {
+        $('body').ajaxSend(sel, types.SUPPRESSION, cache_type);
+        $('#list-activable-item-groupe-' + sel).remove();
+    });
+
     // ======================================================================================================
     // ENVOI AJAX CLIENT -> SERVEUR
     // ======================================================================================================
@@ -946,7 +983,9 @@ $(function () {
                             if (url == types.HOME_USER || url == types.SHARED_USER ||
                                 url == types.RECENT_USER) {
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
-                                openBreadcrumb(data.idparent);
+                                if (typeEntite != types.GROUPE) {
+                                    openBreadcrumb(data.idparent);
+                                }
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' enregistré</strong>', 'glyphicon glyphicon-ok', 'success');
                                 return 0;
@@ -958,7 +997,9 @@ $(function () {
                         case types.MODIFICATION:
                             if (url == types.HOME_USER || url == types.SHARED_USER ||
                                 url == types.RECENT_USER) {
-                                openBreadcrumb(data.idparent);
+                                if (typeEntite != types.GROUPE) {
+                                    openBreadcrumb(data.idparent);
+                                }
                                 $('#popup-add-' + typeEntite).modal('toggle'); // fait disparaitre le modal de création
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' modifié</strong>', 'glyphicon glyphicon-ok', 'success');
@@ -971,7 +1012,9 @@ $(function () {
                         case types.SUPPRESSION:
                             if (url == types.HOME_USER || url == types.SHARED_USER ||
                                 url == types.RECENT_USER) {
-                                openBreadcrumb(data.idparent);
+                                if (typeEntite != types.GROUPE) {
+                                    openBreadcrumb(data.idparent);
+                                }
                                 showNotify('<strong>' + (typeEntite.charAt(0).toUpperCase() + typeEntite.slice(1)) +
                                     ' supprimé</strong>', 'glyphicon glyphicon-ok', 'success');
                                 return 0;
@@ -1036,6 +1079,15 @@ $(function () {
                                 edit2(data.reponse, typeEntite);
                             }
                             menuContext();
+                            return 0;
+                            break;
+                        case types.RECHERCHER:
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
+                                var $lu = $('#liste-utilisateurs-content');
+                                $lu.empty();
+                                $lu.prepend(data.reponse);
+                            }
                             return 0;
                             break;
                         default:

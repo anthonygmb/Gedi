@@ -32,15 +32,13 @@
                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
                          aria-labelledby="headingOne">
                         <div class="panel-body">
-                            <li id="new-groupe" class="bouton-admin-popup-add hvr-grow"><a href="" data-toggle="modal"
-                                                                                           data-target="#popup-add-groupe">
-                                    <span class="glyphicon glyphicon-plus"></span> Nouveau groupe</a>
-                            </li>
-                            <li id="manage-groupe" class="bouton-admin-popup-add hvr-grow"><a href=""
-                                                                                              data-toggle="modal"
-                                                                                              data-target="#popup-add-groupe">
-                                    <span class="glyphicon glyphicon-th"></span> Gérer les groupes</a>
-                            </li>
+                            <a id="new-groupe" class="bouton-admin-popup-add hvr-grow" href="" data-toggle="modal"
+                               data-target="#popup-add-groupe">
+                                <span class="glyphicon glyphicon-plus"></span> Nouveau groupe</a>
+                            <a id="manage-groupe" class="bouton-admin-popup-add hvr-grow" href=""
+                               data-toggle="modal"
+                               data-target="#popup-add-groupe">
+                                <span class="glyphicon glyphicon-th"></span> Gérer les groupes</a>
                         </div>
                     </div>
                 </div>
@@ -237,6 +235,20 @@
                     {{ form_start(groupeForm, { 'attr':  {
                         'class': 'form-groupe',
                     }}) }}
+                    <div id="liste-groupes" class="panel panel-info">
+                        <div class="panel-heading">
+                            <h5>Liste des groupes</h5>
+                        </div>
+                        <!-- contenu de la liste mis a jour en ajax -->
+                        <div id="liste-groupes-content" class="list-group">
+                            {% for groupe in tab_groups %}
+                                <a id="list-activable-item-groupe-{{ groupe.idGroupe }}" href="#"
+                                   class="list-group-item list-activable-item"
+                                   onclick="edit('{{ groupe.toArray|json_encode }}');">
+                                    <span class="glyphicon glyphicon-th"></span> {{ groupe.nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="form-group">
                         {{ form_row(groupeForm.idGroupe) }}
                         <div class="input-group">
@@ -253,21 +265,23 @@
                         }}) }}
                         <br>
                     </div>
-                    <div class="panel panel-info">
+                    <!-- contenu de la liste mis a jour en ajax -->
+                    <div id="liste-utilisateurs" class="panel panel-info">
                         <div class="panel-heading">
-                            <h5>Liste des groupes</h5>
+                            <div class="form-group">
+                                <input id="search-users-group" type="text"
+                                       rows="1" class="form-control form-control"
+                                       placeholder="Ajoutez des utilisateurs">
+                            </div>
                         </div>
-                        <div class="list-group">
-                            {% for groupe in tab_groups %}
-                                <a id="list-activable-item-{{ groupe.idGroupe }}" href="#"
-                                   class="list-group-item list-activable-item"
-                                   onclick="addUser('{{ groupe.idGroupe }}');">
-                                    <span class="glyphicon glyphicon-user"></span> {{ groupe.nom }}</a>
-                            {% endfor %}
+                        <div id="liste-utilisateurs-content" class="list-group">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
+                            <button id="bouton-delete-group" type="button" class="btn btn-danger bouton-dismiss-entity"><span
+                                        class="glyphicon glyphicon-trash"></span> Supprimer
+                            </button>
                             <input type="submit" class="btn btn-success bouton-submit-admin-entity"/>
                             <button type="button" class="btn btn-danger bouton-dismiss-entity" data-dismiss="modal">
                                 Annuler

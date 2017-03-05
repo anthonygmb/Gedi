@@ -2,6 +2,7 @@
 
 namespace Gedi\UserBundle\Controller;
 
+use Doctrine\ORM\Query\Expr\Base;
 use Gedi\BaseBundle\Entity\Document;
 use Gedi\BaseBundle\Entity\Groupe;
 use Gedi\BaseBundle\Entity\Projet;
@@ -87,7 +88,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::SUPPRESSION:
@@ -97,7 +102,11 @@ class UserController extends Controller
                         $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
                         array_push($rows, array('id' => $sel));
                         $this->get($_POST['typeEntite'] . '.service')->delete($rows);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::MODIFICATION:
@@ -105,7 +114,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::UTILISATEUR:
@@ -119,6 +132,30 @@ class UserController extends Controller
                         }
                     } else {
                         array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
+                    break;
+                case BaseEnum::RECHERCHER:
+                    $tmp = $this->get($_POST['typeEntite'] . '.service')->search($sel);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $groupes \Doctrine\Common\Collections\Collection */
+                        $groupes = $this->get('utilisateur.service')->getChildren($id, BaseEnum::GROUPE);
+
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            if ($groupes->contains($child)) {
+                                array_push($rows, '<li class="list-group-item info"><span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            } else {
+                                array_push($rows, '<a id="list-activable-item-' . $child->getIdUtilisateur() . '" href="#"
+                       class="list-group-item list-activable-item"
+                       onclick="addUser(' . $child->getIdUtilisateur() . ');">
+                        <span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</a>');
+                            }
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">Aucun résultat...</li>');
                     }
                     break;
                 case BaseEnum::DOCUMENT_PROJET:

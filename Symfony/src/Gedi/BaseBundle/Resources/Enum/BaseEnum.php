@@ -17,4 +17,5 @@ abstract class BaseEnum
     const GET = "get"; // demande d'informations sur une entité
     const SHARED_DOCUMENT = "shared_document"; // demande d'optention des documents partagés
     const SHARED_PROJET = "shared_projet"; // demande d'optention des projets partagés
+    const RECHERCHER = "rechercher"; // demande de recherche d'entité
 }
