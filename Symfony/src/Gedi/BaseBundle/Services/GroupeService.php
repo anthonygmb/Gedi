@@ -5,6 +5,7 @@ namespace Gedi\BaseBundle\Services;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Gedi\BaseBundle\Entity\Groupe;
+use Gedi\BaseBundle\Entity\Utilisateur;
 use Gedi\BaseBundle\Resources\Enum\BaseEnum;
 
 /**
@@ -55,12 +56,31 @@ class GroupeService
     {
         /* @var $objet Groupe */
         $objet = $this->em->find('GediBaseBundle:Groupe', $sel['idGroupe']);
+        /* @var $utilisateur Utilisateur */
         $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel['idUtilisateur']);
         $utilisateur->addIdGroupeUg($objet);
         $objet->addIdUtilisateurUg($utilisateur);
         $this->em->persist($objet);
         $this->em->flush();
         return $objet;
+    }
+
+    /**
+     * Fonction de suppression de membre à un groupe
+     * @param $sel
+     * @return mixed
+     */
+    public function deleteMembre($sel)
+    {
+        /* @var $objet Groupe */
+        $objet = $this->em->find('GediBaseBundle:Groupe', $sel['idGroupe']);
+        /* @var $utilisateur Utilisateur */
+        $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel['idUtilisateur']);
+        $utilisateur->removeIdGroupeUg($objet);
+        $objet->removeIdUtilisateurUg($utilisateur);
+        $this->em->persist($objet);
+        $this->em->flush();
+        return $sel['idUtilisateur'];
     }
 
     /**

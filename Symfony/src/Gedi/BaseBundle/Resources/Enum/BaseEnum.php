@@ -20,4 +20,5 @@ abstract class BaseEnum
     const RECHERCHER = "rechercher"; // demande de recherche d'entité
     const AJOUTER_MEMBRE = "ajouter_membre"; // demande d'ajout de membre à un groupe
     const GROUPE_PARTAGE = "groupe_partage"; // demande d'optention des groupes partagés
+    const SUPPRIMER_MEMBRE = "supprimer_membre"; // demande de suppression de membre à un groupe
 }

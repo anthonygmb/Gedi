@@ -127,8 +127,12 @@ class UserController extends Controller
                     if (sizeof($tmp) > 0) {
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
-                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
-                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
                         }
                     } else {
                         array_push($rows, '<li class="list-group-item">... vide</li>');
@@ -144,7 +148,7 @@ class UserController extends Controller
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
                             if ($groupes->contains($child)) {
-                                array_push($rows, '<li class="list-group-item info"><span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                array_push($rows, '<li class="list-group-item text-info"><span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
                                     $child->getPrenom() . " - " . $child->getUsername() . '</li>');
                             } else {
                                 array_push($rows, '<a id="list-activable-item-' . $child->getIdUtilisateur() . '" href="#"
@@ -170,12 +174,19 @@ class UserController extends Controller
                     if (sizeof($tmp) > 0) {
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
-                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
-                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel['idGroupe'] . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
                         }
                     } else {
                         array_push($rows, '<li class="list-group-item">... vide</li>');
                     }
+                    break;
+                case BaseEnum::SUPPRIMER_MEMBRE:
+                    $rows = $this->get('groupe.service')->deleteMembre($sel);
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');

@@ -51,7 +51,7 @@ class Groupe
      * Propriétaire du groupe
      * @var Utilisateur
      *
-     * @ORM\ManyToOne(targetEntity="Utilisateur")
+     * @ORM\ManyToOne(targetEntity="Utilisateur", inversedBy="idUtilisateurFkGroupe")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_utilisateur_fk_groupe", referencedColumnName="id_utilisateur")
      * })

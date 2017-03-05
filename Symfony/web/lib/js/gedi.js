@@ -37,7 +37,8 @@ const types = {
     SHARED_DOCUMENT: "shared_document", // demande d'optention des documents partagés
     SHARED_PROJET: "shared_projet", // demande d'optention des projets partagés
     RECHERCHER: "rechercher", // demande de recherche d'entité
-    AJOUTER_MEMBRE: "ajouter_membre" // demande d'ajout de membre à un groupe
+    AJOUTER_MEMBRE: "ajouter_membre", // demande d'ajout de membre à un groupe
+    SUPPRIMER_MEMBRE: "supprimer_membre" // demande de suppression de membre à un groupe
 };
 
 /**
@@ -465,12 +466,18 @@ function menuContext(isFolder, id) {
         default:
             $fil.hide();
             $fol.hide();
-
             break;
     }
     $(".content-user").contextMenu({
         menuSelector: "#contextMenu"
     });
+}
+
+function deleteMembre(groupe, utilisateur) {
+    var tmp = {};
+    tmp['idUtilisateur'] = utilisateur;
+    tmp['idGroupe'] = groupe;
+    $('body').ajaxSend(tmp, types.SUPPRIMER_MEMBRE, types.UTILISATEUR);
 }
 
 /**
@@ -934,13 +941,16 @@ $(function () {
     $("#new-groupe").click(function () {
         $('#liste-groupes').hide();
         $('#liste-utilisateurs').hide();
+        $('#bouton-delete-group').hide();
     });
 
     $("#manage-groupe").click(function () {
         $('.list-activable-item').removeClass('active');
         $('#liste-groupes').show();
         $('#liste-utilisateurs').show();
-        $('#bouton-delete-group').prop('disabled', true);
+        var $bdg = $('#bouton-delete-group');
+        $bdg.show();
+        $bdg.prop('disabled', true);
         $('#liste-utilisateurs-group-content').empty();
         $('#liste-utilisateurs-content').empty();
     });
@@ -1073,6 +1083,10 @@ $(function () {
                                 $lugc.empty();
                                 $lugc.prepend(data.reponse);
                             }
+                            return 0;
+                            break;
+                        case types.SUPPRIMER_MEMBRE:
+                            $('#bouton-delete-ug-' + data.reponse).remove();
                             return 0;
                             break;
                         case types.DOCUMENT:
