@@ -369,7 +369,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::SUPPRESSION:
@@ -379,7 +383,11 @@ class UserController extends Controller
                         $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
                         array_push($rows, array('id' => $sel));
                         $this->get($_POST['typeEntite'] . '.service')->delete($rows);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::MODIFICATION:
@@ -387,7 +395,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::UTILISATEUR:
@@ -396,16 +408,66 @@ class UserController extends Controller
                     if (sizeof($tmp) > 0) {
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
-                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
-                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
                         }
                     } else {
                         array_push($rows, '<li class="list-group-item">... vide</li>');
                     }
                     break;
+                case BaseEnum::RECHERCHER:
+                    $tmp = $this->get($_POST['typeEntite'] . '.service')->search($sel);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $groupes \Doctrine\Common\Collections\Collection */
+                        $groupes = $this->get('utilisateur.service')->getChildren($id, BaseEnum::GROUPE_PARTAGE);
+
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            if ($groupes->contains($child)) {
+                                array_push($rows, '<li class="list-group-item text-info"><span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            } else {
+                                array_push($rows, '<a id="list-activable-item-' . $child->getIdUtilisateur() . '" href="#"
+                       class="list-group-item list-activable-item"
+                       onclick="addMembre(' . $child->getIdUtilisateur() . ');">
+                        <span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</a>');
+                            }
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">Aucun résultat...</li>');
+                    }
+                    break;
                 case BaseEnum::DOCUMENT_PROJET:
                     $parent = $this->get('projet.service')->findOne($sel);
                     return $this->createArborescence($parent);
+                    break;
+                case BaseEnum::AJOUTER_MEMBRE:
+                    /* @var $groupe Groupe */
+                    $groupe = $this->get('groupe.service')->addMembre($sel);
+                    $tmp = $this->get('groupe.service')->getChildren($groupe->getIdGroupe(), $_POST['typeEntite']);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel['idGroupe'] . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
+                    break;
+                case BaseEnum::SUPPRIMER_MEMBRE:
+                    $rows = $this->get('groupe.service')->deleteMembre($sel);
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
@@ -421,6 +483,9 @@ class UserController extends Controller
         // importation des projets partagés de l'utilisateur
         $tab_projects = $this->get('utilisateur.service')->
         getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::SHARED_PROJET);
+        // importation des groupes de l'utilisateur
+        $tab_groups = $this->get('utilisateur.service')->
+        getChildren($this->getUser()->getIdUtilisateur(), BaseEnum::GROUPE);
 
         return $this->render('GediUserBundle:User:shared_user.html.twig', array(
             'groupe' => $groupe,
@@ -431,6 +496,7 @@ class UserController extends Controller
             'documentForm' => $documentForm->createView(),
             'tab_docs' => $tab_docs,
             'tab_projects' => $tab_projects,
+            'tab_groups' => $tab_groups
         ));
     }
 
@@ -501,7 +567,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->create($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::SUPPRESSION:
@@ -511,7 +581,11 @@ class UserController extends Controller
                         $objet = $this->get($_POST['typeEntite'] . '.service')->findOne($sel);
                         array_push($rows, array('id' => $sel));
                         $this->get($_POST['typeEntite'] . '.service')->delete($rows);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::MODIFICATION:
@@ -519,7 +593,11 @@ class UserController extends Controller
                         throw new Exception('typeEntite n\'est pas defini');
                     } else {
                         $objet = $this->get($_POST['typeEntite'] . '.service')->update($sel);
-                        return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        if ($_POST['typeEntite'] == BaseEnum::GROUPE) {
+                            $rows = "OK";
+                        } else {
+                            return $this->createArborescence($this->getParent($objet, $_POST['typeEntite']));
+                        }
                     }
                     break;
                 case BaseEnum::UTILISATEUR:
@@ -528,16 +606,66 @@ class UserController extends Controller
                     if (sizeof($tmp) > 0) {
                         /* @var $child Utilisateur */
                         foreach ($tmp as $child) {
-                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
-                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
                         }
                     } else {
                         array_push($rows, '<li class="list-group-item">... vide</li>');
                     }
                     break;
+                case BaseEnum::RECHERCHER:
+                    $tmp = $this->get($_POST['typeEntite'] . '.service')->search($sel);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $groupes \Doctrine\Common\Collections\Collection */
+                        $groupes = $this->get('utilisateur.service')->getChildren($id, BaseEnum::GROUPE_PARTAGE);
+
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            if ($groupes->contains($child)) {
+                                array_push($rows, '<li class="list-group-item text-info"><span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                            } else {
+                                array_push($rows, '<a id="list-activable-item-' . $child->getIdUtilisateur() . '" href="#"
+                       class="list-group-item list-activable-item"
+                       onclick="addMembre(' . $child->getIdUtilisateur() . ');">
+                        <span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
+                                    $child->getPrenom() . " - " . $child->getUsername() . '</a>');
+                            }
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">Aucun résultat...</li>');
+                    }
+                    break;
                 case BaseEnum::DOCUMENT_PROJET:
                     $parent = $this->get('projet.service')->findOne($sel);
                     return $this->createArborescence($parent);
+                    break;
+                case BaseEnum::AJOUTER_MEMBRE:
+                    /* @var $groupe Groupe */
+                    $groupe = $this->get('groupe.service')->addMembre($sel);
+                    $tmp = $this->get('groupe.service')->getChildren($groupe->getIdGroupe(), $_POST['typeEntite']);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            array_push($rows, '<li id="bouton-delete-ug-' . $child->getIdUtilisateur() . '"' .
+                                'class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " " . '<a type="button"
+                                class="btn btn-danger btn-xs bouton-delete-ug"
+                                onclick="deleteMembre(' . $sel['idGroupe'] . ',' . $child->getIdUtilisateur() . ');"><span
+                                        class="glyphicon glyphicon-trash"></span></a></li>');
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
+                    break;
+                case BaseEnum::SUPPRIMER_MEMBRE:
+                    $rows = $this->get('groupe.service')->deleteMembre($sel);
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
