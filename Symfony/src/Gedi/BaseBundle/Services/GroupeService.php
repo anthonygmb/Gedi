@@ -46,6 +46,18 @@ class GroupeService
         return $objet;
     }
 
+    public function addMembre($sel)
+    {
+        /* @var $objet Groupe */
+        $objet = $this->em->find('GediBaseBundle:Groupe', $sel['idGroupe']);
+        $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel['idUtilisateur']);
+        $utilisateur->addIdGroupeUg($objet);
+        $objet->addIdUtilisateurUg($utilisateur);
+        $this->em->persist($objet);
+        $this->em->flush();
+        return $objet;
+    }
+
     /**
      * Retourne tous les groupes en BDD
      * @return array

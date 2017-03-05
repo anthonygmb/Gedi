@@ -265,16 +265,32 @@
                         }}) }}
                         <br>
                     </div>
-                    <!-- contenu de la liste mis a jour en ajax -->
-                    <div id="liste-utilisateurs" class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="form-group">
-                                <input id="search-users-group" type="text"
-                                       rows="1" class="form-control form-control"
-                                       placeholder="Ajoutez des utilisateurs">
+                    <div id="liste-utilisateurs" class="row">
+                        <div class="col-xs-6">
+                            <!-- contenu de la liste mis a jour en ajax -->
+                            <div id="liste-utilisateurs-search" class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="form-group">
+                                        <input id="search-users-group" type="text"
+                                               rows="1" class="form-control form-control"
+                                               placeholder="Ajoutez des utilisateurs">
+                                    </div>
+                                </div>
+                                <div id="liste-utilisateurs-content" class="list-group">
+                                </div>
                             </div>
                         </div>
-                        <div id="liste-utilisateurs-content" class="list-group">
+                        <div class="col-xs-6">
+                            <!-- contenu de la liste mis a jour en ajax -->
+                            <div id="liste-utilisateurs-groupe" class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="form-group">
+                                        <h5>Membres du groupe</h5>
+                                    </div>
+                                </div>
+                                <div id="liste-utilisateurs-group-content" class="list-group">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

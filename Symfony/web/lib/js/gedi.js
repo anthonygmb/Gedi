@@ -36,7 +36,8 @@ const types = {
     GET: "get", // demande d'informations sur une entité
     SHARED_DOCUMENT: "shared_document", // demande d'optention des documents partagés
     SHARED_PROJET: "shared_projet", // demande d'optention des projets partagés
-    RECHERCHER: "rechercher" // demande de recherche d'entité
+    RECHERCHER: "rechercher", // demande de recherche d'entité
+    AJOUTER_MEMBRE: "ajouter_membre" // demande d'ajout de membre à un groupe
 };
 
 /**
@@ -216,6 +217,7 @@ function edit(js_object_arg) {
         url = types.GROUPE;
         cache_type = types.GROUPE;
         $('#bouton-delete-group').prop('disabled', false);
+        $('#liste-utilisateurs-group-content').empty();
     }
     // récupération de l'entité au format json et transformation
     // en tableau javascript
@@ -252,6 +254,7 @@ function edit(js_object_arg) {
         tmp_url == types.RECENT_USER) {
         url = tmp_url;
         sel = js_object['idGroupe'];
+        $('body').ajaxSend(sel, types.UTILISATEUR, null);
     }
 }
 
@@ -413,6 +416,13 @@ function edit2(js_object, typeEntite) {
     $('#data_nom').prop('disabled', false);
     $('#data_typeDoc').prop('disabled', false);
     $('#data_fichier').prop('disabled', true); // desactive le bouton upload
+}
+
+function addMembre(js_arg) {
+    var tmp = {};
+    tmp['idUtilisateur'] = js_arg;
+    tmp['idGroupe'] = sel;
+    $('body').ajaxSend(tmp, types.AJOUTER_MEMBRE, types.UTILISATEUR);
 }
 
 /**
@@ -931,6 +941,8 @@ $(function () {
         $('#liste-groupes').show();
         $('#liste-utilisateurs').show();
         $('#bouton-delete-group').prop('disabled', true);
+        $('#liste-utilisateurs-group-content').empty();
+        $('#liste-utilisateurs-content').empty();
     });
 
     $("#search-users-group").keyup(function (event) {
@@ -1048,6 +1060,18 @@ $(function () {
                         case types.UTILISATEUR:
                             if (url == types.GROUPE) {
                                 $('#liste-children').prepend(data.reponse);
+                            } else if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
+                                $('#liste-utilisateurs-group-content').prepend(data.reponse);
+                            }
+                            return 0;
+                            break;
+                        case types.AJOUTER_MEMBRE:
+                            if (url == types.HOME_USER || url == types.SHARED_USER ||
+                                url == types.RECENT_USER) {
+                                var $lugc = $('#liste-utilisateurs-group-content');
+                                $lugc.empty();
+                                $lugc.prepend(data.reponse);
                             }
                             return 0;
                             break;

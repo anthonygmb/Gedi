@@ -135,6 +135,11 @@ class UtilisateurService
         return $query->getResult();
     }
 
+    /**
+     * Fonction de recherche d'utilisateurs
+     * @param $sel
+     * @return array
+     */
     public function search($sel)
     {
         $qb = $this->em->createQueryBuilder();

@@ -149,7 +149,7 @@ class UserController extends Controller
                             } else {
                                 array_push($rows, '<a id="list-activable-item-' . $child->getIdUtilisateur() . '" href="#"
                        class="list-group-item list-activable-item"
-                       onclick="addUser(' . $child->getIdUtilisateur() . ');">
+                       onclick="addMembre(' . $child->getIdUtilisateur() . ');">
                         <span class="glyphicon glyphicon-user"></span> ' . $child->getNom() . " " .
                                     $child->getPrenom() . " - " . $child->getUsername() . '</a>');
                             }
@@ -161,6 +161,21 @@ class UserController extends Controller
                 case BaseEnum::DOCUMENT_PROJET:
                     $parent = $this->get('projet.service')->findOne($sel);
                     return $this->createArborescence($parent);
+                    break;
+                case BaseEnum::AJOUTER_MEMBRE:
+                    /* @var $groupe Groupe */
+                    $groupe = $this->get('groupe.service')->addMembre($sel);
+                    $tmp = $this->get('groupe.service')->getChildren($groupe->getIdGroupe(), $_POST['typeEntite']);
+
+                    if (sizeof($tmp) > 0) {
+                        /* @var $child Utilisateur */
+                        foreach ($tmp as $child) {
+                            array_push($rows, '<li class="list-group-item">' . $child->getNom() . " " .
+                                $child->getPrenom() . " - " . $child->getUsername() . '</li>');
+                        }
+                    } else {
+                        array_push($rows, '<li class="list-group-item">... vide</li>');
+                    }
                     break;
                 default:
                     throw new Exception('Typeaction n\'est pas reconnu');
