@@ -4,6 +4,7 @@ namespace Gedi\BaseBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 use Gedi\BaseBundle\Entity\Document;
+use Gedi\BaseBundle\Entity\Projet;
 use ZipArchive;
 
 /**
@@ -58,10 +59,13 @@ class DocumentService
         $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel['idUtilisateurFkDocument']);
         $utilisateur->addIdUtilisateurFkDocument($objet);
         $objet->setIdUtilisateurFkDocument($utilisateur);
+        /* @var $projet Projet */
         $projet = $this->em->find('GediBaseBundle:Projet', $sel['idProjetFkDocument']);
         $projet->addIdProjetFkDocument($objet);
         $objet->setIdProjetFkDocument($projet);
-        $fileName = $this->fs->upload($file, $projet->getPath());
+        $path = $this->targetDir . $projet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+        $projetPath = $this->fs->createPath($projet);
+        $fileName = $this->fs->upload($file, $path . $projetPath);
         $objet->setFichier($fileName);
         $this->em->persist($objet);
         $this->em->flush();

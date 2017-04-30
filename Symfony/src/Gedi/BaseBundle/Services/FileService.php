@@ -23,7 +23,6 @@ class FileService
      * Fonction pour écrire le fichier sur le serveur
      * @param UploadedFile $file
      * @param $path
-     * @param $typeDoc
      * @return string
      * @internal param $projet
      * @internal param $utilisateur
@@ -31,7 +30,7 @@ class FileService
     public function upload(UploadedFile $file, $path)
     {
         $fileName = md5(uniqid());
-        $file->move($this->targetDir . '/' . $path, $fileName);
+        $file->move($path, $fileName);
         return $fileName;
     }
 

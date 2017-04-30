@@ -145,11 +145,13 @@ class ProjetService
     {
         /* @var $objet Projet */
         $objet = $this->em->find('GediBaseBundle:Projet', $sel[0]['value']);
+        $oldPath = $this->fs->createPath($objet);
+        // on enlève le dernier '/'
+        $oldPath = substr($oldPath, 0, strlen($oldPath) - 1);
         $objet->setNom($sel[1]['value']);
-        $oldPath = $objet->getPath();
+        $path = $this->targetDir . $objet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
         $newPath = substr($oldPath, 0, strrpos($oldPath, "/") + 1) . $objet->getNom();
-        $objet->setPath($newPath);
-        rename($this->targetDir . $oldPath, $this->targetDir . $newPath);
+        rename($path . $oldPath, $path . $newPath);
         $this->em->merge($objet);
         $this->em->flush();
         return $objet;
@@ -165,7 +167,11 @@ class ProjetService
         for ($i = 0; $i <= count($sel) - 1; $i++) {
             /* @var $toDel Projet */
             $toDel = $this->em->find('GediBaseBundle:Projet', $sel[$i]['id']);
-            $this->fs->rmdir_recursive($this->targetDir . $toDel->getPath());
+            $oldPath = $this->fs->createPath($toDel);
+            // on enlève le dernier '/'
+            $oldPath = substr($oldPath, 0, strlen($oldPath) - 1);
+            $path = $this->targetDir . $toDel->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+            $this->fs->rmdir_recursive($path . $oldPath);
             $this->em->remove($toDel);
         }
         $this->em->flush();
