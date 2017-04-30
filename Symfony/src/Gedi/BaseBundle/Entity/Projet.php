@@ -32,14 +32,6 @@ class Projet
     private $nom;
 
     /**
-     * Chemin du projet
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    private $path;
-
-    /**
      * Date de création du projet
      * @var \DateTime
      *
@@ -138,30 +130,6 @@ class Projet
     public function setNom($nom)
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     *
-     * @return Projet
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
 
         return $this;
     }

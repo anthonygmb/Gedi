@@ -61,8 +61,8 @@ class DocumentService
         $projet = $this->em->find('GediBaseBundle:Projet', $sel['idProjetFkDocument']);
         $projet->addIdProjetFkDocument($objet);
         $objet->setIdProjetFkDocument($projet);
-        $fileName = $this->fs->upload($file, $projet->getPath(), $objet->getTypeDoc());
-        $objet->setFichier($projet->getPath() . '/' . $fileName);
+        $fileName = $this->fs->upload($file, $projet->getPath());
+        $objet->setFichier($fileName);
         $this->em->persist($objet);
         $this->em->flush();
         return $objet;
@@ -161,17 +161,39 @@ class DocumentService
         }
 
         for ($i = 0; $i <= count($sel) - 1; $i++) {
-            $objet = $this->em->find('GediBaseBundle:Document', $sel[$i]);
-            $objet->addNbDownload();
-            if ($objet->getTypeDoc() != "") {
-                $zip->addFile($this->targetDir . $objet->getFichier(), $objet->getNom() . '.' . $objet->getTypeDoc());
+            /* @var $document Document */
+            $document = $this->em->find('GediBaseBundle:Document', $sel[$i]);
+            $document->addNbDownload();
+            if ($document->getTypeDoc() != "") {
+                $zip->addFile($this->targetDir . $this->makePath($document, true), $document->getNom() . '.' . $document->getTypeDoc());
             } else {
-                $zip->addFile($this->targetDir . $objet->getFichier(), $objet->getNom()); // BUG de téléchargement si fichier sans extention
+                $zip->addFile($this->targetDir . $this->makePath($document, true), $document->getNom());
             }
-            $this->em->merge($objet);
+            $this->em->merge($document);
         }
         $zip->close();
         $this->em->flush();
+    }
+
+    /**
+     * Fonction pour obtenir le path d'un document
+     * @param $document Document
+     * @param $withDocName boolean
+     * @return string
+     */
+    public function makePath($document, $withDocName)
+    {
+        if ($document->getIdProjetFkDocument() != null) {
+            if ($withDocName == true) {
+                return $document->getIdUtilisateurFkDocument()->getIdUtilisateur() . "/" .
+                    $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier();
+            } else {
+                return $document->getIdUtilisateurFkDocument()->getIdUtilisateur() . "/" .
+                    $this->fs->createPath($document->getIdProjetFkDocument());
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -187,10 +209,6 @@ class DocumentService
         $objet->setTypeDoc($sel[2]['value']);
         $objet->setTag(($sel[3]['value'] == "") ? null : $sel[3]['value']);
         $objet->setResume(($sel[4]['value'] == "") ? null : $sel[4]['value']);
-        $oldPath = $objet->getFichier();
-        $newPath = substr($oldPath, 0, strrpos($oldPath, ".") + 1) . $objet->getTypeDoc();
-        $objet->setFichier($newPath);
-        rename($this->targetDir . $oldPath, $this->targetDir . $newPath);
         $this->em->merge($objet);
         $this->em->flush();
         return $objet;
@@ -204,8 +222,9 @@ class DocumentService
     public function delete($sel)
     {
         for ($i = 0; $i <= count($sel) - 1; $i++) {
+            /* @var $toDel Document */
             $toDel = $this->em->find('GediBaseBundle:Document', $sel[$i]['id']);
-            unlink($this->targetDir . $toDel->getFichier());
+            unlink($this->targetDir . $this->makePath($toDel, true));
             $this->em->remove($toDel);
         }
         $this->em->flush();

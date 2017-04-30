@@ -53,17 +53,19 @@ class ProjetService
         $objet->setNom($sel[1]['value']);
         $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel[2]['value']);
         $objet->setIdUtilisateurFkProjet($utilisateur);
+        $path = $this->targetDir . $objet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+        // si le projet à un parent
         if ($sel[3]['value'] != null && $sel[3]['value'] != "") {
+            /* @var $parent Projet */
             $parent = $this->em->find('GediBaseBundle:Projet', $sel[3]['value']);
             $parent->addChildren($objet);
             $objet->setParent($parent);
-            $objet->setPath($parent->getPath() . "/" . $objet->getNom());
+            mkdir($path . $this->fs->createPath($parent) . $objet->getNom(), 0777);
         } else {
-            $objet->setPath($objet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/" . $objet->getNom());
+            mkdir($path . $objet->getNom(), 0777);
         }
         $this->em->persist($objet);
         $this->em->flush();
-        mkdir($this->targetDir . $objet->getPath(), 0777);
         return $objet;
     }
 
@@ -161,6 +163,7 @@ class ProjetService
     public function delete($sel)
     {
         for ($i = 0; $i <= count($sel) - 1; $i++) {
+            /* @var $toDel Projet */
             $toDel = $this->em->find('GediBaseBundle:Projet', $sel[$i]['id']);
             $this->fs->rmdir_recursive($this->targetDir . $toDel->getPath());
             $this->em->remove($toDel);

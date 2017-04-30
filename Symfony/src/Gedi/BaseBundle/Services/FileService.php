@@ -3,6 +3,7 @@
 namespace Gedi\BaseBundle\Services;
 
 
+use Gedi\BaseBundle\Entity\Projet;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileService
@@ -27,13 +28,9 @@ class FileService
      * @internal param $projet
      * @internal param $utilisateur
      */
-    public function upload(UploadedFile $file, $path, $typeDoc)
+    public function upload(UploadedFile $file, $path)
     {
-        if ($typeDoc != "") {
-            $fileName = md5(uniqid()) . '.' . $typeDoc;
-        } else {
-            $fileName = md5(uniqid());
-        }
+        $fileName = md5(uniqid());
         $file->move($this->targetDir . '/' . $path, $fileName);
         return $fileName;
     }
@@ -60,5 +57,21 @@ class FileService
             else unlink("$dir/$file");
         }
         rmdir($dir);
+    }
+
+    /**
+     * Fonction récursive pour contruire le path d'un projet
+     * @param $projet Projet
+     * @return string
+     */
+    public function createPath($projet)
+    {
+        // si le projet a un parent
+        if ($projet->getParent() != null) {
+            $path = $this->createPath($projet->getParent());
+        } else {
+            return $projet->getNom() . "/";
+        }
+        return $path . $projet->getNom() . "/";
     }
 }
