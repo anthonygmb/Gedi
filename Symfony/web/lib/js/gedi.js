@@ -344,7 +344,7 @@ function validFormGP() {
  */
 function validFormDoc() {
     var $bt = $('.bouton-submit-admin-entity');
-    if ($('#data_typeDoc').val() == "" || $('#data_idUtilisateurFkDocument').val() == "" ||
+    if ($('#data_idUtilisateurFkDocument').val() == "" ||
         $('#data_nom').val() == "" || $('#data_idProjetFkDocument').val() == "") {
         $bt.prop('disabled', true);
     } else {
@@ -655,8 +655,12 @@ $(function () {
      */
     $('#data_fichier').change(function () {
         var uf = $(this).val();
-        $('#data_nom').val(uf.substring(uf.lastIndexOf('\\') + 1, uf.lastIndexOf('.')));
-        $('#data_typeDoc').val(uf.substring(uf.lastIndexOf('.') + 1, uf.length));
+        if (uf.indexOf(".") >= 0) {
+            $('#data_nom').val(uf.substring(uf.lastIndexOf('\\') + 1, uf.lastIndexOf('.')));
+            $('#data_typeDoc').val(uf.substring(uf.lastIndexOf('.') + 1, uf.length));
+        } else {
+            $('#data_nom').val(uf.substring(uf.lastIndexOf('\\') + 1, uf.length));
+        }
     });
 
     /**

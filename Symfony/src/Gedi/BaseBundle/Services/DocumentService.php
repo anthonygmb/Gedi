@@ -163,7 +163,11 @@ class DocumentService
         for ($i = 0; $i <= count($sel) - 1; $i++) {
             $objet = $this->em->find('GediBaseBundle:Document', $sel[$i]);
             $objet->addNbDownload();
-            $zip->addFile($this->targetDir . $objet->getFichier(), $objet->getNom() . '.' . $objet->getTypeDoc());
+            if ($objet->getTypeDoc() != "") {
+                $zip->addFile($this->targetDir . $objet->getFichier(), $objet->getNom() . '.' . $objet->getTypeDoc());
+            } else {
+                $zip->addFile($this->targetDir . $objet->getFichier(), $objet->getNom()); // BUG de téléchargement si fichier sans extention
+            }
             $this->em->merge($objet);
         }
         $zip->close();

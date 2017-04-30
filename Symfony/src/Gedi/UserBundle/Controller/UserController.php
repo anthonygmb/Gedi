@@ -239,10 +239,17 @@ class UserController extends Controller
         if (sizeof($documents) > 0) {
             /* @var $child Document */
             foreach ($documents as $child) {
-                array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent hvr-float-shadow"><a id="' . $child->getIdDocument() .
-                    '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
-                    $child->getTypeDoc() . TYPE_ICON . '" alt="' . $child->getNom() .
-                    '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
+                if ($child->getTypeDoc() != "") {
+                    array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent hvr-float-shadow"><a id="' . $child->getIdDocument() .
+                        '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
+                        $child->getTypeDoc() . TYPE_ICON . '" alt="' . $child->getNom() .
+                        '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
+                } else {
+                    array_push($rows, '<div class="col-md-2 container-data"><div class="panel full-transparent hvr-float-shadow"><a id="' . $child->getIdDocument() .
+                        '" class="content-user" href="#" oncontextmenu="menuContext(false, this.id);"><img src="' . $this->getParameter('image_icon_directory') .
+                        "file" . TYPE_ICON . '" alt="' . $child->getNom() .
+                        '"/><p class="text-white"><strong>' . $child->getNom() . '</strong></p></a></div></div>');
+                }
             }
         }
 

@@ -29,7 +29,11 @@ class FileService
      */
     public function upload(UploadedFile $file, $path, $typeDoc)
     {
-        $fileName = md5(uniqid()) . '.' . $typeDoc;
+        if ($typeDoc != "") {
+            $fileName = md5(uniqid()) . '.' . $typeDoc;
+        } else {
+            $fileName = md5(uniqid());
+        }
         $file->move($this->targetDir . '/' . $path, $fileName);
         return $fileName;
     }
