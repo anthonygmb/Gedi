@@ -73,4 +73,19 @@ class FileService
         }
         return $path . $projet->getNom() . "/";
     }
+
+    /**
+     * Retourne le chemin relatif de l'arborescence d'un utilisateur.
+     * @param $idUser int : id de l'utilisateur.
+     * @param $tmpDir boolean : true si on veut le repertoire temporaire de l'utilisateur.
+     * @return string : le path construit.
+     */
+    public function getPath($idUser, $tmpDir)
+    {
+        if ($tmpDir == true) {
+            return $this->targetDir . $idUser . "/";
+        } else {
+            return $this->targetDir . $idUser . "/data/";
+        }
+    }
 }

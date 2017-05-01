@@ -14,11 +14,11 @@ services:
 
     projet.service:
         class: Gedi\BaseBundle\Services\ProjetService
-        arguments: [ "@doctrine.orm.entity_manager", '%fichiers_directory%', "@fichier.service" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@fichier.service" ]
 
     document.service:
         class: Gedi\BaseBundle\Services\DocumentService
-        arguments: [ "@doctrine.orm.entity_manager", "@fichier.service", '%fichiers_directory%' ]
+        arguments: [ "@doctrine.orm.entity_manager", "@fichier.service" ]
 
     fichier.service:
         class: Gedi\BaseBundle\Services\FileService

@@ -92,8 +92,9 @@ class UtilisateurService
         $objet->setActif(($sel[6]['value'] == "false") ? false : true);
         $this->em->persist($objet);
         $this->em->flush();
+        // création de l'arborescence si l'utilisateur est actif
         if ($objet->getActif() == true) {
-            mkdir($this->targetDir . $objet->getIdUtilisateur(), 0777);
+            mkdir($this->targetDir . $objet->getIdUtilisateur() . "/data", 0777, true);
         }
         return $objet;
     }
@@ -199,8 +200,9 @@ class UtilisateurService
         $objet->setActif(($sel[6]['value'] == "false") ? false : true);
         $this->em->merge($objet);
         $this->em->flush();
+        // création de l'arborescence si l'utilisateur est actif
         if ($objet->getActif() == true && !file_exists($this->targetDir . $objet->getIdUtilisateur())) {
-            mkdir($this->targetDir . $objet->getIdUtilisateur(), 0777);
+            mkdir($this->targetDir . $objet->getIdUtilisateur() . "/data", 0777, true);
         }
         return $objet;
     }

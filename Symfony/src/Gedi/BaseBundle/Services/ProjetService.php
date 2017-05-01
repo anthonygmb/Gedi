@@ -20,11 +20,6 @@ class ProjetService
     private $em;
 
     /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
      * @var FileService
      */
     private $fs;
@@ -32,13 +27,11 @@ class ProjetService
     /**
      * ProjetService constructor.
      * @param EntityManager $entityManager
-     * @param $targetDir
      * @param FileService $fileService
      */
-    public function __construct(EntityManager $entityManager, $targetDir, FileService $fileService)
+    public function __construct(EntityManager $entityManager, FileService $fileService)
     {
         $this->em = $entityManager;
-        $this->targetDir = $targetDir;
         $this->fs = $fileService;
     }
 
@@ -53,7 +46,7 @@ class ProjetService
         $objet->setNom($sel[1]['value']);
         $utilisateur = $this->em->find('GediBaseBundle:Utilisateur', $sel[2]['value']);
         $objet->setIdUtilisateurFkProjet($utilisateur);
-        $path = $this->targetDir . $objet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+        $path = $this->fs->getPath($objet->getIdUtilisateurFkProjet()->getIdUtilisateur(), false);
         // si le projet à un parent
         if ($sel[3]['value'] != null && $sel[3]['value'] != "") {
             /* @var $parent Projet */
@@ -149,9 +142,13 @@ class ProjetService
         // on enlève le dernier '/'
         $oldPath = substr($oldPath, 0, strlen($oldPath) - 1);
         $objet->setNom($sel[1]['value']);
-        $path = $this->targetDir . $objet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
-        $newPath = substr($oldPath, 0, strrpos($oldPath, "/") + 1) . $objet->getNom();
-        rename($path . $oldPath, $path . $newPath);
+        $path = $this->fs->getPath($objet->getIdUtilisateurFkProjet()->getIdUtilisateur(), false);
+        // si le projet n'a pas de parent
+        if ($objet->getParent() == null) {
+            rename($path . $oldPath, $path . $objet->getNom());
+        } else {
+            rename($path . $oldPath, $path . substr($oldPath, 0, strrpos($oldPath, "/") + 1) . $objet->getNom());
+        }
         $this->em->merge($objet);
         $this->em->flush();
         return $objet;
@@ -170,7 +167,7 @@ class ProjetService
             $oldPath = $this->fs->createPath($toDel);
             // on enlève le dernier '/'
             $oldPath = substr($oldPath, 0, strlen($oldPath) - 1);
-            $path = $this->targetDir . $toDel->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+            $path = $this->fs->getPath($toDel->getIdUtilisateurFkProjet()->getIdUtilisateur(), false);
             $this->fs->rmdir_recursive($path . $oldPath);
             $this->em->remove($toDel);
         }

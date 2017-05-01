@@ -5,6 +5,8 @@ namespace Gedi\BaseBundle\Services;
 use Doctrine\ORM\EntityManager;
 use Gedi\BaseBundle\Entity\Document;
 use Gedi\BaseBundle\Entity\Projet;
+use Gedi\BaseBundle\Entity\Utilisateur;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use ZipArchive;
 
 /**
@@ -25,21 +27,14 @@ class DocumentService
     private $fs;
 
     /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
      * DocumentService constructor.
      * @param EntityManager $entityManager
      * @param FileService $fileService
-     * @param $targetDir
      */
-    public function __construct(EntityManager $entityManager, FileService $fileService, $targetDir)
+    public function __construct(EntityManager $entityManager, FileService $fileService)
     {
         $this->em = $entityManager;
         $this->fs = $fileService;
-        $this->targetDir = $targetDir;
     }
 
     /**
@@ -63,7 +58,7 @@ class DocumentService
         $projet = $this->em->find('GediBaseBundle:Projet', $sel['idProjetFkDocument']);
         $projet->addIdProjetFkDocument($objet);
         $objet->setIdProjetFkDocument($projet);
-        $path = $this->targetDir . $projet->getIdUtilisateurFkProjet()->getIdUtilisateur() . "/";
+        $path = $this->fs->getPath($projet->getIdUtilisateurFkProjet()->getIdUtilisateur(), false);
         $projetPath = $this->fs->createPath($projet);
         $fileName = $this->fs->upload($file, $path . $projetPath);
         $objet->setFichier($fileName);
@@ -149,12 +144,13 @@ class DocumentService
 
     /**
      * Télécharge les fichiers selectionnés dans une archive zip
-     * @param $sel
+     * @param $sel : selection à télécharger
+     * @param $user Utilisateur : utilisateur de l'action
      */
-    public function download($sel)
+    public function download($sel, $user)
     {
         $zip = new ZipArchive();
-        $filename = $this->targetDir . "archive.zip";
+        $filename = $this->fs->getPath($user->getIdUtilisateur(), true) . "download.zip";
 
         if (file_exists($filename)) {
             unlink($filename);
@@ -168,36 +164,39 @@ class DocumentService
             /* @var $document Document */
             $document = $this->em->find('GediBaseBundle:Document', $sel[$i]);
             $document->addNbDownload();
+
+            // si le fichier à une extention
             if ($document->getTypeDoc() != "") {
-                $zip->addFile($this->targetDir . $this->makePath($document, true), $document->getNom() . '.' . $document->getTypeDoc());
+                // récupération du chemin du fichier à télécharger
+                $fichier = $this->fs->getPath($document->getIdUtilisateurFkDocument()->getIdUtilisateur(), false) .
+                    $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier();
+
+                // vérification de l'existence du fichier
+                if (!file_exists($fichier)) {
+                    throw new Exception("pas de ficher : " . $document->getNom() . "\nà l'adresse : " . $fichier);
+                } else {
+                    $zip->addFile($this->fs->getPath($document->getIdUtilisateurFkDocument()->getIdUtilisateur(), false) .
+                        $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier(), $document->getNom() .
+                        '.' . $document->getTypeDoc());
+                }
             } else {
-                $zip->addFile($this->targetDir . $this->makePath($document, true), $document->getNom());
+                // récupération du chemin du fichier à télécharger
+                $fichier = $this->fs->getPath($document->getIdUtilisateurFkDocument()->getIdUtilisateur(), false) .
+                    $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier();
+
+                // vérification de l'existence du fichier
+                if (!file_exists($fichier)) {
+                    throw new Exception("pas de ficher : " . $document->getNom() . "\nà l'adresse : " . $fichier);
+                } else {
+                    $zip->addFile($this->fs->getPath($document->getIdUtilisateurFkDocument()->getIdUtilisateur(), false) .
+                        $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier(), $document->getNom());
+                }
             }
             $this->em->merge($document);
         }
+
         $zip->close();
         $this->em->flush();
-    }
-
-    /**
-     * Fonction pour obtenir le path d'un document
-     * @param $document Document
-     * @param $withDocName boolean
-     * @return string
-     */
-    public function makePath($document, $withDocName)
-    {
-        if ($document->getIdProjetFkDocument() != null) {
-            if ($withDocName == true) {
-                return $document->getIdUtilisateurFkDocument()->getIdUtilisateur() . "/" .
-                    $this->fs->createPath($document->getIdProjetFkDocument()) . $document->getFichier();
-            } else {
-                return $document->getIdUtilisateurFkDocument()->getIdUtilisateur() . "/" .
-                    $this->fs->createPath($document->getIdProjetFkDocument());
-            }
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -228,7 +227,8 @@ class DocumentService
         for ($i = 0; $i <= count($sel) - 1; $i++) {
             /* @var $toDel Document */
             $toDel = $this->em->find('GediBaseBundle:Document', $sel[$i]['id']);
-            unlink($this->targetDir . $this->makePath($toDel, true));
+            unlink($this->fs->getPath($toDel->getIdUtilisateurFkDocument()->getIdUtilisateur(), false) .
+                $this->fs->createPath($toDel->getIdProjetFkDocument()) . $toDel->getFichier());
             $this->em->remove($toDel);
         }
         $this->em->flush();

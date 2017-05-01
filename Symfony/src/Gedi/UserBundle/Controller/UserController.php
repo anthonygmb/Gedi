@@ -80,7 +80,7 @@ class UserController extends Controller
                     break;
                 case BaseEnum::DOWNLOAD:
                     $tmp = [$sel];
-                    $this->get('document.service')->download($tmp);
+                    $this->get('document.service')->download($tmp, $this->getUser());
                     $rows = "download";
                     break;
                 case BaseEnum::ENREGISTREMENT:
@@ -368,7 +368,7 @@ class UserController extends Controller
                     break;
                 case BaseEnum::DOWNLOAD:
                     $tmp = [$sel];
-                    $this->get('document.service')->download($tmp);
+                    $this->get('document.service')->download($tmp, $this->getUser());
                     $rows = "download";
                     break;
                 case BaseEnum::ENREGISTREMENT:
@@ -566,7 +566,7 @@ class UserController extends Controller
                     break;
                 case BaseEnum::DOWNLOAD:
                     $tmp = [$sel];
-                    $this->get('document.service')->download($tmp);
+                    $this->get('document.service')->download($tmp, $this->getUser());
                     $rows = "download";
                     break;
                 case BaseEnum::ENREGISTREMENT:
@@ -710,10 +710,10 @@ class UserController extends Controller
     public function downloadAction()
     {
         header('Content-Type: application/octet-stream');
-        header('Content-disposition: attachment; filename=archive.zip');
+        header('Content-disposition: attachment; filename=download.zip');
         header('Pragma: no-cache');
         header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
-        readfile($this->getParameter('fichiers_directory') . 'archive.zip');
+        readfile($this->getParameter('fichiers_directory') . $this->getUser()->getIdUtilisateur() . '/download.zip');
     }
 }

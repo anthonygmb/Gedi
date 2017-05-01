@@ -352,7 +352,7 @@ class AdminController extends Controller
                     }
                     break;
                 case BaseEnum::DOWNLOAD:
-                    $this->get('document.service')->download($sel);
+                    $this->get('document.service')->download($sel, $this->getUser());
                     $rows = "download_admin";
                     break;
                 case BaseEnum::SUPPRESSION:
@@ -425,10 +425,10 @@ class AdminController extends Controller
     public function downloadAction()
     {
         header('Content-Type: application/octet-stream');
-        header('Content-disposition: attachment; filename=archive.zip');
+        header('Content-disposition: attachment; filename=download.zip');
         header('Pragma: no-cache');
         header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
-        readfile($this->getParameter('fichiers_directory') . 'archive.zip');
+        readfile($this->getParameter('fichiers_directory') . $this->getUser()->getIdUtilisateur() . '/download.zip');
     }
 }
