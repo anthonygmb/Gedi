@@ -35,7 +35,7 @@ class Document
      * Type du document
      * @var string
      *
-     * @ORM\Column(name="type_doc", type="string", nullable=false)
+     * @ORM\Column(name="type_doc", type="string", nullable=true, length=25)
      */
     private $typeDoc;
 

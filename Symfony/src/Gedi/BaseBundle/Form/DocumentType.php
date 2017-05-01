@@ -19,7 +19,7 @@ class DocumentType extends AbstractType
     {
         $builder->add('idDocument', HiddenType::class, array('label' => false));
         $builder->add('nom', TextType::class, array('label' => false));
-        $builder->add('typeDoc', TextType::class, array('label' => false));
+        $builder->add('typeDoc', TextType::class, array('required' => false, 'label' => false));
         $builder->add('tag', TextType::class, array('required' => false, 'label' => false));
         $builder->add('resume', TextareaType::class, array('required' => false, 'label' => false));
         $builder->add('idUtilisateurFkDocument', HiddenType::class, array('label' => false));

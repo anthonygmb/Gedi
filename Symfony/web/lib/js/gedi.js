@@ -661,6 +661,8 @@ $(function () {
         } else {
             $('#data_nom').val(uf.substring(uf.lastIndexOf('\\') + 1, uf.length));
         }
+        $('#data_nom').prop('disabled', false);
+        $('#data_typeDoc').prop('disabled', false);
     });
 
     /**
