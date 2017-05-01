@@ -49,6 +49,7 @@ class UtilisateurService
         $this->targetDir = $targetDir;
         $this->fs = $fileService;
 
+        // si le repertoire bankfile n'existe pas, on le crée
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777);
         }
